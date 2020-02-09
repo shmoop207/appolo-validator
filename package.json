@@ -1,0 +1,54 @@
+{
+  "name": "appolo-decorators",
+  "description": "useful decorators",
+  "keywords": [
+    "decorators",
+    "setTimeout decorator",
+    "debounce decorator",
+    "once decorator",
+    "bind decorator",
+    "mixin decorator",
+    "cache decorator",
+    "mixin decorator"
+  ],
+  "author": {
+    "name": "Roman Svichar",
+    "email": "shmoop207@gmail.com"
+  },
+  "engines": {
+    "node": ">= 8.4.x",
+    "npm": ">= 5.3.x"
+  },
+  "scripts": {
+    "test": "mocha test --exit"
+  },
+  "main": "./index.js",
+  "version": "6.0.14",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/shmoop207/appolo-decorators.git"
+  },
+  "readme": "",
+  "readmeFilename": "README.md",
+  "dependencies": {
+    "appolo-engine": "^6.0.81",
+    "appolo-utils": "^0.0.25",
+    "lodash": "^4.17.15",
+    "reflect-metadata": "^0.1.12"
+  },
+  "devDependencies": {
+    "@types/benchmark": "^1.0.31",
+    "@types/bluebird": "^3.5.24",
+    "@types/chai": "^4.2.4",
+    "@types/lodash": "^4.14.144",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.5",
+    "benchmark": "^2.1.4",
+    "bluebird": "^3.5.2",
+    "chai": "^4.2.0",
+    "mocha": "^5.2.0",
+    "tslib": "^1.10.0",
+    "typescript": "^3.7.2"
+  }
+}
