@@ -2,15 +2,15 @@ import "reflect-metadata";
 import {createApp} from "appolo-engine"
 import {Promises, Objects} from "appolo-utils";
 
-import {IsNumberValidator} from "./src/validators/isNumberValidator"
-import {IOptions} from "./src/interfaces/IOptions";
+import {IOptions, ISchemaOptions} from "./src/interfaces/IOptions";
 import {ValidatorDefaults} from "./src/defaults/defaults";
 import {Validator} from "./src/validator/validator";
+import {Schema} from "./src/schema/schema";
 
 
-export {Validator, IsNumberValidator}
+export {Validator}
 
-export async function createValidator(options: IOptions = {}): Promise<Validator> {
+export async function validator(options: IOptions = {}): Promise<Validator> {
 
     let app = createApp({root: __dirname});
 
@@ -21,4 +21,8 @@ export async function createValidator(options: IOptions = {}): Promise<Validator
     let server = app.injector.get<Validator>(Validator);
 
     return server;
+}
+
+export function schema(options?: ISchemaOptions): Schema {
+    return new Schema(options)
 }

@@ -1,31 +1,43 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class ValidationError extends Error {
-    constructor(params) {
+    constructor() {
         super();
-        this.params = params;
-        if (!params.constraints) {
-            params.constraints = {};
-        }
-        if (!params.children) {
-            params.children = [];
-        }
+        this._constraints = [];
         Object.setPrototypeOf(this, ValidationError.prototype);
     }
     get target() {
-        return this.params.target;
+        return this._target;
+    }
+    set target(value) {
+        this._target = value;
     }
     get property() {
-        return this.params.property;
+        return this._property;
+    }
+    set property(value) {
+        this._property = value;
     }
     get value() {
-        return this.params.value;
+        return this._value;
+    }
+    set value(value) {
+        this._value = value;
+    }
+    get message() {
+        return this._message;
+    }
+    set message(value) {
+        this._message = value;
     }
     get constraints() {
-        return this.params.constraints;
+        return this._constraints;
     }
-    get children() {
-        return this.params.children;
+    get type() {
+        return this._type;
+    }
+    set type(value) {
+        this._type = value;
     }
 }
 exports.ValidationError = ValidationError;

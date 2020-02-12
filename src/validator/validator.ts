@@ -1,19 +1,42 @@
 import {define, singleton, inject, injectFactoryMethod} from "appolo-engine"
-import {IOptions, ISchemaOptions} from "../interfaces/IOptions";
-import {Schema} from "../register/schema";
+import {IOptions, ISchemaOptions, IValidateOptions} from "../interfaces/IOptions";
+import {Schema} from "../schema/schema";
 import {Objects} from "appolo-utils/index";
-import {SchemaDefaults, ValidatorDefaults} from "../defaults/defaults";
+import {SchemaDefaults, ValidateDefaults, ValidatorDefaults} from "../defaults/defaults";
+import {ValidationError} from "../common/errors/ValidationError";
+import {SchemaValidator} from "../schema/schemaValidator";
+import {AnySchema} from "../schema/types/anySchema";
 
 @define()
+@singleton()
 export class Validator {
     @inject() private options: IOptions;
-    @injectFactoryMethod(Schema) private createSchema: (options: ISchemaOptions) => Schema;
+    @inject() private schemaValidator: SchemaValidator;
 
     public schema(options: ISchemaOptions = {}) {
 
-        options = Objects.defaults({}, options, this.options, SchemaDefaults, ValidatorDefaults);
+        options = Objects.defaults({}, options, this.options, ValidatorDefaults);
 
-        return this.createSchema(options);
+        return new Schema(options);
+    }
+
+    public async validate(schema: AnySchema, value: any, options: IValidateOptions = {}): Promise<{ error: ValidationError, value: any }> {
+
+        options = Objects.defaults({}, options, schema.options, ValidateDefaults);
+
+        let result = await this.schemaValidator.validate(value, schema, options);
+
+        return {error: result.error, value: result.value};
+    }
+
+    public async validateAndTrow(schema: Schema, value: any, options: IValidateOptions) {
+        let result = await this.validate(value, options);
+
+        if (result.error) {
+            throw result.error;
+        }
+
+        return result.value;
     }
 }
 

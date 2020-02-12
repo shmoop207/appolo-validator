@@ -1,39 +1,67 @@
+import {IConstraint} from "../../constraints/IConstraint";
+
 export class ValidationError extends Error {
 
-    constructor(private params: { target?: Object, property?: string, value: string, constraints?: { [type: string]: string; }, children?: ValidationError[] }) {
+
+    private _target: Object;
+    private _property: string | number;
+    private _value: any;
+    private _type: string;
+    private _message: string;
+    private readonly _constraints: ValidationError[];
+
+    constructor() {
 
         super();
 
-        if (!params.constraints) {
-            params.constraints = {}
-        }
-
-        if (!params.children) {
-            params.children = []
-        }
+        this._constraints = [];
 
         Object.setPrototypeOf(this, ValidationError.prototype);
     }
 
     public get target(): Object {
-        return this.params.target;
+        return this._target;
     }
 
-    public get property(): string {
-        return this.params.property;
+    public set target(value: Object) {
+        this._target = value;
+    }
+
+    public get property(): string | number {
+        return this._property;
+    }
+
+    public set property(value: string | number) {
+        this._property = value;
     }
 
     public get value(): any {
-        return this.params.value;
+        return this._value;
+    }
+
+    public set value(value: any) {
+        this._value = value;
+    }
+
+    public get message(): string {
+        return this._message;
+    }
+
+    public set message(value: string) {
+        this._message = value;
+    }
+
+    public get constraints(): ValidationError[] {
+        return this._constraints;
     }
 
 
-    public get constraints(): { [p: string]: string } {
-        return this.params.constraints;
+    public get type(): string {
+        return this._type;
     }
 
-
-    public get children(): ValidationError[] {
-        return this.params.children;
+    public set type(value: string) {
+        this._type = value;
     }
+
 }
