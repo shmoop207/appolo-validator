@@ -13,6 +13,7 @@ export interface IValidateOptions extends ICommonOptions {
     property?: string | number;
 }
 
+
 interface ICommonOptions {
     convert?: boolean
     groups?: string[]

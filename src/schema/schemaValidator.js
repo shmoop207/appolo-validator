@@ -3,26 +3,33 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const ValidationError_1 = require("../common/errors/ValidationError");
 const appolo_engine_1 = require("appolo-engine");
-const index_1 = require("appolo-utils/index");
+const appolo_utils_1 = require("appolo-utils");
 let SchemaValidator = class SchemaValidator {
     async validate(value, schema, options) {
         if (options.convert) {
             value = await schema.convert(value);
         }
-        let result = await index_1.Promises.map(schema.validators, validator => this._validateValidator(value, validator, options));
+        this._options = options;
+        this._schema = schema;
+        this._value = value;
+        this._groupsIndex = appolo_utils_1.Arrays.keyBy(options.groups || []);
+        let result = await appolo_utils_1.Promises.map(schema.validators, constraintSchema => this._validateConstraint(constraintSchema));
         let { error } = this._buildError(value, result);
         return { error, value };
     }
-    async _validateValidator(value, constraintSchema, options) {
+    async _validateConstraint(constraintSchema) {
         let constraint = null, error, message;
+        if (!this._checkValidGroups(constraintSchema.options.groups)) {
+            return { isValid: true };
+        }
         let params = {
-            value,
+            value: this._value,
             options: constraintSchema.options || {},
             args: constraintSchema.args || [],
             validator: this.validator,
-            property: options.property,
-            object: options.object,
-            validateOptions: options
+            property: this._options.property,
+            object: this._options.object,
+            validateOptions: this._options
         };
         try {
             constraint = this._getConstraintInstance(constraintSchema.constraint);
@@ -37,13 +44,20 @@ let SchemaValidator = class SchemaValidator {
         }
         if (!error) {
             error = new ValidationError_1.ValidationError();
-            error.value = value;
+            error.value = this._value;
             error.message = message || constraint.defaultMessage(params);
             error.type = constraint ? constraint.type : "unknown";
-            error.property = options.property;
-            error.target = options.object;
+            error.property = this._options.property;
+            error.target = this._options.object;
         }
         return { isValid: false, error };
+    }
+    _checkValidGroups(constraintGroups) {
+        if (!this._options.groups || !this._options.groups.length || !constraintGroups || !constraintGroups.length) {
+            return true;
+        }
+        let validGroups = constraintGroups.every(group => !!this._groupsIndex[group]);
+        return validGroups;
     }
     _getConstraintInstance(constraintClass) {
         let classId = appolo_engine_1.Util.getClassName(constraintClass);
@@ -75,8 +89,7 @@ tslib_1.__decorate([
     appolo_engine_1.inject()
 ], SchemaValidator.prototype, "validator", void 0);
 SchemaValidator = tslib_1.__decorate([
-    appolo_engine_1.define(),
-    appolo_engine_1.singleton()
+    appolo_engine_1.define()
 ], SchemaValidator);
 exports.SchemaValidator = SchemaValidator;
 //# sourceMappingURL=schemaValidator.js.map

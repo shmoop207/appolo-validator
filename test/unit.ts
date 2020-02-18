@@ -110,7 +110,7 @@ describe("validator", function () {
 
     });
 
-    it.only('should validate convert', async () => {
+    it('should validate convert', async () => {
         let result: { error: ValidationError, value: any };
 
         let val = await validator();
@@ -129,5 +129,35 @@ describe("validator", function () {
     });
 
 
+    it.only('should validate with groups', async () => {
+        let result: { error: ValidationError, value: any };
+
+        let val = await validator();
+
+        let schem = schema()
+            .object({
+                a: schema().number({groups: ["test"]}),
+                b: schema().number({groups: ["test2"]}),
+                c: schema().number()
+            });
+
+        result = await val.validate(schem, {a: 1, b: "11"}, {groups: ["test1"]});
+
+        should.not.exist(result.error);
+        result.value.b.should.be.eq("11");
+
+        result = await val.validate(schem, {a: 1, b: "11",c:"22"}, {groups: ["test1", "test2"]});
+
+        result.error.constraints.length.should.be.eq(1);
+        result.error.constraints[0].constraints.length.should.be.eq(2);
+        result.error.constraints[0].constraints[0].message.should.be.eq('11 is not a number');
+
+        result = await val.validate(schem, {a: 1, b: "11"}, {});
+
+        result.error.constraints.length.should.be.eq(1);
+        result.error.constraints[0].constraints.length.should.be.eq(1);
+        result.error.constraints[0].constraints[0].message.should.be.eq('11 is not a number');
+
+    });
 });
 

@@ -1,7 +1,7 @@
 import {define, singleton, inject, injectFactoryMethod} from "appolo-engine"
 import {IOptions, ISchemaOptions, IValidateOptions} from "../interfaces/IOptions";
 import {Schema} from "../schema/schema";
-import {Objects} from "appolo-utils/index";
+import {Arrays, Objects} from "appolo-utils/index";
 import {SchemaDefaults, ValidateDefaults, ValidatorDefaults} from "../defaults/defaults";
 import {ValidationError} from "../common/errors/ValidationError";
 import {SchemaValidator} from "../schema/schemaValidator";
@@ -11,7 +11,7 @@ import {AnySchema} from "../schema/types/anySchema";
 @singleton()
 export class Validator {
     @inject() private options: IOptions;
-    @inject() private schemaValidator: SchemaValidator;
+    @injectFactoryMethod(SchemaValidator) private createSchemaValidator: () => SchemaValidator;
 
     public schema(options: ISchemaOptions = {}) {
 
@@ -24,7 +24,8 @@ export class Validator {
 
         options = Objects.defaults({}, options, schema.options, ValidateDefaults);
 
-        let result = await this.schemaValidator.validate(value, schema, options);
+
+        let result = await this.createSchemaValidator().validate(value, schema, options);
 
         return {error: result.error, value: result.value};
     }

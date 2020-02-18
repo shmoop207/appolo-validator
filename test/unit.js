@@ -65,13 +65,34 @@ describe("validator", function () {
         result.error.constraints[0].constraints[0].constraints[0].message.should.be.eq('is not a valid array');
         result.error.constraints[0].constraints[0].constraints[0].constraints[0].message.should.be.eq("bb is not a number");
     });
-    it.only('should validate convert', async () => {
+    it('should validate convert', async () => {
         let result;
         let val = await index_1.validator();
         let schem = index_1.schema({ convert: true }).object({ a: index_1.schema().number(), b: index_1.schema().number() });
         result = await val.validate(schem, { a: 1, b: "11" });
         should.not.exist(result.error);
         result.value.b.should.be.eq(11);
+        result.error.constraints.length.should.be.eq(1);
+        result.error.constraints[0].constraints.length.should.be.eq(1);
+        result.error.constraints[0].constraints[0].message.should.be.eq('11 is not a number');
+    });
+    it.only('should validate with groups', async () => {
+        let result;
+        let val = await index_1.validator();
+        let schem = index_1.schema()
+            .object({
+            a: index_1.schema().number({ groups: ["test"] }),
+            b: index_1.schema().number({ groups: ["test2"] }),
+            c: index_1.schema().number()
+        });
+        result = await val.validate(schem, { a: 1, b: "11" }, { groups: ["test1"] });
+        should.not.exist(result.error);
+        result.value.b.should.be.eq("11");
+        result = await val.validate(schem, { a: 1, b: "11", c: "22" }, { groups: ["test1", "test2"] });
+        result.error.constraints.length.should.be.eq(1);
+        result.error.constraints[0].constraints.length.should.be.eq(2);
+        result.error.constraints[0].constraints[0].message.should.be.eq('11 is not a number');
+        result = await val.validate(schem, { a: 1, b: "11" }, {});
         result.error.constraints.length.should.be.eq(1);
         result.error.constraints[0].constraints.length.should.be.eq(1);
         result.error.constraints[0].constraints[0].message.should.be.eq('11 is not a number');

@@ -5,6 +5,7 @@ const appolo_engine_1 = require("appolo-engine");
 const schema_1 = require("../schema/schema");
 const index_1 = require("appolo-utils/index");
 const defaults_1 = require("../defaults/defaults");
+const schemaValidator_1 = require("../schema/schemaValidator");
 let Validator = class Validator {
     schema(options = {}) {
         options = index_1.Objects.defaults({}, options, this.options, defaults_1.ValidatorDefaults);
@@ -12,7 +13,7 @@ let Validator = class Validator {
     }
     async validate(schema, value, options = {}) {
         options = index_1.Objects.defaults({}, options, schema.options, defaults_1.ValidateDefaults);
-        let result = await this.schemaValidator.validate(value, schema, options);
+        let result = await this.createSchemaValidator().validate(value, schema, options);
         return { error: result.error, value: result.value };
     }
     async validateAndTrow(schema, value, options) {
@@ -27,8 +28,8 @@ tslib_1.__decorate([
     appolo_engine_1.inject()
 ], Validator.prototype, "options", void 0);
 tslib_1.__decorate([
-    appolo_engine_1.inject()
-], Validator.prototype, "schemaValidator", void 0);
+    appolo_engine_1.injectFactoryMethod(schemaValidator_1.SchemaValidator)
+], Validator.prototype, "createSchemaValidator", void 0);
 Validator = tslib_1.__decorate([
     appolo_engine_1.define(),
     appolo_engine_1.singleton()

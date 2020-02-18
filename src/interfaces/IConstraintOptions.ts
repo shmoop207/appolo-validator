@@ -1,4 +1,4 @@
 export interface IConstraintOptions {
     message?:string
-    groups?:[]
+    groups?:string[]
 }

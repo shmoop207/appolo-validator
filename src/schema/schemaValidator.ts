@@ -8,44 +8,56 @@ import {ValidationError} from "../common/errors/ValidationError";
 import {inject, Injector, Util, define, singleton} from "appolo-engine";
 import {Schema} from "./schema";
 import {IValidateOptions} from "../interfaces/IOptions";
-import {Objects, Promises} from "appolo-utils/index";
+import {Objects, Promises, Arrays} from "appolo-utils";
 import {ValidateDefaults} from "../defaults/defaults";
 import {Validator} from "../validator/validator";
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
 import {AnySchema} from "./types/anySchema";
 
 @define()
-@singleton()
 export class SchemaValidator {
 
     @inject() private injector: Injector;
     @inject() private validator: Validator;
 
+    private _groupsIndex: { [index: string]: string };
+    private _options: IValidateOptions;
+    private _schema: AnySchema;
+    private _value: any;
 
-    public async validate(value: any, schema: AnySchema, options: IValidateOptions): Promise<{ error: ValidationError,value }> {
+
+    public async validate(value: any, schema: AnySchema, options: IValidateOptions): Promise<{ error: ValidationError, value }> {
 
         if (options.convert) {
             value = await schema.convert(value);
         }
+        this._options = options;
+        this._schema = schema;
+        this._value = value;
+        this._groupsIndex = Arrays.keyBy(options.groups || []);
 
-        let result = await Promises.map(schema.validators, validator => this._validateValidator(value, validator, options));
+        let result = await Promises.map(schema.validators, constraintSchema => this._validateConstraint(constraintSchema));
 
         let {error} = this._buildError(value, result);
 
-        return {error,value};
+        return {error, value};
     }
 
-    private async _validateValidator(value: any, constraintSchema: IConstraintSchema, options: IValidateOptions): Promise<{ isValid: boolean, error?: ValidationError }> {
+    private async _validateConstraint(constraintSchema: IConstraintSchema): Promise<{ isValid: boolean, error?: ValidationError }> {
         let constraint: IConstraint = null, error: ValidationError, message: string;
 
+        if (!this._checkValidGroups(constraintSchema.options.groups)) {
+            return {isValid: true}
+        }
+
         let params: ValidationParams = {
-            value,
+            value: this._value,
             options: constraintSchema.options || {},
             args: constraintSchema.args || [],
             validator: this.validator,
-            property: options.property,
-            object: options.object,
-            validateOptions: options
+            property: this._options.property,
+            object: this._options.object,
+            validateOptions: this._options
         };
 
         try {
@@ -66,14 +78,23 @@ export class SchemaValidator {
 
         if (!error) {
             error = new ValidationError();
-            error.value = value;
+            error.value = this._value;
             error.message = message || constraint.defaultMessage(params);
             error.type = constraint ? constraint.type : "unknown";
-            error.property = options.property;
-            error.target = options.object;
+            error.property = this._options.property;
+            error.target = this._options.object;
         }
 
         return {isValid: false, error}
+    }
+
+    private _checkValidGroups(constraintGroups: string[]): boolean {
+        if (!this._options.groups || !this._options.groups.length || !constraintGroups || !constraintGroups.length) {
+            return true;
+        }
+        let validGroups = constraintGroups.every(group => !!this._groupsIndex[group]);
+
+        return validGroups;
     }
 
     private _getConstraintInstance(constraintClass: IConstraintClass): IConstraint {
