@@ -19,4 +19,9 @@ function schema(options) {
     return new schema_1.Schema(options);
 }
 exports.schema = schema;
+//TODO custom message
+//TODO required
+//TODO optional
+//TODO custom convert
+//TODO ref
 //# sourceMappingURL=index.js.map

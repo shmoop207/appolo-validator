@@ -7,7 +7,6 @@ import {ValidatorDefaults} from "./src/defaults/defaults";
 import {Validator} from "./src/validator/validator";
 import {Schema} from "./src/schema/schema";
 
-
 export {Validator}
 
 export async function validator(options: IOptions = {}): Promise<Validator> {
@@ -26,3 +25,10 @@ export async function validator(options: IOptions = {}): Promise<Validator> {
 export function schema(options?: ISchemaOptions): Schema {
     return new Schema(options)
 }
+
+
+//TODO custom message
+//TODO required
+//TODO optional
+//TODO custom convert
+//TODO ref

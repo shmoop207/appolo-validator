@@ -17,4 +17,6 @@ export interface IValidateOptions extends ICommonOptions {
 interface ICommonOptions {
     convert?: boolean
     groups?: string[]
+    stripUnknown?: boolean
+
 }

@@ -20,24 +20,18 @@ export class Validator {
         return new Schema(options);
     }
 
-    public async validate(schema: AnySchema, value: any, options: IValidateOptions = {}): Promise<{ error: ValidationError, value: any }> {
+    public async validate(schema: AnySchema, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {
 
         options = Objects.defaults({}, options, schema.options, ValidateDefaults);
 
 
-        let result = await this.createSchemaValidator().validate(value, schema, options);
+        let {errors, value: valueConverted} = await this.createSchemaValidator().validate(value, schema, options);
 
-        return {error: result.error, value: result.value};
+        return {errors, value: valueConverted};
     }
 
     public async validateAndTrow(schema: Schema, value: any, options: IValidateOptions) {
-        let result = await this.validate(value, options);
-
-        if (result.error) {
-            throw result.error;
-        }
-
-        return result.value;
+       throw new Error("not implemented")
     }
 }
 

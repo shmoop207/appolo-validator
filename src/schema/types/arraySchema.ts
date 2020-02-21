@@ -11,7 +11,7 @@ export class ArraySchema extends AnySchema {
 
         this._type = "array";
 
-        this.addValidation({
+        this.addConstraint({
             constraint: ArrayConstraint,
             options: validationOptions,
             args: schema ? [schema] : []

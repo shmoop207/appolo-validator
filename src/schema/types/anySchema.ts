@@ -8,29 +8,38 @@ import {ValidationParams} from "../../constraints/IConstraint";
 export class AnySchema {
 
     private readonly _options: ISchemaOptions;
-    private readonly _validators: IConstraintSchema[] = [];
+    private readonly _constraints: IConstraintSchema[] = [];
 
     protected _type: string;
+    protected _params: {};
 
     constructor(validationOptions: IConstraintOptions = {}, schemaOptions: ISchemaOptions = {}) {
         this._options = Objects.defaults({}, schemaOptions, SchemaDefaults);
         this._type = "any";
+        this._params = {}
     }
 
-    public get validators(): IConstraintSchema[] {
-        return this._validators;
+
+    public get params() {
+        return this._params;
     }
+
+    public get constraints(): IConstraintSchema[] {
+        return this._constraints;
+    }
+
 
     public get options(): ISchemaOptions {
         return this._options;
     }
 
-    public addValidation(schema: IConstraintSchema): AnySchema {
-        this._validators.push(schema);
+    public addConstraint(schema: IConstraintSchema): AnySchema {
+        this._constraints.push(schema);
         return this
     }
 
-    public async convert(value:any): Promise<any> {
+
+    public async convert(value: any): Promise<any> {
         return value;
     }
 }

@@ -12,7 +12,7 @@ export class ObjectSchema extends AnySchema {
 
         this._type = "object";
 
-        this.addValidation({
+        this.addConstraint({
             constraint: ObjectConstraint,
             options: validationOptions,
             args: schemaIndex ? [schemaIndex] : []

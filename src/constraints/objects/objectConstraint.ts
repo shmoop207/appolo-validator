@@ -16,23 +16,25 @@ export class ObjectConstraint implements IConstraint {
 
         let schemasIndex = args.args[0] as { [index: string]: AnySchema };
 
-        let keys = Object.keys(args.value);
+        let keys = [...new Set(Object.keys(args.value).concat(Object.keys(schemasIndex)))];
 
-        let results = await Promises.map(keys, (key, index) =>
-            args.validator.validate(schemasIndex[key], args.value[key], {
-                ...(args.validateOptions || {}),
-                object: args.value,
-                property: key
-            }));
+        let results = await Promises.map(keys, key => this._validateProperty(schemasIndex, key, args));
 
         let error = new ValidationError();
 
         for (let i = 0; i < results.length; i++) {
-            let result = results[i];
-            if (result.error) {
-                error.constraints.push(...result.error.constraints)
-            } else {
-                args.value[keys[i]] = result.value;
+            let result = results[i], key = keys[i];
+            if (result.errors && result.errors.length) {
+
+                error.constraints.push(...result.errors)
+
+            } else if (!schemasIndex[key] && args.validateOptions.stripUnknown) {
+
+                delete args.value[key];
+
+            } else if (args.value[key]) {
+
+                args.value[key] = result.value;
             }
         }
 
@@ -46,6 +48,20 @@ export class ObjectConstraint implements IConstraint {
         error.type = this.type;
 
         return {isValid: false, error};
+    }
+
+    private async _validateProperty(schemasIndex: { [index: string]: AnySchema }, key: string, args: ValidationParams): Promise<{ errors: ValidationError[], value: any }> {
+        let schema = schemasIndex[key], value = args.value[key];
+
+        if (!schema) {
+            return {errors: [], value: value}
+        }
+
+        return args.validator.validate(schema, value, {
+            ...(args.validateOptions || {}),
+            object: args.value,
+            property: key
+        })
     }
 
     public get type(): string {

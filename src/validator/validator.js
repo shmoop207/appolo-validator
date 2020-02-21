@@ -13,15 +13,11 @@ let Validator = class Validator {
     }
     async validate(schema, value, options = {}) {
         options = index_1.Objects.defaults({}, options, schema.options, defaults_1.ValidateDefaults);
-        let result = await this.createSchemaValidator().validate(value, schema, options);
-        return { error: result.error, value: result.value };
+        let { errors, value: valueConverted } = await this.createSchemaValidator().validate(value, schema, options);
+        return { errors, value: valueConverted };
     }
     async validateAndTrow(schema, value, options) {
-        let result = await this.validate(value, options);
-        if (result.error) {
-            throw result.error;
-        }
-        return result.value;
+        throw new Error("not implemented");
     }
 };
 tslib_1.__decorate([

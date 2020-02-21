@@ -10,7 +10,7 @@ export class NumberSchema extends AnySchema {
 
         this._type = "number";
 
-        this.addValidation({
+        this.addConstraint({
             constraint: NumberConstraint,
             options: validationOptions,
             args: []

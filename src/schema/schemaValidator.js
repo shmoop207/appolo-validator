@@ -13,14 +13,52 @@ let SchemaValidator = class SchemaValidator {
         this._schema = schema;
         this._value = value;
         this._groupsIndex = appolo_utils_1.Arrays.keyBy(options.groups || []);
-        let result = await appolo_utils_1.Promises.map(schema.validators, constraintSchema => this._validateConstraint(constraintSchema));
-        let { error } = this._buildError(value, result);
-        return { error, value };
+        let { blackList, parallel, whiteList } = this._distributeConstraint(schema.constraints);
+        if (await this._checkWhiteListConstraint(whiteList)) {
+            return { errors: [], value };
+        }
+        let blackListError = await this._checkBlackListConstraint(blackList);
+        if (blackListError) {
+            return { errors: [blackListError], value };
+        }
+        let errors = await this._checkParallelConstraint(parallel);
+        return { errors, value };
+    }
+    async _checkWhiteListConstraint(whiteList) {
+        if (whiteList.length == 0) {
+            return false;
+        }
+        let result = await appolo_utils_1.Promises.someResolved(whiteList.map(item => this._validateConstraint(item)), { fn: value => !value });
+        return result.length > 0;
+    }
+    async _checkBlackListConstraint(blackList) {
+        if (blackList.length == 0) {
+            return null;
+        }
+        let result = await appolo_utils_1.Promises.someRejected(blackList.map(item => this._validateConstraint(item)), { fn: value => !value });
+        if (!result.length) {
+            return null;
+        }
+        return result[0].reason;
+    }
+    _distributeConstraint(validators) {
+        let blackList = [], whiteList = [], parallel = [];
+        for (let i = 0; i < validators.length; i++) {
+            let validator = validators[i];
+            validator.blackList
+                ? blackList.push(validator)
+                : validator.whiteList ? whiteList.push(validator) : parallel.push(validator);
+        }
+        return { blackList, whiteList, parallel };
+    }
+    async _checkParallelConstraint(constraintSchema) {
+        let errors = await appolo_utils_1.Promises.map(constraintSchema, constraintSchema => this._validateConstraint(constraintSchema));
+        return appolo_utils_1.Arrays.compact(errors);
     }
     async _validateConstraint(constraintSchema) {
         let constraint = null, error, message;
         if (!this._checkValidGroups(constraintSchema.options.groups)) {
-            return { isValid: true };
+            return null;
         }
         let params = {
             value: this._value,
@@ -35,22 +73,23 @@ let SchemaValidator = class SchemaValidator {
             constraint = this._getConstraintInstance(constraintSchema.constraint);
             let result = await constraint.validate(params);
             if (result.isValid) {
-                return { isValid: true };
+                return null;
             }
-            error = result.error;
+            error = result.error || this._createError(constraint.defaultMessage(params), constraint.type);
         }
         catch (e) {
-            message = "failed to run validator";
+            error = this._createError("failed to run validator", "unknown");
         }
-        if (!error) {
-            error = new ValidationError_1.ValidationError();
-            error.value = this._value;
-            error.message = message || constraint.defaultMessage(params);
-            error.type = constraint ? constraint.type : "unknown";
-            error.property = this._options.property;
-            error.target = this._options.object;
-        }
-        return { isValid: false, error };
+        return error;
+    }
+    _createError(message, type) {
+        let error = new ValidationError_1.ValidationError();
+        error.value = this._value;
+        error.message = message;
+        error.type = type;
+        error.property = this._options.property;
+        error.target = this._options.object;
+        return error;
     }
     _checkValidGroups(constraintGroups) {
         if (!this._options.groups || !this._options.groups.length || !constraintGroups || !constraintGroups.length) {
@@ -66,8 +105,8 @@ let SchemaValidator = class SchemaValidator {
         }
         return new constraintClass();
     }
-    _buildError(value, validatorsResults) {
-        let isValid = true, error = new ValidationError_1.ValidationError();
+    _buildError(validatorsResults) {
+        let isValid = true, error = this._createError("failed to validate", "");
         for (let i = 0; i < validatorsResults.length; i++) {
             let validatorResult = validatorsResults[i];
             if (!validatorResult.isValid) {
@@ -78,7 +117,6 @@ let SchemaValidator = class SchemaValidator {
         if (isValid) {
             return { error: null };
         }
-        error.message = "failed to validate";
         return { error };
     }
 };

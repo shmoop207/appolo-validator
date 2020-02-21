@@ -5,4 +5,6 @@ export interface IConstraintSchema {
     constraint: IConstraintClass
     options?: IConstraintOptions
     args?: any[]
+    whiteList?: boolean
+    blackList?:boolean
 }
