@@ -2,17 +2,20 @@ import {
     IConstraintClass,
     IConstraint,
     ValidationParams,
-    IConstraintValidateResult
+    IConstraintValidateResult, IConverterClass
 } from "../constraints/IConstraint";
 import {ValidationError} from "../common/errors/ValidationError";
 import {inject, Injector, Util, define, singleton} from "appolo-engine";
-import {Schema} from "./schema";
 import {IValidateOptions} from "../interfaces/IOptions";
 import {Objects, Promises, Arrays} from "appolo-utils";
 import {ValidateDefaults} from "../defaults/defaults";
 import {Validator} from "../validator/validator";
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
 import {AnySchema} from "./types/anySchema";
+import {IConverter} from "../converters/IConverter";
+import {IConverterSchema} from "../interfaces/IConverterSchema";
+import {IConstraintOptions} from "../interfaces/IConstraintOptions";
+import {Ref} from "./types/ref";
 
 @define()
 export class SchemaValidator {
@@ -28,29 +31,34 @@ export class SchemaValidator {
 
     public async validate(value: any, schema: AnySchema, options: IValidateOptions): Promise<{ errors: ValidationError[], value: any }> {
 
-        if (options.convert) {
-            value = await schema.convert(value);
-        }
         this._options = options;
         this._schema = schema;
         this._value = value;
         this._groupsIndex = Arrays.keyBy(options.groups || []);
 
+        schema.beforeValidate(options);
+
+        if (schema.converters.length) {
+            await this._runConverters();
+        }
+
         let {blackList, parallel, whiteList} = this._distributeConstraint(schema.constraints);
 
-        if (await this._checkWhiteListConstraint(whiteList)) {
+        if (whiteList.length && await this._checkWhiteListConstraint(whiteList)) {
             return {errors: [], value}
         }
 
-        let blackListError = await this._checkBlackListConstraint(blackList);
+        if (blackList.length) {
+            let blackListError = await this._checkBlackListConstraint(blackList);
 
-        if (blackListError) {
-            return {errors: [blackListError], value};
+            if (blackListError) {
+                return {errors: [blackListError], value};
+            }
         }
 
         let errors = await this._checkParallelConstraint(parallel);
 
-        return {errors, value};
+        return {errors, value: this._value};
     }
 
     private async _checkWhiteListConstraint(whiteList: IConstraintSchema[]): Promise<boolean> {
@@ -99,40 +107,86 @@ export class SchemaValidator {
 
     }
 
+    private async _runConverters() {
+        for (let i = 0; i < this._schema.converters.length; i++) {
+            let converter = this._schema.converters[i];
+
+            await this._convertValue(converter);
+        }
+    }
+
+    private async _convertValue(converterSchema: IConverterSchema) {
+        try {
+            let converter = this._getInstance(converterSchema.converter);
+
+            let params = this._createValidationParams(converterSchema.options, converterSchema.args);
+
+            let value = await converter.convert(params);
+
+            this._value = value;
+
+        } catch (e) {
+            //TODO handle converter error;
+        }
+    }
+
     private async _validateConstraint(constraintSchema: IConstraintSchema): Promise<ValidationError> {
         let constraint: IConstraint = null, error: ValidationError, message: string;
 
-        if (!this._checkValidGroups(constraintSchema.options.groups)) {
-            return null
-        }
-
-        let params: ValidationParams = {
-            value: this._value,
-            options: constraintSchema.options || {},
-            args: constraintSchema.args || [],
-            validator: this.validator,
-            property: this._options.property,
-            object: this._options.object,
-            validateOptions: this._options
-        };
+        // if (!this._checkValidGroups(constraintSchema.options.groups)) {
+        //     return null
+        // }
 
         try {
 
-            constraint = this._getConstraintInstance(constraintSchema.constraint);
+
+            let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
+
+            params.args = this._prepareArgs(constraintSchema.args, params);
+
+            constraint = this._getInstance(constraintSchema.constraint);
 
             let result = await constraint.validate(params);
 
             if (result.isValid) {
+
+                (result.value != undefined) && (this._value = result.value);
+
                 return null
             }
 
             error = result.error || this._createError(constraint.defaultMessage(params), constraint.type);
 
         } catch (e) {
-            error = this._createError("failed to run validator", "unknown");
+            error = this._createError("failed to run validation", "unknown");
         }
 
         return error
+    }
+
+    private _prepareArgs(args: any[], params: ValidationParams): any[] {
+        let output = [];
+
+        for (let i = 0; i < (args || []).length; i++) {
+            let arg = args[i];
+            output.push(arg instanceof Ref ? arg.geValue(params) : arg)
+        }
+
+        return output;
+    }
+
+    private _createValidationParams(options: IConstraintOptions, args: any[]): ValidationParams {
+        let params: ValidationParams = {
+            value: this._value,
+            options: options || {},
+            args: args || [],
+            validator: this.validator,
+            property: this._options.property,
+            object: this._options.object,
+            validateOptions: this._options
+        };
+
+        return params;
     }
 
     private _createError(message: string, type: string) {
@@ -146,44 +200,44 @@ export class SchemaValidator {
         return error;
     }
 
-    private _checkValidGroups(constraintGroups: string[]): boolean {
-        if (!this._options.groups || !this._options.groups.length || !constraintGroups || !constraintGroups.length) {
-            return true;
-        }
-        let validGroups = constraintGroups.every(group => !!this._groupsIndex[group]);
+    // private _checkValidGroups(constraintGroups: string[]): boolean {
+    //     if (!this._options.groups || !this._options.groups.length || !constraintGroups || !constraintGroups.length) {
+    //         return true;
+    //     }
+    //     let validGroups = constraintGroups.every(group => !!this._groupsIndex[group]);
+    //
+    //     return validGroups;
+    // }
 
-        return validGroups;
-    }
-
-    private _getConstraintInstance(constraintClass: IConstraintClass): IConstraint {
-        let classId = Util.getClassName(constraintClass);
+    private _getInstance<T>(klass: (new() => T)): T {
+        let classId = Util.getClassName(klass);
 
         if (this.injector.hasDefinition(classId)) {
             return this.injector.get(classId);
         }
 
-        return new constraintClass();
+        return new klass();
     }
 
 
-    private _buildError(validatorsResults: { isValid: boolean, error?: ValidationError }[]): { error: ValidationError } {
-
-        let isValid: boolean = true, error = this._createError("failed to validate", "");
-
-        for (let i = 0; i < validatorsResults.length; i++) {
-            let validatorResult = validatorsResults[i];
-
-            if (!validatorResult.isValid) {
-                isValid = false;
-                error.constraints.push(validatorResult.error)
-            }
-        }
-
-        if (isValid) {
-            return {error: null};
-        }
-
-        return {error}
-
-    }
+    // private _buildError(validatorsResults: { isValid: boolean, error?: ValidationError }[]): { error: ValidationError } {
+    //
+    //     let isValid: boolean = true, error = this._createError("failed to validate", "");
+    //
+    //     for (let i = 0; i < validatorsResults.length; i++) {
+    //         let validatorResult = validatorsResults[i];
+    //
+    //         if (!validatorResult.isValid) {
+    //             isValid = false;
+    //             error.constraints.push(validatorResult.error)
+    //         }
+    //     }
+    //
+    //     if (isValid) {
+    //         return {error: null};
+    //     }
+    //
+    //     return {error}
+    //
+    // }
 }

@@ -5,7 +5,7 @@ const anySchema_1 = require("../../schema/types/anySchema");
 class AllowConstraint {
     async validate(params) {
         let allowed = params.args[0], value = params.value;
-        if (!allowed || allowed.length) {
+        if (!allowed || !allowed.length) {
             return { isValid: true };
         }
         for (let i = 0; i < allowed.length; i++) {

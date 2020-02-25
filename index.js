@@ -6,22 +6,28 @@ const appolo_utils_1 = require("appolo-utils");
 const defaults_1 = require("./src/defaults/defaults");
 const validator_1 = require("./src/validator/validator");
 exports.Validator = validator_1.Validator;
-const schema_1 = require("./src/schema/schema");
-async function validator(options = {}) {
+const anySchema_1 = require("./src/schema/types/anySchema");
+exports.any = anySchema_1.any;
+const numberSchema_1 = require("./src/schema/types/numberSchema");
+exports.number = numberSchema_1.number;
+const stringSchema_1 = require("./src/schema/types/stringSchema");
+exports.string = stringSchema_1.string;
+const arraySchema_1 = require("./src/schema/types/arraySchema");
+exports.array = arraySchema_1.array;
+const objectSchema_1 = require("./src/schema/types/objectSchema");
+exports.object = objectSchema_1.object;
+const ref_1 = require("./src/schema/types/ref");
+exports.ref = ref_1.ref;
+const when_1 = require("./src/constraints/when/when");
+exports.when = when_1.when;
+async function validation(options = {}) {
     let app = appolo_engine_1.createApp({ root: __dirname });
     app.injector.addObject("options", appolo_utils_1.Objects.defaults({}, options, defaults_1.ValidatorDefaults));
     await app.launch();
     let server = app.injector.get(validator_1.Validator);
     return server;
 }
-exports.validator = validator;
-function schema(options) {
-    return new schema_1.Schema(options);
-}
-exports.schema = schema;
+exports.validation = validation;
 //TODO custom message
-//TODO required
-//TODO optional
-//TODO custom convert
-//TODO ref
+//TODO ValidateIf
 //# sourceMappingURL=index.js.map

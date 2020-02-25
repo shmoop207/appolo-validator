@@ -1,25 +1,38 @@
 import {AnySchema} from "./anySchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
-import {ISchemaOptions} from "../../interfaces/IOptions";
+import {ISchemaOptions, IValidateOptions} from "../../interfaces/IOptions";
 import {ArrayConstraint} from "../../constraints/arrays/arrayConstraint";
 import {ObjectConstraint} from "../../constraints/objects/objectConstraint";
 import {Util} from "appolo-utils/index";
 
 export class ObjectSchema extends AnySchema {
 
-    constructor(schemaIndex: { [index: string]: AnySchema }, validationOptions: IConstraintOptions = {}, schemaOptions: ISchemaOptions = {}) {
-        super(validationOptions, schemaOptions);
+    constructor(options: IConstraintOptions={}) {
+        super(options);
 
         this._type = "object";
 
         this.addConstraint({
             constraint: ObjectConstraint,
-            options: validationOptions,
-            args: schemaIndex ? [schemaIndex] : []
+            options: options,
+            args: []
         })
     }
 
-    public async convert(value: any): Promise<any> {
-        return typeof value === 'string' ? Util.objects.tryParseJSON(value) || value : value
+    beforeValidate(options: IValidateOptions) {
+
+        if (options.convert) {
+
+            this.addConverter({
+                converter: require("../../converters/objects/jsonConverter").JsonConverter,
+                args: []
+            }, true)
+        }
+
+        return super.beforeValidate(options);
     }
+}
+
+export function object(options?: IConstraintOptions) {
+    return new ObjectSchema(options)
 }

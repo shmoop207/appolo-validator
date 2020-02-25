@@ -2,7 +2,7 @@ import {IConstraint, IConstraintValidateResult, ValidationParams} from "../ICons
 import {registerConstraint} from "../../schema/registerConstraint";
 import {NumberSchema} from "../../schema/types/numberSchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
-
+import {Ref} from "../../schema/types/ref";
 
 export class MinNumberConstraint implements IConstraint {
 
@@ -31,6 +31,6 @@ registerConstraint.extend({
 declare module '../../schema/types/numberSchema' {
 
     interface NumberSchema {
-        min(min: number, options?: IConstraintOptions): this;
+        min(min: number | Ref, options?: IConstraintOptions): this;
     }
 }

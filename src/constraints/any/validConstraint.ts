@@ -5,20 +5,20 @@ import {AnySchema} from "../../schema/types/anySchema";
 import {truncate} from "fs";
 
 
-export class AllowConstraint implements IConstraint {
+export class ValidConstraint implements IConstraint {
 
     public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
 
-        let allowed: any[] = params.args[0], value = params.value;
+        let valid: any[] = params.args[0], value = params.value;
 
-        if (!allowed || !allowed.length) {
+        if (!valid || !valid.length) {
             return {isValid: true}
         }
 
-        for (let i = 0; i < allowed.length; i++) {
-            let allowedItem = allowed[i];
+        for (let i = 0; i < valid.length; i++) {
+            let validItem = valid[i];
 
-            if (allowedItem === value || (isNaN(allowedItem) && isNaN(value))) {
+            if (validItem === value || (isNaN(validItem) && isNaN(value))) {
                 return {isValid: true};
             }
         }
@@ -27,24 +27,24 @@ export class AllowConstraint implements IConstraint {
     }
 
     public get type(): string {
-        return "allow"
+        return "equals"
     }
 
     public defaultMessage(args: ValidationParams): string {
-        return `${args.property || args.value} is required`
+        return `${args.property || args.value} is not valid`
     }
 }
 
 registerConstraint.extend({
     base: AnySchema,
-    name: "allow",
-    constraint: AllowConstraint,
-    whiteList:true
+    name: "valid",
+    constraint: ValidConstraint,
+    blackList: true
 });
 
 declare module '../../schema/types/anySchema' {
 
     interface AnySchema {
-        allow(values: any[], options?: IConstraintOptions): this;
+        valid(values: any[], options?: IConstraintOptions): this;
     }
 }

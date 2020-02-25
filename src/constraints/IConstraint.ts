@@ -2,10 +2,12 @@ import {ValidationError} from "../common/errors/ValidationError";
 import {Validator} from "../validator/validator";
 import {IConstraintOptions} from "../interfaces/IConstraintOptions";
 import {IValidateOptions} from "../interfaces/IOptions";
+import {IConverter} from "../converters/IConverter";
 
 export interface IConstraintValidateResult {
     isValid: boolean,
-    error?: ValidationError
+    error?: ValidationError,
+    value?: any
 }
 
 export interface IConstraint {
@@ -21,6 +23,10 @@ export interface IConstraintClass {
     new(): IConstraint
 }
 
+export interface IConverterClass {
+    new(): IConverter
+}
+
 export interface ValidationParams {
 
     value: any;
@@ -32,7 +38,7 @@ export interface ValidationParams {
     targetName?: string;
 
 
-    object?: Object;
+    object?: any;
 
     property?: string | number;
 

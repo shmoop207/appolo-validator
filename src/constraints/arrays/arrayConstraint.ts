@@ -1,9 +1,6 @@
 import {registerConstraint} from "../../schema/registerConstraint";
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../IConstraint";
-import {Schema} from "../../schema/schema";
-import {Promises} from "appolo-utils";
-import {ValidationError} from "../../common/errors/ValidationError";
-import {AnySchema} from "../../schema/types/anySchema";
+
 
 
 export class ArrayConstraint implements IConstraint {
@@ -12,44 +9,7 @@ export class ArrayConstraint implements IConstraint {
 
         let isValid = Array.isArray(args.value);
 
-        if (!isValid) {
-            return {isValid};
-        }
-
-        let schema = args.args[0] as AnySchema;
-
-        if (!schema) {
-            return {isValid}
-        }
-
-        let results = await Promises.map(args.value, (item, index) =>
-            args.validator.validate(schema, item, {
-                ...(args.validateOptions || {}),
-                object: args.value,
-                property: index
-            }));
-
-        let error = new ValidationError();
-
-
-        for (let i = 0; i < results.length; i++) {
-            let result = results[i];
-            if (result.errors && result.errors.length) {
-                error.constraints.push(...result.errors)
-            } else {
-                args.value[i] = result.value;
-            }
-        }
-
-        if (error.constraints.length == 0) {
-            return {isValid: true}
-        }
-        error.property = args.property;
-        error.target = args.object;
-        error.type = this.type;
-        error.message = this.defaultMessage(args);
-
-        return {isValid: false, error};
+        return {isValid};
     }
 
     public get type(): string {
@@ -57,9 +17,11 @@ export class ArrayConstraint implements IConstraint {
     }
 
     public defaultMessage(args: ValidationParams): string {
-        return `is not a valid array`
+        return `value is not a valid array`
     }
 }
+
+
 
 
 // registerConstraint.extend("isArray", function (schema?: Schema, options?: IConstraintOptions) {

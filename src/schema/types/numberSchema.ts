@@ -1,23 +1,36 @@
 import {AnySchema} from "./anySchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {NumberConstraint} from "../../constraints/numbers/numberConstraint";
-import {ISchemaOptions} from "../../interfaces/IOptions";
+import {ISchemaOptions, IValidateOptions} from "../../interfaces/IOptions";
 
 export class NumberSchema extends AnySchema {
 
-    constructor(validationOptions: IConstraintOptions = {}, schemaOptions: ISchemaOptions = {}) {
-        super(validationOptions, schemaOptions);
+    constructor(options: IConstraintOptions={}) {
+        super(options);
 
         this._type = "number";
 
         this.addConstraint({
             constraint: NumberConstraint,
-            options: validationOptions,
+            options: options,
             args: []
-        })
+        });
     }
 
-    public async convert(value: any): Promise<any> {
-        return typeof value === 'string' ? parseFloat(value) : value
+    beforeValidate(options: IValidateOptions) {
+
+        if (options.convert) {
+
+            this.addConverter({
+                converter: require("../../converters/numbers/numberConverter").NumberConverter,
+                args: []
+            }, true)
+        }
+
+        return super.beforeValidate(options);
     }
+}
+
+export function number(options?: IConstraintOptions) {
+    return new NumberSchema(options)
 }

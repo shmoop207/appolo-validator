@@ -1,24 +1,30 @@
-import {ISchemaOptions} from "../../interfaces/IOptions";
+import {ISchemaOptions, IValidateOptions} from "../../interfaces/IOptions";
 import {Objects} from "appolo-utils/index";
 import {SchemaDefaults} from "../../defaults/defaults";
 import {IConstraintSchema} from "../../interfaces/IConstraintSchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {ValidationParams} from "../../constraints/IConstraint";
+import {IConverterSchema} from "../../interfaces/IConverterSchema";
+import {OrConstraint} from "../../constraints/any/orConstraint";
 
 export class AnySchema {
 
-    private readonly _options: ISchemaOptions;
+    private _options: ISchemaOptions;
     private readonly _constraints: IConstraintSchema[] = [];
+    private readonly _converters: IConverterSchema[] = [];
 
     protected _type: string;
     protected _params: {};
 
-    constructor(validationOptions: IConstraintOptions = {}, schemaOptions: ISchemaOptions = {}) {
-        this._options = Objects.defaults({}, schemaOptions, SchemaDefaults);
+    constructor(options: IConstraintOptions = {}) {
+        this._options = Objects.defaults({}, options, SchemaDefaults);
         this._type = "any";
         this._params = {}
     }
 
+    public beforeValidate(options: IValidateOptions) {
+        return this
+    }
 
     public get params() {
         return this._params;
@@ -28,18 +34,33 @@ export class AnySchema {
         return this._constraints;
     }
 
+    public get converters(): IConverterSchema[] {
+        return this._converters;
+    }
 
-    public get options(): ISchemaOptions {
+    public options(options: ISchemaOptions): this {
+        this._options = Object.assign({}, this._options, options);
+
+        return this;
+    }
+
+    public getOptions() {
         return this._options;
     }
 
-    public addConstraint(schema: IConstraintSchema): AnySchema {
+    addConstraint(schema: IConstraintSchema): AnySchema {
         this._constraints.push(schema);
         return this
     }
 
-
-    public async convert(value: any): Promise<any> {
-        return value;
+    public addConverter(schema: IConverterSchema, top: boolean = false): AnySchema {
+        top ? this._converters.unshift(schema) : this._converters.push(schema);
+        return this
     }
+
 }
+
+export function any(options?: IConstraintOptions) {
+    return new AnySchema(options)
+}
+

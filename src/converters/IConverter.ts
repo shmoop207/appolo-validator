@@ -1,5 +1,5 @@
 import {ValidationParams} from "../constraints/IConstraint";
 
-export interface IConvertor {
+export interface IConverter {
     convert(validationArguments: ValidationParams): Promise<any> | any
 }

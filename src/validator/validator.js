@@ -2,19 +2,25 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const appolo_engine_1 = require("appolo-engine");
-const schema_1 = require("../schema/schema");
 const index_1 = require("appolo-utils/index");
 const defaults_1 = require("../defaults/defaults");
 const schemaValidator_1 = require("../schema/schemaValidator");
+const anySchema_1 = require("../schema/types/anySchema");
+const when_1 = require("../constraints/when/when");
 let Validator = class Validator {
-    schema(options = {}) {
-        options = index_1.Objects.defaults({}, options, this.options, defaults_1.ValidatorDefaults);
-        return new schema_1.Schema(options);
-    }
+    // public schema(options: ISchemaOptions = {}) {
+    //
+    //     options = Objects.defaults({}, options, this.options, ValidatorDefaults);
+    //
+    //     return new Schema(options);
+    // }
     async validate(schema, value, options = {}) {
-        options = index_1.Objects.defaults({}, options, schema.options, defaults_1.ValidateDefaults);
-        let { errors, value: valueConverted } = await this.createSchemaValidator().validate(value, schema, options);
-        return { errors, value: valueConverted };
+        if (schema instanceof when_1.When) {
+            schema = anySchema_1.any().if(schema);
+        }
+        options = index_1.Objects.defaults({}, options, schema.getOptions(), this.options, defaults_1.ValidateDefaults);
+        let result = await this.createSchemaValidator().validate(value, schema, options);
+        return result;
     }
     async validateAndTrow(schema, value, options) {
         throw new Error("not implemented");

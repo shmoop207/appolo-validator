@@ -1,21 +1,30 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const anySchema_1 = require("./anySchema");
-const appolo_utils_1 = require("appolo-utils");
 const arrayConstraint_1 = require("../../constraints/arrays/arrayConstraint");
 class ArraySchema extends anySchema_1.AnySchema {
-    constructor(schema, validationOptions = {}, schemaOptions = {}) {
-        super(validationOptions, schemaOptions);
+    constructor(options = {}) {
+        super(options);
         this._type = "array";
         this.addConstraint({
             constraint: arrayConstraint_1.ArrayConstraint,
-            options: validationOptions,
-            args: schema ? [schema] : []
+            options: options,
+            args: []
         });
     }
-    async convert(value) {
-        return typeof value === 'string' ? appolo_utils_1.Util.objects.tryParseJSON(value) || value : value;
+    beforeValidate(options) {
+        if (options.convert) {
+            this.addConverter({
+                converter: require("../../converters/objects/jsonConverter").JsonConverter,
+                args: []
+            }, true);
+        }
+        return super.beforeValidate(options);
     }
 }
 exports.ArraySchema = ArraySchema;
+function array(options) {
+    return new ArraySchema(options);
+}
+exports.array = array;
 //# sourceMappingURL=arraySchema.js.map

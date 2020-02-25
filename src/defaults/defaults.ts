@@ -1,6 +1,6 @@
-export let ValidatorDefaults = {convert: false};
+export let ValidatorDefaults = {};
 
-export let SchemaDefaults = {convert: false};
+export let SchemaDefaults = {};
 
 
-export let ValidateDefaults = {convert: false,failFast:true};
+export let ValidateDefaults = {};

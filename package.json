@@ -20,6 +20,7 @@
     "type": "git",
     "url": "https://github.com/shmoop207/appolo-decorators.git"
   },
+  "typings": "src",
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
