@@ -19,13 +19,22 @@ export class KeysConstraint implements IConstraint {
 
         let results = await Promises.map(keys, key => this._validateProperty(schemasIndex, key, args));
 
-        let error = new ValidationError();
+        //let error = new ValidationError();
+
+        let errors: ValidationError[] = [];
 
         for (let i = 0; i < results.length; i++) {
             let result = results[i], key = keys[i];
             if (result.errors && result.errors.length) {
 
-                error.constraints.push(...result.errors)
+                errors.push(...result.errors);
+
+                if (args.object) {
+                    for (let j = 0; j < result.errors.length; j++) {
+                        result.errors[j].addParent({property: args.property, object: args.object})
+                    }
+                }
+
 
             } else if (!schemasIndex[key] && args.validateOptions.stripUnknown) {
 
@@ -37,16 +46,12 @@ export class KeysConstraint implements IConstraint {
             }
         }
 
-        if (error.constraints.length == 0) {
+        if (errors.length == 0) {
             return {isValid: true}
         }
 
-        error.message = this.defaultMessage(args);
-        error.property = args.property;
-        error.target = args.object;
-        error.type = this.type;
 
-        return {isValid: false, error};
+        return {isValid: false, errors};
     }
 
     private async _validateProperty(schemasIndex: { [index: string]: AnySchema }, key: string, args: ValidationParams): Promise<{ errors: ValidationError[], value: any }> {

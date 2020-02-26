@@ -6,7 +6,7 @@ import {IConverter} from "../converters/IConverter";
 
 export interface IConstraintValidateResult {
     isValid: boolean,
-    error?: ValidationError,
+    errors?: ValidationError[],
     value?: any
 }
 

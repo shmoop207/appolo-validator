@@ -39,10 +39,10 @@ export class ArrayConstraint implements IConstraint {
 // }
 
 
-// export function isNumber(): ((target: any, propertyKey: string, descriptor?: PropertyDescriptor) => any) & Schema {
+// export function isNumber(): ((object: any, propertyKey: string, descriptor?: PropertyDescriptor) => any) & Schema {
 //     let schema = schema()
 //
-//     let fn = function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+//     let fn = function (object: any, propertyKey: string, descriptor: PropertyDescriptor) {
 //         console.log(fn)
 //     }
 //

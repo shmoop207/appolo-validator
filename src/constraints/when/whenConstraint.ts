@@ -85,11 +85,11 @@ export class WhenConstraint implements IConstraint {
         }
     }
 
-    private async _validateSchemaResult(schema: AnySchema, value: any, params: ValidationParams) {
+    private async _validateSchemaResult(schema: AnySchema, value: any, params: ValidationParams):Promise<IConstraintValidateResult> {
 
         let result = await this._validateSchema(schema, value, params);
 
-        return {isValid: result.errors.length == 0, error: result.errors[0], value: result.value};
+        return {isValid: result.errors.length == 0, errors: result.errors, value: result.value};
     }
 
     private _validateSchema(schema: AnySchema, value: any, params: ValidationParams) {

@@ -20,6 +20,8 @@ const ref_1 = require("./src/schema/types/ref");
 exports.ref = ref_1.ref;
 const when_1 = require("./src/constraints/when/when");
 exports.when = when_1.when;
+const orConstraint_1 = require("./src/constraints/any/orConstraint");
+exports.or = orConstraint_1.or;
 async function validation(options = {}) {
     let app = appolo_engine_1.createApp({ root: __dirname });
     app.injector.addObject("options", appolo_utils_1.Objects.defaults({}, options, defaults_1.ValidatorDefaults));

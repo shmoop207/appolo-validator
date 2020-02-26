@@ -2,18 +2,18 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const registerConstraint_1 = require("../../schema/registerConstraint");
 const anySchema_1 = require("../../schema/types/anySchema");
+const appolo_utils_1 = require("appolo-utils");
 class OrConstraint {
     async validate(params) {
         let schemas = params.args[0], value = params.value;
         if (!Array.isArray(schemas)) {
             schemas = [schemas];
         }
-        let results = await Promise.all(schemas.map((schema) => this._validateSchema(schema, value, params)));
-        for (let i = 0; i < results.length; i++) {
-            let result = results[i];
-            if (result.errors.length == 0) {
-                return { isValid: true, value: result.value };
-            }
+        let results = await appolo_utils_1.Promises.someResolved(schemas.map((schema) => this._validateSchema(schema, value, params)), {
+            fn: value => value.errors.length == 0
+        });
+        if (results.length > 0) {
+            return { isValid: true, value: results[0].value.value };
         }
         return { isValid: false };
     }
@@ -34,4 +34,12 @@ registerConstraint_1.registerConstraint.extend({
     constraint: OrConstraint,
     whiteList: true
 });
+function or(schema) {
+    if (Array.isArray(schema)) {
+        let [first, ...rest] = schema;
+        return first.or(rest);
+    }
+    return schema;
+}
+exports.or = or;
 //# sourceMappingURL=orConstraint.js.map

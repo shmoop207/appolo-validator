@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 class ValidationError extends Error {
     constructor() {
         super();
-        this._constraints = [];
+        this._parents = [];
         Object.setPrototypeOf(this, ValidationError.prototype);
     }
-    get target() {
-        return this._target;
+    get object() {
+        return this._object;
     }
-    set target(value) {
-        this._target = value;
+    set object(value) {
+        this._object = value;
     }
     get property() {
         return this._property;
@@ -30,9 +30,15 @@ class ValidationError extends Error {
     set message(value) {
         this._message = value;
     }
-    get constraints() {
-        return this._constraints;
+    addParent(parent) {
+        this._parents.unshift(parent);
     }
+    get parents() {
+        return this._parents;
+    }
+    // public get constraints(): ValidationError[] {
+    //     return this._constraints;
+    // }
     get type() {
         return this._type;
     }

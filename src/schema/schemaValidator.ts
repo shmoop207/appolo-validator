@@ -48,7 +48,7 @@ export class SchemaValidator {
             let blackListError = await this._checkBlackListConstraint(blackList);
 
             if (blackListError) {
-                return {errors: [blackListError], value};
+                return {errors: blackListError, value};
             }
         }
 
@@ -62,11 +62,34 @@ export class SchemaValidator {
 
         if (options.convert && schema.converter) {
             converters = converters.slice();
-            converters.push({converter: schema.converter, args: []})
+            converters.unshift({converter: schema.converter, args: []})
         }
 
         if (converters.length) {
             return this._runConverters(converters);
+        }
+    }
+
+    private async _runConverters(converters: IConverterSchema[]) {
+        for (let i = 0; i < converters.length; i++) {
+            let converter = converters[i];
+
+            await this._convertValue(converter);
+        }
+    }
+
+    private async _convertValue(converterSchema: IConverterSchema) {
+        try {
+            let converter = this._getInstance(converterSchema.converter);
+
+            let params = this._createValidationParams(converterSchema.options, converterSchema.args);
+
+            let value = await converter.convert(params);
+
+            this._value = value;
+
+        } catch (e) {
+            //TODO handle converter error;
         }
     }
 
@@ -80,7 +103,7 @@ export class SchemaValidator {
         return result.length > 0
     }
 
-    private async _checkBlackListConstraint(blackList: IConstraintSchema[]): Promise<ValidationError> {
+    private async _checkBlackListConstraint(blackList: IConstraintSchema[]): Promise<ValidationError[]> {
         if (blackList.length == 0) {
             return null;
         }
@@ -109,45 +132,22 @@ export class SchemaValidator {
     }
 
     private async _checkParallelConstraint(constraintSchema: IConstraintSchema[]): Promise<ValidationError[]> {
-
+        let output = [];
         let errors = await Promises.map(constraintSchema, constraintSchema => this._validateConstraint(constraintSchema));
 
-        return Arrays.compact(errors);
-
-    }
-
-    private async _runConverters(converters: IConverterSchema[]) {
-        for (let i = 0; i < converters.length; i++) {
-            let converter = converters[i];
-
-            await this._convertValue(converter);
+        for(let i =0;i<errors.length;i++){
+            if(errors[i]){
+                output.push(...errors[i])
+            }
         }
+
+        return output
     }
 
-    private async _convertValue(converterSchema: IConverterSchema) {
-        try {
-            let converter = this._getInstance(converterSchema.converter);
-
-            let params = this._createValidationParams(converterSchema.options, converterSchema.args);
-
-            let value = await converter.convert(params);
-
-            this._value = value;
-
-        } catch (e) {
-            //TODO handle converter error;
-        }
-    }
-
-    private async _validateConstraint(constraintSchema: IConstraintSchema): Promise<ValidationError> {
+    private async _validateConstraint(constraintSchema: IConstraintSchema): Promise<ValidationError[]> {
         let constraint: IConstraint = null, error: ValidationError, message: string;
 
-        // if (!this._checkValidGroups(constraintSchema.options.groups)) {
-        //     return null
-        // }
-
         try {
-
 
             let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
 
@@ -164,13 +164,16 @@ export class SchemaValidator {
                 return null
             }
 
-            error = result.error || this._createError(constraint.defaultMessage(params), constraint.type);
+            if (result.errors && result.errors.length) {
+                return result.errors;
+            }
+
+            return [this._createError(constraint.defaultMessage(params), constraint.type)];
 
         } catch (e) {
-            error = this._createError("failed to run validation", "unknown");
+            return [this._createError("failed to run validation", "unknown")];
         }
 
-        return error
     }
 
     private _prepareArgs(args: any[], params: ValidationParams): any[] {
@@ -204,7 +207,7 @@ export class SchemaValidator {
         error.message = message;
         error.type = type;
         error.property = this._options.property;
-        error.target = this._options.object;
+        error.object = this._options.object;
 
         return error;
     }

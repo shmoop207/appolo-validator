@@ -23,27 +23,30 @@ export class ItemsConstraint implements IConstraint {
                 property: index
             }));
 
-        let error = new ValidationError();
-
+        let errors: ValidationError[] = [];
 
         for (let i = 0; i < results.length; i++) {
             let result = results[i];
             if (result.errors && result.errors.length) {
-                error.constraints.push(...result.errors)
+                errors.push(...result.errors);
+
+                if (args.object) {
+                    for (let j = 0; j < result.errors.length; j++) {
+                        result.errors[j].addParent({property: args.property, object: args.object})
+                    }
+                }
+
+
             } else {
                 args.value[i] = result.value;
             }
         }
 
-        if (error.constraints.length == 0) {
+        if (errors.length == 0) {
             return {isValid: true}
         }
-        error.property = args.property;
-        error.target = args.object;
-        error.type = this.type;
-        error.message = this.defaultMessage(args);
 
-        return {isValid: false, error};
+        return {isValid: false, errors};
     }
 
     public get type(): string {

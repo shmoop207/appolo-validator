@@ -12,6 +12,7 @@ import {array} from "./src/schema/types/arraySchema";
 import {object} from "./src/schema/types/objectSchema";
 import {ref} from "./src/schema/types/ref";
 import {when} from "./src/constraints/when/when";
+import {or} from "./src/constraints/any/orConstraint";
 import {DefaultConverter} from "./src/converters/any/defaultConverter";
 import {KeysConstraint} from "./src/constraints/objects/keysConstraint";
 import {ItemsConstraint} from "./src/constraints/arrays/itemsConstraint";
@@ -20,7 +21,7 @@ import {InvalidConstraint} from "./src/constraints/any/invalidConstraint";
 import {IConstraintOptions} from "./src/interfaces/IConstraintOptions";
 
 
-export {Validator, any, number, string, array, object, ref,when}
+export {Validator, any, number, string, array, object, ref, when, or}
 
 export async function validation(options: IOptions = {}): Promise<Validator> {
 

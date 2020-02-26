@@ -61,7 +61,7 @@ class WhenConstraint {
     }
     async _validateSchemaResult(schema, value, params) {
         let result = await this._validateSchema(schema, value, params);
-        return { isValid: result.errors.length == 0, error: result.errors[0], value: result.value };
+        return { isValid: result.errors.length == 0, errors: result.errors, value: result.value };
     }
     _validateSchema(schema, value, params) {
         return params.validator.validate(schema, value, Object.assign(Object.assign({}, (params.validateOptions || {})), { object: params.object, property: params.property }));

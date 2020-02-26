@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const chai = require("chai");
 const index_1 = require("../index");
+const andConstraint_1 = require("../src/constraints/any/andConstraint");
 let should = chai.should();
 describe("validator", function () {
     describe("Numbers", () => {
@@ -32,8 +33,8 @@ describe("validator", function () {
             result.value.b.should.be.eq(11);
             schema = index_1.object().keys({ a: index_1.number(), b: index_1.number() });
             result = await validator.validate(schema, { a: 1, b: "11" });
-            result.errors[0].constraints.length.should.be.eq(1);
-            result.errors[0].constraints[0].message.should.be.eq('11 is not a number');
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('11 is not a number');
         });
         it('should validate with convert precision', async () => {
             let result;
@@ -49,8 +50,7 @@ describe("validator", function () {
         let schema = index_1.array().items(index_1.number());
         let result = await validator.validate(schema, [5, "aa"]);
         result.errors.length.should.be.eq(1);
-        result.errors[0].constraints.length.should.be.eq(1);
-        result.errors[0].constraints[0].message.should.be.eq('aa is not a number');
+        result.errors[0].message.should.be.eq('aa is not a number');
     });
     it('should validate array or', async () => {
         let validator = await index_1.validation();
@@ -75,8 +75,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { min: 5, max: 4 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].constraints.length.should.be.eq(1);
-            result.errors[0].constraints[0].message.should.be.eq('4 min that was expected for this number');
+            result.errors[0].message.should.be.eq('4 min that was expected for this number');
         });
         it('should validate object when with schema', async () => {
             let validator = await index_1.validation();
@@ -86,8 +85,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { min: 5, max: 4 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].constraints.length.should.be.eq(1);
-            result.errors[0].constraints[0].message.should.be.eq('4 min that was expected for this number');
+            result.errors[0].message.should.be.eq('4 min that was expected for this number');
             let result2 = await validator.validate(schema, { min: 5, max: 7 });
             result2.errors.length.should.be.eq(0);
         });
@@ -99,8 +97,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { min: 5, max: 4 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].constraints.length.should.be.eq(1);
-            result.errors[0].constraints[0].message.should.be.eq('4 min that was expected for this number');
+            result.errors[0].message.should.be.eq('4 min that was expected for this number');
         });
         it('should validate object when with group else', async () => {
             let validator = await index_1.validation({ groups: ["test"] });
@@ -112,8 +109,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { min: 5, max: 6 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].constraints.length.should.be.eq(1);
-            result.errors[0].constraints[0].message.should.be.eq('6 min that was expected for this number');
+            result.errors[0].message.should.be.eq('6 min that was expected for this number');
         });
         it('should validate object when with switch', async () => {
             let validator = await index_1.validation({ groups: ["test"] });
@@ -126,8 +122,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { min: 5, max: 5 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].constraints.length.should.be.eq(1);
-            result.errors[0].constraints[0].message.should.be.eq('5 min that was expected for this number');
+            result.errors[0].message.should.be.eq('5 min that was expected for this number');
         });
     });
     it('should validate nested array', async () => {
@@ -135,19 +130,15 @@ describe("validator", function () {
         let schema = index_1.array().items(index_1.array().items(index_1.number()));
         let result = await validator.validate(schema, [[5], ["aa"]]);
         result.errors.length.should.be.eq(1);
-        result.errors[0].constraints.length.should.be.eq(1);
-        result.errors[0].constraints[0].message.should.be.eq('is not a valid array');
-        result.errors[0].constraints[0].property.should.be.eq(1);
-        result.errors[0].constraints[0].constraints[0].message.should.be.eq('aa is not a number');
-        result.errors[0].constraints[0].constraints[0].property.should.be.eq(0);
+        result.errors[0].message.should.be.eq('aa is not a number');
+        result.errors[0].property.should.be.eq(0);
     });
     it('should validate object', async () => {
         let validator = await index_1.validation();
         let schema = index_1.object().keys({ a: index_1.number(), b: index_1.number() });
         let result = await validator.validate(schema, { a: 1, b: "11" });
         result.errors.length.should.be.eq(1);
-        result.errors[0].constraints.length.should.be.eq(1);
-        result.errors[0].constraints[0].message.should.be.eq('11 is not a number');
+        result.errors[0].message.should.be.eq('11 is not a number');
     });
     it('should validate nested object', async () => {
         let validator = await index_1.validation();
@@ -159,10 +150,9 @@ describe("validator", function () {
             })
         });
         let result = await validator.validate(schema, { a: { b: [11, "bb"] } });
-        result.errors[0].constraints.length.should.be.eq(1);
-        result.errors[0].constraints[0].constraints.length.should.be.eq(1);
-        result.errors[0].constraints[0].constraints[0].message.should.be.eq('is not a valid array');
-        result.errors[0].constraints[0].constraints[0].constraints[0].message.should.be.eq("bb is not a number");
+        result.errors.length.should.be.eq(1);
+        result.errors[0].message.should.be.eq("bb is not a number");
+        result.errors[0].parents.length.should.be.eq(2);
     });
     it('should validate with stripUnknown', async () => {
         let result;
@@ -196,8 +186,7 @@ describe("validator", function () {
             b: index_1.number().required()
         });
         result = await validator.validate(schema, { a: 1 });
-        result.errors[0].constraints.length.should.be.eq(1);
-        result.errors[0].constraints[0].message.should.be.eq('b is required');
+        result.errors[0].message.should.be.eq('b is required');
     });
     describe("Any Schema", () => {
         it('should validate with optional', async () => {
@@ -231,7 +220,7 @@ describe("validator", function () {
             });
             result = await validator.validate(schema, { a: 1, b: 2 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].constraints[0].message.should.be.deep.equal("b is forbidden");
+            result.errors[0].message.should.be.deep.equal("b is forbidden");
         });
         it('should validate with invalid', async () => {
             let result;
@@ -242,7 +231,7 @@ describe("validator", function () {
             });
             result = await validator.validate(schema, { a: 4, b: 2 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].constraints[0].message.should.be.deep.equal("b is not valid");
+            result.errors[0].message.should.be.deep.equal("b is not valid");
         });
     });
     it('should validate with ref', async () => {
@@ -257,7 +246,21 @@ describe("validator", function () {
         result.value.should.be.deep.equal({ a: 4, b: 5 });
         result = await validator.validate(schema, { a: 4, b: 3 });
         result.errors.length.should.be.eq(1);
-        result.errors[0].constraints[0].message.should.be.eq("3 min that was expected for this number");
+        result.errors[0].message.should.be.eq("3 min that was expected for this number");
+    });
+    it('should validate with and', async () => {
+        let result;
+        let validator = await index_1.validation();
+        let schema = index_1.object().keys({
+            a: index_1.number(),
+            b: andConstraint_1.and([index_1.number().min(3), index_1.number().max(5)])
+        });
+        result = await validator.validate(schema, { a: 4, b: 4 });
+        result.errors.length.should.be.eq(0);
+        result.value.should.be.deep.equal({ a: 4, b: 4 });
+        result = await validator.validate(schema, { a: 4, b: 6 });
+        result.errors.length.should.be.eq(1);
+        result.errors[0].message.should.be.eq("6 max that was expected for this number");
     });
 });
 //# sourceMappingURL=unit.js.map

@@ -5,9 +5,10 @@ import {any, AnySchema} from "../../schema/types/anySchema";
 import {Promises} from "appolo-utils";
 import {truncate} from "fs";
 import {Validator} from "../../validator/validator";
+import {ValidationError} from "../../common/errors/ValidationError";
 
 
-export class OrConstraint implements IConstraint {
+export class AndConstraint implements IConstraint {
 
     public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
 
@@ -17,15 +18,18 @@ export class OrConstraint implements IConstraint {
             schemas = [schemas];
         }
 
-        let results = await Promises.someResolved(schemas.map((schema) => this._validateSchema(schema, value, params)), {
+        let results = await Promises.someRejected(schemas.map((schema) => this._validateSchema(schema, value, params)), {
             fn: value => value.errors.length == 0
         });
 
-        if (results.length > 0) {
-            return {isValid: true, value: results[0].value.value}
+        if (results.length == 0) {
+            return {isValid: true};
         }
 
-        return {isValid: false};
+        let errors = results[0].reason.errors;
+
+        return {isValid: false, errors}
+
     }
 
     private _validateSchema(schema: AnySchema, value: any, params: ValidationParams) {
@@ -38,7 +42,7 @@ export class OrConstraint implements IConstraint {
     }
 
     public get type(): string {
-        return "or"
+        return "and"
     }
 
     public defaultMessage(args: ValidationParams): string {
@@ -48,25 +52,18 @@ export class OrConstraint implements IConstraint {
 
 registerConstraint.extend({
     base: AnySchema,
-    name: "or",
-    constraint: OrConstraint,
-    whiteList: true
+    name: "and",
+    constraint: AndConstraint,
+    blackList: true
 });
 
 declare module '../../schema/types/anySchema' {
 
     interface AnySchema {
-        or(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
+        and(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
     }
 }
 
-export function or(schema: AnySchema | AnySchema[]): AnySchema {
-
-    if (Array.isArray(schema)) {
-        let [first, ...rest] = schema;
-
-        return first.or(rest);
-    }
-
-    return schema
+export function and(schema: AnySchema | AnySchema[]): AnySchema {
+    return any().and(schema);
 }

@@ -3,28 +3,28 @@ import {IConstraint} from "../../constraints/IConstraint";
 export class ValidationError extends Error {
 
 
-    private _target: Object;
+    private _object: Object;
     private _property: string | number;
     private _value: any;
     private _type: string;
     private _message: string;
-    private readonly _constraints: ValidationError[];
+    private readonly _parents: { object: any, property: string | number }[];
 
     constructor() {
 
         super();
 
-        this._constraints = [];
+        this._parents = [];
 
         Object.setPrototypeOf(this, ValidationError.prototype);
     }
 
-    public get target(): Object {
-        return this._target;
+    public get object(): Object {
+        return this._object;
     }
 
-    public set target(value: Object) {
-        this._target = value;
+    public set object(value: Object) {
+        this._object = value;
     }
 
     public get property(): string | number {
@@ -51,9 +51,17 @@ export class ValidationError extends Error {
         this._message = value;
     }
 
-    public get constraints(): ValidationError[] {
-        return this._constraints;
+    public addParent(parent: { object: any, property: string | number }) {
+        this._parents.unshift(parent);
     }
+
+    public get parents(): { object: any, property: string | number }[] {
+        return this._parents;
+    }
+
+    // public get constraints(): ValidationError[] {
+    //     return this._constraints;
+    // }
 
 
     public get type(): string {

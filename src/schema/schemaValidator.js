@@ -19,7 +19,7 @@ let SchemaValidator = class SchemaValidator {
         if (blackList.length) {
             let blackListError = await this._checkBlackListConstraint(blackList);
             if (blackListError) {
-                return { errors: [blackListError], value };
+                return { errors: blackListError, value };
             }
         }
         let errors = await this._checkParallelConstraint(parallel);
@@ -29,10 +29,27 @@ let SchemaValidator = class SchemaValidator {
         let converters = (schema.converters || []);
         if (options.convert && schema.converter) {
             converters = converters.slice();
-            converters.push({ converter: schema.converter, args: [] });
+            converters.unshift({ converter: schema.converter, args: [] });
         }
         if (converters.length) {
             return this._runConverters(converters);
+        }
+    }
+    async _runConverters(converters) {
+        for (let i = 0; i < converters.length; i++) {
+            let converter = converters[i];
+            await this._convertValue(converter);
+        }
+    }
+    async _convertValue(converterSchema) {
+        try {
+            let converter = this._getInstance(converterSchema.converter);
+            let params = this._createValidationParams(converterSchema.options, converterSchema.args);
+            let value = await converter.convert(params);
+            this._value = value;
+        }
+        catch (e) {
+            //TODO handle converter error;
         }
     }
     async _checkWhiteListConstraint(whiteList) {
@@ -63,31 +80,17 @@ let SchemaValidator = class SchemaValidator {
         return { blackList, whiteList, parallel };
     }
     async _checkParallelConstraint(constraintSchema) {
+        let output = [];
         let errors = await appolo_utils_1.Promises.map(constraintSchema, constraintSchema => this._validateConstraint(constraintSchema));
-        return appolo_utils_1.Arrays.compact(errors);
-    }
-    async _runConverters(converters) {
-        for (let i = 0; i < converters.length; i++) {
-            let converter = converters[i];
-            await this._convertValue(converter);
+        for (let i = 0; i < errors.length; i++) {
+            if (errors[i]) {
+                output.push(...errors[i]);
+            }
         }
-    }
-    async _convertValue(converterSchema) {
-        try {
-            let converter = this._getInstance(converterSchema.converter);
-            let params = this._createValidationParams(converterSchema.options, converterSchema.args);
-            let value = await converter.convert(params);
-            this._value = value;
-        }
-        catch (e) {
-            //TODO handle converter error;
-        }
+        return output;
     }
     async _validateConstraint(constraintSchema) {
         let constraint = null, error, message;
-        // if (!this._checkValidGroups(constraintSchema.options.groups)) {
-        //     return null
-        // }
         try {
             let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
             params.args = this._prepareArgs(constraintSchema.args, params);
@@ -97,12 +100,14 @@ let SchemaValidator = class SchemaValidator {
                 (result.value != undefined) && (this._value = result.value);
                 return null;
             }
-            error = result.error || this._createError(constraint.defaultMessage(params), constraint.type);
+            if (result.errors && result.errors.length) {
+                return result.errors;
+            }
+            return [this._createError(constraint.defaultMessage(params), constraint.type)];
         }
         catch (e) {
-            error = this._createError("failed to run validation", "unknown");
+            return [this._createError("failed to run validation", "unknown")];
         }
-        return error;
     }
     _prepareArgs(args, params) {
         let output = [];
@@ -130,7 +135,7 @@ let SchemaValidator = class SchemaValidator {
         error.message = message;
         error.type = type;
         error.property = this._options.property;
-        error.target = this._options.object;
+        error.object = this._options.object;
         return error;
     }
     // private _checkValidGroups(constraintGroups: string[]): boolean {
