@@ -12,14 +12,8 @@ class NumberSchema extends anySchema_1.AnySchema {
             args: []
         });
     }
-    beforeValidate(options) {
-        if (options.convert) {
-            this.addConverter({
-                converter: require("../../converters/numbers/numberConverter").NumberConverter,
-                args: []
-            }, true);
-        }
-        return super.beforeValidate(options);
+    get converter() {
+        return require("../../converters/numbers/numberConverter").NumberConverter;
     }
 }
 exports.NumberSchema = NumberSchema;

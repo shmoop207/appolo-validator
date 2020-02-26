@@ -6,6 +6,7 @@ import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {ValidationParams} from "../../constraints/IConstraint";
 import {IConverterSchema} from "../../interfaces/IConverterSchema";
 import {OrConstraint} from "../../constraints/any/orConstraint";
+import {IConverter, IConverterClass} from "../../converters/IConverter";
 
 export class AnySchema {
 
@@ -22,8 +23,8 @@ export class AnySchema {
         this._params = {}
     }
 
-    public beforeValidate(options: IValidateOptions) {
-        return this
+    public get converter(): IConverterClass {
+        return null
     }
 
     public get params() {

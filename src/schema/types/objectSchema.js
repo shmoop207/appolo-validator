@@ -12,14 +12,8 @@ class ObjectSchema extends anySchema_1.AnySchema {
             args: []
         });
     }
-    beforeValidate(options) {
-        if (options.convert) {
-            this.addConverter({
-                converter: require("../../converters/objects/jsonConverter").JsonConverter,
-                args: []
-            }, true);
-        }
-        return super.beforeValidate(options);
+    get converter() {
+        return require("../../converters/objects/jsonConverter").JsonConverter;
     }
 }
 exports.ObjectSchema = ObjectSchema;

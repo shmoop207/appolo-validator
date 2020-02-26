@@ -106,6 +106,17 @@ describe("validator", function () {
         result.value.should.be.deep.equal([5, "aa"]);
     });
 
+    it('should validate array or array', async () => {
+        let validator = await validation();
+
+        let schema = array().items([number(),string()]);
+
+        let result = await validator.validate(schema, [5, "aa"]);
+
+        result.errors.length.should.be.eq(0);
+        result.value.should.be.deep.equal([5, "aa"]);
+    });
+
     describe("When", () => {
         it('should validate object when', async () => {
             let validator = await validation();
@@ -128,7 +139,7 @@ describe("validator", function () {
 
             let schema = object().keys({
                 min: number(),
-                max: when(ref("min")).schema(number().valid([5])).then(number().min(6))
+                max: when().ref("min").schema(number().valid([5])).then(number().min(6))
             });
 
             let result = await validator.validate(schema, {min: 5, max: 4});
@@ -165,8 +176,8 @@ describe("validator", function () {
             let schema = object().keys({
                 min: number(),
                 max: when().group("test2")
-                        .then(number().min(5))
-                        .otherwise(number().min(7))
+                    .then(number().min(5))
+                    .else(number().min(7))
             });
 
             let result = await validator.validate(schema, {min: 5, max: 6});
@@ -185,7 +196,7 @@ describe("validator", function () {
                 max: when()
                     .case(when().group("test2").then(number().min(5)))
                     .case(when().group("test").then(number().min(6)))
-                    .otherwise(number().min(8))
+                    .default(number().min(8))
             });
 
             let result = await validator.validate(schema, {min: 5, max: 5});

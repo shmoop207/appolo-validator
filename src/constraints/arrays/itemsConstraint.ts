@@ -2,7 +2,7 @@ import {registerConstraint} from "../../schema/registerConstraint";
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../IConstraint";
 import {Promises} from "appolo-utils";
 import {ValidationError} from "../../common/errors/ValidationError";
-import {AnySchema} from "../../schema/types/anySchema";
+import {any, AnySchema} from "../../schema/types/anySchema";
 import {ArraySchema} from "../../schema/types/arraySchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 
@@ -11,6 +11,10 @@ export class ItemsConstraint implements IConstraint {
     public async validate(args: ValidationParams): Promise<IConstraintValidateResult> {
 
         let schema = args.args[0] as AnySchema;
+
+        if (Array.isArray(schema)) {
+            schema = any().or(schema);
+        }
 
         let results = await Promises.map(args.value, (item, index) =>
             args.validator.validate(schema, item, {
@@ -60,6 +64,6 @@ registerConstraint.extend({
 declare module '../../schema/types/arraySchema' {
 
     interface ArraySchema {
-        items(schema?: AnySchema, options?: IConstraintOptions): this;
+        items(schema?: AnySchema | AnySchema[], options?: IConstraintOptions): this;
     }
 }

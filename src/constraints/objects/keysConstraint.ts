@@ -7,7 +7,8 @@ import {NumberSchema} from "../../schema/types/numberSchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {MinNumberConstraint} from "../numbers/minNumberConstraint";
 import {ObjectSchema} from "../../schema/types/objectSchema";
-import {If} from "../when/when";
+import {When} from "../when/when";
+
 export class KeysConstraint implements IConstraint {
 
     public async validate(args: ValidationParams): Promise<IConstraintValidateResult> {
@@ -81,7 +82,7 @@ declare module '../../schema/types/objectSchema' {
 
 
     interface ObjectSchema {
-        keys(schemaIndex: { [index: string]: AnySchema | If }, options?: IConstraintOptions): this;
+        keys(schemaIndex: { [index: string]: AnySchema | Pick<When, any> }, options?: IConstraintOptions): this;
     }
 }
 

@@ -10,8 +10,8 @@ class AnySchema {
         this._type = "any";
         this._params = {};
     }
-    beforeValidate(options) {
-        return this;
+    get converter() {
+        return null;
     }
     get params() {
         return this._params;

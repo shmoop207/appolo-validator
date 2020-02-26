@@ -17,17 +17,8 @@ export class NumberSchema extends AnySchema {
         });
     }
 
-    beforeValidate(options: IValidateOptions) {
-
-        if (options.convert) {
-
-            this.addConverter({
-                converter: require("../../converters/numbers/numberConverter").NumberConverter,
-                args: []
-            }, true)
-        }
-
-        return super.beforeValidate(options);
+    public get converter() {
+        return require("../../converters/numbers/numberConverter").NumberConverter
     }
 }
 

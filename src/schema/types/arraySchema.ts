@@ -18,17 +18,8 @@ export class ArraySchema extends AnySchema {
         })
     }
 
-    beforeValidate(options: IValidateOptions) {
-
-        if (options.convert) {
-
-            this.addConverter({
-                converter: require("../../converters/objects/jsonConverter").JsonConverter,
-                args: []
-            },true)
-        }
-
-        return super.beforeValidate(options);
+    public get converter() {
+        return require("../../converters/objects/jsonConverter").JsonConverter
     }
 }
 

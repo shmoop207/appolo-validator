@@ -15,9 +15,9 @@ export class WhenConstraint implements IConstraint {
 
         let value = params.value, whenParams = params.args[0].params as IWhenParams;
 
-        let matchValue = this._getMatchedValue(whenParams,params);
+        let matchValue = this._getMatchedValue(whenParams, params);
 
-        let matchedCase = await this._findMatchedCase(whenParams,params,matchValue);
+        let matchedCase = await this._findMatchedCase(whenParams, params, matchValue);
 
         if (matchedCase && matchedCase.then) {
             return this._validateSchemaResult(matchedCase.then, value, params)
@@ -28,24 +28,25 @@ export class WhenConstraint implements IConstraint {
         }
     }
 
-    private _getMatchedValue(whenParams:IWhenParams,params:ValidationParams):any{
+    private _getMatchedValue(whenParams: IWhenParams, params: ValidationParams): any {
 
-        if(typeof whenParams.prop ==="function"){
+        if (whenParams.prop instanceof Ref) {
+            return whenParams.prop.geValue(params)
+        }
+
+        if (typeof whenParams.prop === "function") {
             return whenParams.prop(params);
         }
 
-        if(whenParams.prop instanceof Ref){
-            return whenParams.prop.geValue(params)
-        }
         return params.value;
 
     }
 
-    private async _findMatchedCase(whenParams:IWhenParams, params:ValidationParams, value:any):Promise<ICaseParams>{
-        let matchedCase:ICaseParams = null;
+    private async _findMatchedCase(whenParams: IWhenParams, params: ValidationParams, value: any): Promise<ICaseParams> {
+        let matchedCase: ICaseParams = null;
         for (let i = 0; i < whenParams.cases.length; i++) {
             let caseParams = whenParams.cases[i];
-            let isMatch = await this._matchCase(caseParams, params,value);
+            let isMatch = await this._matchCase(caseParams, params, value);
             if (isMatch) {
                 matchedCase = caseParams;
                 break;
@@ -55,9 +56,9 @@ export class WhenConstraint implements IConstraint {
         return matchedCase;
     }
 
-    private async _matchCase(caseParams: ICaseParams, params: ValidationParams, value:any): Promise<boolean> {
+    private async _matchCase(caseParams: ICaseParams, params: ValidationParams, value: any): Promise<boolean> {
 
-        let groups = caseParams.groups,validationGroups = params.validateOptions.groups;
+        let groups = caseParams.groups, validationGroups = params.validateOptions.groups;
 
         if (groups && groups.length && validationGroups && validationGroups.length) {
 
@@ -70,9 +71,9 @@ export class WhenConstraint implements IConstraint {
             let result = await this._validateSchema(caseParams.schema, value, params);
             return result.errors.length == 0;
 
-        } else if (caseParams.fn && typeof caseParams.fn =="function") {
+        } else if (caseParams.fn && typeof caseParams.fn == "function") {
 
-            return caseParams.fn(params);
+            return caseParams.fn(params, value);
 
         } else if (caseParams.value !== undefined) {
 
@@ -118,8 +119,6 @@ registerConstraint.extend({
     constraint: WhenConstraint,
     blackList: true
 });
-
-
 
 
 declare module '../../schema/types/anySchema' {

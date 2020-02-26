@@ -36,11 +36,7 @@ export class SchemaValidator {
         this._value = value;
         this._groupsIndex = Arrays.keyBy(options.groups || []);
 
-        schema.beforeValidate(options);
-
-        if (schema.converters.length) {
-            await this._runConverters();
-        }
+        await this._handleConverters(schema, options);
 
         let {blackList, parallel, whiteList} = this._distributeConstraint(schema.constraints);
 
@@ -59,6 +55,19 @@ export class SchemaValidator {
         let errors = await this._checkParallelConstraint(parallel);
 
         return {errors, value: this._value};
+    }
+
+    private _handleConverters(schema: AnySchema, options: IValidateOptions) {
+        let converters: IConverterSchema[] = (schema.converters || []);
+
+        if (options.convert && schema.converter) {
+            converters = converters.slice();
+            converters.push({converter: schema.converter, args: []})
+        }
+
+        if (converters.length) {
+            return this._runConverters(converters);
+        }
     }
 
     private async _checkWhiteListConstraint(whiteList: IConstraintSchema[]): Promise<boolean> {
@@ -107,9 +116,9 @@ export class SchemaValidator {
 
     }
 
-    private async _runConverters() {
-        for (let i = 0; i < this._schema.converters.length; i++) {
-            let converter = this._schema.converters[i];
+    private async _runConverters(converters: IConverterSchema[]) {
+        for (let i = 0; i < converters.length; i++) {
+            let converter = converters[i];
 
             await this._convertValue(converter);
         }

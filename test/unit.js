@@ -59,6 +59,13 @@ describe("validator", function () {
         result.errors.length.should.be.eq(0);
         result.value.should.be.deep.equal([5, "aa"]);
     });
+    it('should validate array or array', async () => {
+        let validator = await index_1.validation();
+        let schema = index_1.array().items([index_1.number(), index_1.string()]);
+        let result = await validator.validate(schema, [5, "aa"]);
+        result.errors.length.should.be.eq(0);
+        result.value.should.be.deep.equal([5, "aa"]);
+    });
     describe("When", () => {
         it('should validate object when', async () => {
             let validator = await index_1.validation();
@@ -75,7 +82,7 @@ describe("validator", function () {
             let validator = await index_1.validation();
             let schema = index_1.object().keys({
                 min: index_1.number(),
-                max: index_1.when(index_1.ref("min")).schema(index_1.number().valid([5])).then(index_1.number().min(6))
+                max: index_1.when().ref("min").schema(index_1.number().valid([5])).then(index_1.number().min(6))
             });
             let result = await validator.validate(schema, { min: 5, max: 4 });
             result.errors.length.should.be.eq(1);
@@ -101,7 +108,7 @@ describe("validator", function () {
                 min: index_1.number(),
                 max: index_1.when().group("test2")
                     .then(index_1.number().min(5))
-                    .otherwise(index_1.number().min(7))
+                    .else(index_1.number().min(7))
             });
             let result = await validator.validate(schema, { min: 5, max: 6 });
             result.errors.length.should.be.eq(1);
@@ -115,7 +122,7 @@ describe("validator", function () {
                 max: index_1.when()
                     .case(index_1.when().group("test2").then(index_1.number().min(5)))
                     .case(index_1.when().group("test").then(index_1.number().min(6)))
-                    .otherwise(index_1.number().min(8))
+                    .default(index_1.number().min(8))
             });
             let result = await validator.validate(schema, { min: 5, max: 5 });
             result.errors.length.should.be.eq(1);

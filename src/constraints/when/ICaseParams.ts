@@ -4,7 +4,7 @@ import {ValidationParams} from "../IConstraint";
 export interface ICaseParams {
     schema?: AnySchema,
     value?: any,
-    fn?: (params: ValidationParams) => boolean,
+    fn?: (params: ValidationParams, value: any) => boolean,
     groups?: string[]
     then?: AnySchema
 }

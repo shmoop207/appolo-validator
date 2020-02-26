@@ -11,10 +11,7 @@ let SchemaValidator = class SchemaValidator {
         this._schema = schema;
         this._value = value;
         this._groupsIndex = appolo_utils_1.Arrays.keyBy(options.groups || []);
-        schema.beforeValidate(options);
-        if (schema.converters.length) {
-            await this._runConverters();
-        }
+        await this._handleConverters(schema, options);
         let { blackList, parallel, whiteList } = this._distributeConstraint(schema.constraints);
         if (whiteList.length && await this._checkWhiteListConstraint(whiteList)) {
             return { errors: [], value };
@@ -27,6 +24,16 @@ let SchemaValidator = class SchemaValidator {
         }
         let errors = await this._checkParallelConstraint(parallel);
         return { errors, value: this._value };
+    }
+    _handleConverters(schema, options) {
+        let converters = (schema.converters || []);
+        if (options.convert && schema.converter) {
+            converters = converters.slice();
+            converters.push({ converter: schema.converter, args: [] });
+        }
+        if (converters.length) {
+            return this._runConverters(converters);
+        }
     }
     async _checkWhiteListConstraint(whiteList) {
         if (whiteList.length == 0) {
@@ -59,9 +66,9 @@ let SchemaValidator = class SchemaValidator {
         let errors = await appolo_utils_1.Promises.map(constraintSchema, constraintSchema => this._validateConstraint(constraintSchema));
         return appolo_utils_1.Arrays.compact(errors);
     }
-    async _runConverters() {
-        for (let i = 0; i < this._schema.converters.length; i++) {
-            let converter = this._schema.converters[i];
+    async _runConverters(converters) {
+        for (let i = 0; i < converters.length; i++) {
+            let converter = converters[i];
             await this._convertValue(converter);
         }
     }
