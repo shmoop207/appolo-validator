@@ -51,7 +51,7 @@ class When {
         return this;
     }
     then(schema) {
-        this._getCase().then = schema;
+        this._getCase().thenSchema = schema;
         return this;
     }
     case(when) {

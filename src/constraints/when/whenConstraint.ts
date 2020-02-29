@@ -19,8 +19,8 @@ export class WhenConstraint implements IConstraint {
 
         let matchedCase = await this._findMatchedCase(whenParams, params, matchValue);
 
-        if (matchedCase && matchedCase.then) {
-            return this._validateSchemaResult(matchedCase.then, value, params)
+        if (matchedCase && matchedCase.thenSchema) {
+            return this._validateSchemaResult(matchedCase.thenSchema, value, params)
         } else if (whenParams.otherwise) {
             return this._validateSchemaResult(whenParams.otherwise, value, params)
         } else {

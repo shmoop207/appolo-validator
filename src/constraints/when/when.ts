@@ -76,7 +76,7 @@ export class When implements Pick<When, "ref"> {
     }
 
     public then(schema: AnySchema): Pick<When, "else"> {
-        this._getCase().then = schema;
+        this._getCase().thenSchema = schema;
         return this;
     }
 

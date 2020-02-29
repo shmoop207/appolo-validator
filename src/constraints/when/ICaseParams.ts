@@ -6,5 +6,5 @@ export interface ICaseParams {
     value?: any,
     fn?: (params: ValidationParams, value: any) => boolean,
     groups?: string[]
-    then?: AnySchema
+    thenSchema?: AnySchema
 }
