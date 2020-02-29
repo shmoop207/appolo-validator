@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("appolo-utils/index");
 const defaults_1 = require("../../defaults/defaults");
+const registerDecorator_1 = require("../../decorators/registerDecorator");
 class AnySchema {
     constructor(options = {}) {
         this._constraints = [];
@@ -40,7 +41,8 @@ class AnySchema {
 }
 exports.AnySchema = AnySchema;
 function any(options) {
-    return new AnySchema(options);
+    let schema = new AnySchema(options);
+    return registerDecorator_1.registerDecorator.extend({ schema });
 }
 exports.any = any;
 //# sourceMappingURL=anySchema.js.map

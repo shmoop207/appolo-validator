@@ -7,6 +7,8 @@ import {ValidationParams} from "../../constraints/IConstraint";
 import {IConverterSchema} from "../../interfaces/IConverterSchema";
 import {OrConstraint} from "../../constraints/any/orConstraint";
 import {IConverter, IConverterClass} from "../../converters/IConverter";
+import {registerDecorator} from "../../decorators/registerDecorator";
+import {NumberSchema} from "./numberSchema";
 
 export class AnySchema {
 
@@ -62,6 +64,10 @@ export class AnySchema {
 }
 
 export function any(options?: IConstraintOptions) {
-    return new AnySchema(options)
+
+    let schema = new AnySchema(options);
+
+    return registerDecorator.extend<NumberSchema>({schema})
+
 }
 

@@ -1,135 +1,28 @@
 "use strict";
 import chai = require('chai');
-import Q = require('bluebird');
-import {array, any, object, string, number, validation, ref, when} from "../index";
+import {Promises} from 'appolo-utils';
+import {array, any, object, string, number, validation, ref, when, schema, and} from "../index";
 import {ValidationError} from "../src/common/errors/ValidationError";
-import {and} from "../src/constraints/any/andConstraint";
 
 let should = chai.should();
 
 describe("validator", function () {
 
-    describe("Numbers", () => {
-        it('should validate isNumber', async () => {
+    describe("When",  () => {
+        it.only('should validate object when', async () => {
 
-            let validator = await validation({});
+               let validator = await validation();
 
-            let schema = number();
+               let schema = object().keys({
+                   min: number(),
+                   max:  when().fn(params => params.object.min == 5).then(number().min(5))
+               });
 
-            let result = await validator.validate(schema, 5);
+               let result = await validator.validate(schema, {min: 5, max: 4});
 
-            result.errors.length.should.be.eq(0);
+               result.errors.length.should.be.eq(1);
+               result.errors[0].message.should.be.eq('4 min that was expected for this number');
 
-            result = await validator.validate(schema, "5");
-
-            result.errors[0].message.should.be.eq("5 is not a number");
-            result.errors[0].type.should.be.eq("number")
-
-        });
-
-        it('should validate min number', async () => {
-
-            let validator = await validation({});
-
-            let schema = number().min(5);
-
-            let result = await validator.validate(schema, 5);
-
-            result.errors.length.should.be.eq(0);
-
-            result = await validator.validate(schema, 3);
-
-            result.errors[0].message.should.be.eq("3 min that was expected for this number");
-            result.errors[0].type.should.be.eq("minNumber")
-
-        });
-
-        it('should validate with convert numbers', async () => {
-            let result: { errors: ValidationError[], value: any };
-
-            let validator = await validation();
-
-            let schema = object().keys({a: number(), b: number()}).options({convert: true});
-
-            result = await validator.validate(schema, {a: 1, b: "11"});
-
-            result.errors.length.should.be.eq(0);
-            result.value.b.should.be.eq(11);
-
-            schema = object().keys({a: number(), b: number()});
-
-            result = await validator.validate(schema, {a: 1, b: "11"});
-
-            result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('11 is not a number');
-
-        });
-
-        it('should validate with convert precision', async () => {
-            let result: { errors: ValidationError[], value: any };
-
-            let validator = await validation();
-
-            let schema = object().keys({a: number(), b: number().toPrecision(2)}).options({convert: true});
-
-            result = await validator.validate(schema, {a: 1, b: "11.6677"});
-
-            result.errors.length.should.be.eq(0);
-            result.value.b.should.be.eq(11.67);
-
-        });
-
-
-    });
-
-
-    it('should validate array', async () => {
-        let validator = await validation();
-
-        let schema = array().items(number());
-
-        let result = await validator.validate(schema, [5, "aa"]);
-
-        result.errors.length.should.be.eq(1);
-        result.errors[0].message.should.be.eq('aa is not a number');
-
-    });
-
-    it('should validate array or', async () => {
-        let validator = await validation();
-
-        let schema = array().items(number().or(string()));
-
-        let result = await validator.validate(schema, [5, "aa"]);
-
-        result.errors.length.should.be.eq(0);
-        result.value.should.be.deep.equal([5, "aa"]);
-    });
-
-    it('should validate array or array', async () => {
-        let validator = await validation();
-
-        let schema = array().items([number(),string()]);
-
-        let result = await validator.validate(schema, [5, "aa"]);
-
-        result.errors.length.should.be.eq(0);
-        result.value.should.be.deep.equal([5, "aa"]);
-    });
-
-    describe("When", () => {
-        it('should validate object when', async () => {
-            let validator = await validation();
-
-            let schema = object().keys({
-                min: number(),
-                max: when().fn(params => params.object.min == 5).then(number().min(5))
-            });
-
-            let result = await validator.validate(schema, {min: 5, max: 4});
-
-            result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('4 min that was expected for this number');
 
         });
 
@@ -204,19 +97,133 @@ describe("validator", function () {
     });
 
 
-    it('should validate nested array', async () => {
 
-        let validator = await validation();
+    describe("Numbers", () => {
+        it('should validate isNumber', async () => {
 
-        let schema = array().items(array().items(number()));
+            let validator = await validation({});
 
-        let result = await validator.validate(schema, [[5], ["aa"]]);
+            let schema = number();
 
-        result.errors.length.should.be.eq(1);
-        result.errors[0].message.should.be.eq('aa is not a number');
-        result.errors[0].property.should.be.eq(0);
+            let result = await validator.validate(schema, 5);
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "5");
+
+            result.errors[0].message.should.be.eq("5 is not a number");
+            result.errors[0].type.should.be.eq("number")
+
+        });
+
+        it('should validate min number', async () => {
+
+            let validator = await validation({});
+
+            let schema = number().min(5);
+
+            let result = await validator.validate(schema, 5);
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 3);
+
+            result.errors[0].message.should.be.eq("3 min that was expected for this number");
+            result.errors[0].type.should.be.eq("minNumber")
+
+        });
+
+        it('should validate with convert numbers', async () => {
+            let result: { errors: ValidationError[], value: any };
+
+            let validator = await validation();
+
+            let schema = object().keys({a: number(), b: number()}).options({convert: true});
+
+            result = await validator.validate(schema, {a: 1, b: "11"});
+
+            result.errors.length.should.be.eq(0);
+            result.value.b.should.be.eq(11);
+
+            schema = object().keys({a: number(), b: number()});
+
+            result = await validator.validate(schema, {a: 1, b: "11"});
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('11 is not a number');
+
+        });
+
+        it('should validate with convert precision', async () => {
+            let result: { errors: ValidationError[], value: any };
+
+            let validator = await validation();
+
+            let schema = object().keys({a: number(), b: number().toPrecision(2)}).options({convert: true});
+
+            result = await validator.validate(schema, {a: 1, b: "11.6677"});
+
+            result.errors.length.should.be.eq(0);
+            result.value.b.should.be.eq(11.67);
+
+        });
+
 
     });
+    describe("Arrays",()=>{
+        it('should validate array', async () => {
+            let validator = await validation();
+
+            let schema = array().items(number());
+
+            let result = await validator.validate(schema, [5, "aa"]);
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('aa is not a number');
+
+        });
+
+        it('should validate array or', async () => {
+            let validator = await validation();
+
+            let schema = array().items(number().or(string()));
+
+            let result = await validator.validate(schema, [5, "aa"]);
+
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.deep.equal([5, "aa"]);
+        });
+
+        it('should validate array or array', async () => {
+            let validator = await validation();
+
+            let schema = array().items([number(), string()]);
+
+            let result = await validator.validate(schema, [5, "aa"]);
+
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.deep.equal([5, "aa"]);
+        });
+        it('should validate nested array', async () => {
+
+            let validator = await validation();
+
+            let schema = array().items(array().items(number()));
+
+            let result = await validator.validate(schema, [[5], ["aa"]]);
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('aa is not a number');
+            result.errors[0].property.should.be.eq(0);
+
+        });
+    });
+
+
+
+
+
+
 
     it('should validate object', async () => {
         let validator = await validation();
@@ -399,7 +406,7 @@ describe("validator", function () {
 
         let schema = object().keys({
             a: number(),
-            b: and([number().min(3),number().max(5)])
+            b: and([number().min(3), number().max(5)])
         });
 
         result = await validator.validate(schema, {a: 4, b: 4});
@@ -412,6 +419,59 @@ describe("validator", function () {
         result.errors.length.should.be.eq(1);
         result.errors[0].message.should.be.eq("6 max that was expected for this number");
     });
+
+    describe("decorators", () => {
+        it('should validate decorators', async () => {
+            @schema(object().required())
+            class A {
+
+                @number().min(5)
+                private a: number
+            }
+
+            let validator = await validation();
+
+            let result = await validator.validate(A, {a: 6});
+
+            result.errors.length.should.be.eq(0);
+        });
+
+        it('should validate decorators with inherit', async () => {
+            class C {
+                @number().min(5).required()
+                private c: number;
+
+                @number().min(5).required()
+                private d: number;
+            }
+
+            class B extends C {
+
+                @number().min(5).required()
+                private b: number;
+            }
+
+            class A extends B {
+
+                @number().min(5).required()
+                private a: number
+            }
+
+            let validator = await validation();
+
+            let result = await validator.validate(A, {a: 6, d: 1});
+
+            result.errors.length.should.be.eq(3);
+            result.errors[0].message.should.be.eq("1 min that was expected for this number");
+            result.errors[1].message.should.be.eq("c is required");
+
+            result = await validator.validate(A, {a: 6, b: 6, c: 6, d: 6});
+
+            result.errors.length.should.be.eq(0);
+
+        })
+
+    })
 
 
 });

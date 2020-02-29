@@ -22,6 +22,14 @@ const when_1 = require("./src/constraints/when/when");
 exports.when = when_1.when;
 const orConstraint_1 = require("./src/constraints/any/orConstraint");
 exports.or = orConstraint_1.or;
+const andConstraint_1 = require("./src/constraints/any/andConstraint");
+exports.and = andConstraint_1.and;
+const appolo_utils_2 = require("appolo-utils");
+const decorators_1 = require("./src/decorators/decorators");
+exports.schema = decorators_1.schema;
+for (let file of appolo_utils_2.Files.walk(__dirname, "src")) {
+    require(file);
+}
 async function validation(options = {}) {
     let app = appolo_engine_1.createApp({ root: __dirname });
     app.injector.addObject("options", appolo_utils_1.Objects.defaults({}, options, defaults_1.ValidatorDefaults));

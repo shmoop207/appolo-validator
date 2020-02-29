@@ -1,11 +1,12 @@
 import {AnySchema} from "./anySchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {NumberConstraint} from "../../constraints/numbers/numberConstraint";
-import {ISchemaOptions, IValidateOptions} from "../../interfaces/IOptions";
+
+import {registerDecorator} from "../../decorators/registerDecorator";
 
 export class NumberSchema extends AnySchema {
 
-    constructor(options: IConstraintOptions={}) {
+    constructor(options: IConstraintOptions = {}) {
         super(options);
 
         this._type = "number";
@@ -22,6 +23,10 @@ export class NumberSchema extends AnySchema {
     }
 }
 
+
 export function number(options?: IConstraintOptions) {
-    return new NumberSchema(options)
+
+    let schema = new NumberSchema(options);
+
+    return registerDecorator.extend<NumberSchema>({schema})
 }

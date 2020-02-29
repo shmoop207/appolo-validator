@@ -5,8 +5,6 @@ const appolo_engine_1 = require("appolo-engine");
 const index_1 = require("appolo-utils/index");
 const defaults_1 = require("../defaults/defaults");
 const schemaValidator_1 = require("../schema/schemaValidator");
-const anySchema_1 = require("../schema/types/anySchema");
-const when_1 = require("../constraints/when/when");
 let Validator = class Validator {
     // public schema(options: ISchemaOptions = {}) {
     //
@@ -15,11 +13,10 @@ let Validator = class Validator {
     //     return new Schema(options);
     // }
     async validate(schema, value, options = {}) {
-        if (schema instanceof when_1.When) {
-            schema = anySchema_1.any().if(schema);
-        }
+        let validator = this.createSchemaValidator();
+        schema = validator.getSchemaFromParams(schema);
         options = index_1.Objects.defaults({}, options, schema.getOptions(), this.options, defaults_1.ValidateDefaults);
-        let result = await this.createSchemaValidator().validate(value, schema, options);
+        let result = await validator.validate(value, schema, options);
         return result;
     }
     async validateAndTrow(schema, value, options) {

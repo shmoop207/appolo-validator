@@ -2,7 +2,6 @@ import {IConstraint, IConstraintValidateResult, ValidationParams} from "../ICons
 import {registerConstraint} from "../../schema/registerConstraint";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {AnySchema} from "../../schema/types/anySchema";
-import {truncate} from "fs";
 
 
 export class AllowConstraint implements IConstraint {
@@ -34,7 +33,6 @@ export class AllowConstraint implements IConstraint {
         return `${args.property || args.value} is required`
     }
 }
-
 registerConstraint.extend({
     base: AnySchema,
     name: "allow",

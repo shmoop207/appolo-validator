@@ -1,4 +1,4 @@
-import {define, singleton, inject, injectFactoryMethod} from "appolo-engine"
+import {define, singleton, inject, injectFactoryMethod, IClass} from "appolo-engine"
 import {IOptions, ISchemaOptions, IValidateOptions} from "../interfaces/IOptions";
 import {Arrays, Objects} from "appolo-utils/index";
 import {SchemaDefaults, ValidateDefaults, ValidatorDefaults} from "../defaults/defaults";
@@ -6,6 +6,8 @@ import {ValidationError} from "../common/errors/ValidationError";
 import {SchemaValidator} from "../schema/schemaValidator";
 import {any, AnySchema} from "../schema/types/anySchema";
 import {When} from "../constraints/when/when";
+import {Classes} from "appolo-utils";
+import {object} from "../../index";
 
 @define()
 @singleton()
@@ -20,15 +22,16 @@ export class Validator {
     //     return new Schema(options);
     // }
 
-    public async validate(schema: AnySchema|When, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {
+    public async validate(schema: AnySchema | When | IClass, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {
 
-        if(schema instanceof When){
-            schema = any().if(schema);
-        }
+
+        let validator = this.createSchemaValidator();
+
+        schema = validator.getSchemaFromParams(schema);
 
         options = Objects.defaults({}, options, schema.getOptions(), this.options, ValidateDefaults);
 
-        let result = await this.createSchemaValidator().validate(value, schema, options);
+        let result = await validator.validate(value, schema, options);
 
         return result;
     }

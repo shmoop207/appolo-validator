@@ -12,7 +12,10 @@ import {array} from "./src/schema/types/arraySchema";
 import {object} from "./src/schema/types/objectSchema";
 import {ref} from "./src/schema/types/ref";
 import {when} from "./src/constraints/when/when";
-import {or} from "./src/constraints/any/orConstraint";
+import {or,} from "./src/constraints/any/orConstraint";
+import {and} from "./src/constraints/any/andConstraint";
+import {Files} from "appolo-utils";
+import {schema} from "./src/decorators/decorators";
 import {DefaultConverter} from "./src/converters/any/defaultConverter";
 import {KeysConstraint} from "./src/constraints/objects/keysConstraint";
 import {ItemsConstraint} from "./src/constraints/arrays/itemsConstraint";
@@ -21,7 +24,12 @@ import {InvalidConstraint} from "./src/constraints/any/invalidConstraint";
 import {IConstraintOptions} from "./src/interfaces/IConstraintOptions";
 
 
-export {Validator, any, number, string, array, object, ref, when, or}
+for (let file of Files.walk(__dirname, "src")) {
+    require(file);
+}
+
+
+export {Validator, any, number, string, array, object, ref, when, or, schema,and}
 
 export async function validation(options: IOptions = {}): Promise<Validator> {
 

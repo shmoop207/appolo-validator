@@ -4,10 +4,26 @@ import {IConstraintSchema} from "../interfaces/IConstraintSchema";
 import {AnySchema} from "./types/anySchema";
 import {IConverterSchema} from "../interfaces/IConverterSchema";
 
+interface IExtendParams {
+    name: string,
+    converter: IConverterClass,
+    base: typeof AnySchema
+}
+
 
 export class RegisterConverter {
 
-    public extend(params: { name: string, converter: IConverterClass, base: typeof AnySchema }) {
+    private _converters = new Map<typeof AnySchema, IExtendParams[]>();
+
+    public extend(params: IExtendParams) {
+
+        if(!this._converters.has(params.base)){
+            this._converters.set(params.base,[]);
+        }
+
+        this._converters.get(params.base).push(params);
+
+
         params.base.prototype[params.name] = function (this: AnySchema) {
 
             let args = Array.from(arguments), options = args[args.length - 1];
@@ -22,6 +38,10 @@ export class RegisterConverter {
 
             return this;
         };
+    }
+
+    public get converters() {
+        return this._converters;
     }
 
 }

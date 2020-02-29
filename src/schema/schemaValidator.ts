@@ -11,11 +11,17 @@ import {Objects, Promises, Arrays} from "appolo-utils";
 import {ValidateDefaults} from "../defaults/defaults";
 import {Validator} from "../validator/validator";
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
-import {AnySchema} from "./types/anySchema";
+import {any, AnySchema} from "./types/anySchema";
 import {IConverter} from "../converters/IConverter";
 import {IConverterSchema} from "../interfaces/IConverterSchema";
 import {IConstraintOptions} from "../interfaces/IConstraintOptions";
 import {Ref} from "./types/ref";
+import {When} from "../constraints/when/when";
+import {IClass} from "appolo-engine/index";
+import {PropertySymbol, RegisterDecorator, SchemaFnSymbol} from "../decorators/registerDecorator";
+import {object} from "../../index";
+import {SchemaSymbol} from "../decorators/decorators";
+import {ObjectSchema} from "./types/objectSchema";
 
 @define()
 export class SchemaValidator {
@@ -135,8 +141,8 @@ export class SchemaValidator {
         let output = [];
         let errors = await Promises.map(constraintSchema, constraintSchema => this._validateConstraint(constraintSchema));
 
-        for(let i =0;i<errors.length;i++){
-            if(errors[i]){
+        for (let i = 0; i < errors.length; i++) {
+            if (errors[i]) {
                 output.push(...errors[i])
             }
         }
@@ -212,15 +218,6 @@ export class SchemaValidator {
         return error;
     }
 
-    // private _checkValidGroups(constraintGroups: string[]): boolean {
-    //     if (!this._options.groups || !this._options.groups.length || !constraintGroups || !constraintGroups.length) {
-    //         return true;
-    //     }
-    //     let validGroups = constraintGroups.every(group => !!this._groupsIndex[group]);
-    //
-    //     return validGroups;
-    // }
-
     private _getInstance<T>(klass: (new() => T)): T {
         let classId = Util.getClassName(klass);
 
@@ -231,25 +228,33 @@ export class SchemaValidator {
         return new klass();
     }
 
+    public getSchemaFromParams(schema: AnySchema | When | IClass): AnySchema {
 
-    // private _buildError(validatorsResults: { isValid: boolean, error?: ValidationError }[]): { error: ValidationError } {
-    //
-    //     let isValid: boolean = true, error = this._createError("failed to validate", "");
-    //
-    //     for (let i = 0; i < validatorsResults.length; i++) {
-    //         let validatorResult = validatorsResults[i];
-    //
-    //         if (!validatorResult.isValid) {
-    //             isValid = false;
-    //             error.constraints.push(validatorResult.error)
-    //         }
-    //     }
-    //
-    //     if (isValid) {
-    //         return {error: null};
-    //     }
-    //
-    //     return {error}
-    //
-    // }
+        if(schema[SchemaFnSymbol]){
+            return schema[SchemaFnSymbol]
+        }
+
+        if (schema instanceof AnySchema) {
+            return schema;
+        }
+
+        if (schema instanceof When) {
+            return new AnySchema().if(schema)
+        }
+
+        let meta = Reflect.getMetadata(PropertySymbol, schema.prototype);
+
+        if (!meta) {
+            throw new Error("invalid schema")
+        }
+
+        let schemaMeta:{schema:ObjectSchema} = Reflect.getMetadata(SchemaSymbol, schema.prototype);
+
+        let output:ObjectSchema =  (schemaMeta) ?schemaMeta.schema : object();
+
+        output.keys(meta);
+
+        return this.getSchemaFromParams(output)
+    }
+
 }
