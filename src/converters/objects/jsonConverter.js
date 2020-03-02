@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const registerConverter_1 = require("../../schema/registerConverter");
+const registerConverter_1 = require("../registerConverter");
 const objectSchema_1 = require("../../schema/types/objectSchema");
 const index_1 = require("appolo-utils/index");
 class JsonConverter {

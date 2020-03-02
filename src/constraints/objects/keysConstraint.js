@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const index_1 = require("appolo-utils/index");
-const registerConstraint_1 = require("../../schema/registerConstraint");
+const registerConstraint_1 = require("../registerConstraint");
 const objectSchema_1 = require("../../schema/types/objectSchema");
 class KeysConstraint {
     async validate(args) {

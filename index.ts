@@ -10,6 +10,7 @@ import {number} from "./src/schema/types/numberSchema";
 import {string} from "./src/schema/types/stringSchema";
 import {array} from "./src/schema/types/arraySchema";
 import {object} from "./src/schema/types/objectSchema";
+import {func} from "./src/schema/types/functionSchema";
 import {ref} from "./src/schema/types/ref";
 import {when} from "./src/constraints/when/when";
 import {or,} from "./src/constraints/any/orConstraint";
@@ -21,6 +22,8 @@ import {KeysConstraint} from "./src/constraints/objects/keysConstraint";
 import {ItemsConstraint} from "./src/constraints/arrays/itemsConstraint";
 import {ForbiddenConstraint} from "./src/constraints/any/forbiddenConstraint";
 import {InvalidConstraint} from "./src/constraints/any/invalidConstraint";
+import {ArgsSizeConstraint} from "./src/constraints/function/argsSizeConstraint";
+import {MaxArgsConstraint} from "./src/constraints/function/maxArgsConstraint";
 import {IConstraintOptions} from "./src/interfaces/IConstraintOptions";
 
 
@@ -29,7 +32,7 @@ for (let file of Files.walk(__dirname, "src")) {
 }
 
 
-export {Validator, any, number, string, array, object, ref, when, or, schema,and}
+export {Validator, any, number, string, array, object, ref, when, or, schema,and,func}
 
 export async function validation(options: IOptions = {}): Promise<Validator> {
 

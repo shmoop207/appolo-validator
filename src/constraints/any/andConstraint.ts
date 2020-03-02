@@ -1,5 +1,5 @@
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../IConstraint";
-import {registerConstraint} from "../../schema/registerConstraint";
+import {registerConstraint} from "../registerConstraint";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {any, AnySchema} from "../../schema/types/anySchema";
 import {Promises} from "appolo-utils";

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const registerConstraint_1 = require("../../schema/registerConstraint");
+const registerConstraint_1 = require("../registerConstraint");
 const anySchema_1 = require("../../schema/types/anySchema");
 const appolo_utils_1 = require("appolo-utils");
 class AndConstraint {

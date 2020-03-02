@@ -1,27 +1,27 @@
 "use strict";
 import chai = require('chai');
 import {Promises} from 'appolo-utils';
-import {array, any, object, string, number, validation, ref, when, schema, and} from "../index";
+import {array, any, object, string, number, validation, ref, when, schema, and, func} from "../index";
 import {ValidationError} from "../src/common/errors/ValidationError";
 
 let should = chai.should();
 
 describe("validator", function () {
 
-    describe("When",  () => {
+    describe("When", () => {
         it('should validate object when', async () => {
 
-               let validator = await validation();
+            let validator = await validation();
 
-               let schema = object().keys({
-                   min: number(),
-                   max:  when().fn(params => params.object.min == 5).then(number().min(5))
-               });
+            let schema = object().keys({
+                min: number(),
+                max: when().fn(params => params.object.min == 5).then(number().min(5))
+            });
 
-               let result = await validator.validate(schema, {min: 5, max: 4});
+            let result = await validator.validate(schema, {min: 5, max: 4});
 
-               result.errors.length.should.be.eq(1);
-               result.errors[0].message.should.be.eq('4 min that was expected for this number');
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('4 min that was expected for this number');
 
 
         });
@@ -97,7 +97,6 @@ describe("validator", function () {
     });
 
 
-
     describe("Numbers", () => {
         it('should validate isNumber', async () => {
 
@@ -170,7 +169,7 @@ describe("validator", function () {
 
 
     });
-    describe("Arrays",()=>{
+    describe("Arrays", () => {
         it('should validate array', async () => {
             let validator = await validation();
 
@@ -219,11 +218,79 @@ describe("validator", function () {
         });
     });
 
+    describe("Function",()=>{
+        it('should validate function isClass ', async () => {
+            let validator = await validation();
+
+            let schema = func().isClass();
+
+            let result = await validator.validate(schema, function () {
+
+            });
+            result.errors[0].message.should.be.eq('is not a valid class');
+
+            result = await validator.validate(schema, class A {
+            });
+
+            result.errors.length.should.be.eq(0);
+
+        });
+
+        it('should validate function args size', async () => {
+            let validator = await validation();
+
+            let schema = func().argsSize(3);
+
+            let result = await validator.validate(schema, function (a,b) {
+
+            });
+            result.errors[0].message.should.be.eq('is not valid size');
+
+            result = await validator.validate(schema, function (a,b,c) {
+
+            });
+
+            result.errors.length.should.be.eq(0);
+        });
+
+        it('should validate function min args size', async () => {
+            let validator = await validation();
+
+            let schema = func().minArgs(3);
+
+            let result = await validator.validate(schema, function (a,b) {
+
+            });
+            result.errors[0].message.should.be.eq('is not valid size');
+
+            result = await validator.validate(schema, function (a,b,c,d) {
+
+            });
+
+            result.errors.length.should.be.eq(0);
+        });
+
+        it('should validate function max args size', async () => {
+            let validator = await validation();
+
+            let schema = func().maxArgs(3);
+
+            let result = await validator.validate(schema, function (a,b,c,d) {
+
+            });
+            result.errors[0].message.should.be.eq('is not valid size');
+
+            result = await validator.validate(schema, function (a,b) {
+
+            });
+
+            result.errors.length.should.be.eq(0);
+        });
+
+    });
 
 
-
-
-    describe("Object",()=>{
+    describe("Object", () => {
         it('should validate object', async () => {
             let validator = await validation();
 
@@ -235,6 +302,128 @@ describe("validator", function () {
             result.errors[0].message.should.be.eq('11 is not a number');
 
         });
+
+        it('should validate plain object', async () => {
+            let validator = await validation();
+
+            let schema = object().isPlain();
+
+            let result = await validator.validate(schema, {a: 1, b: "11"});
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, class A {
+            });
+
+
+            result.errors[0].message.should.be.eq('is not a valid object');
+
+        });
+
+        it('should validate object size', async () => {
+            let validator = await validation();
+
+            let schema = object().size(2);
+
+            let result = await validator.validate(schema, {a: 1, b: "11"});
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, {});
+
+
+            result.errors[0].message.should.be.eq('is not valid size');
+
+        });
+
+        it('should validate object min', async () => {
+            let validator = await validation();
+
+            let schema = object().minKeys(2);
+
+            let result = await validator.validate(schema, {a: 1, b: "11"});
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, {});
+
+
+            result.errors[0].message.should.be.eq('is not valid size');
+
+        });
+
+        it('should validate object max', async () => {
+            let validator = await validation();
+
+            let schema = object().maxKeys(2);
+
+            let result = await validator.validate(schema, {a: 1, b: "11"});
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, {a: 1, b: "11",c:"11"});
+
+
+            result.errors[0].message.should.be.eq('is not valid size');
+
+        });
+
+        it('should validate object with', async () => {
+            let validator = await validation();
+
+            let schema = object().with("a",["b"]);
+
+            let result = await validator.validate(schema, {a: 1, b: "11"});
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, {a: 1});
+
+
+            result.errors[0].message.should.be.eq('Property that should have been present at the same time as another one was missing.');
+
+        });
+
+        it('should validate object without', async () => {
+            let validator = await validation();
+
+            let schema = object().without("a",["b"]);
+
+            let result = await validator.validate(schema, {a: 1});
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, {a: 1,b:11});
+
+
+            result.errors[0].message.should.be.eq('Property that should have been absent at the same time as another one was present');
+
+        });
+
+
+
+        it('should validate object instanceOf ', async () => {
+            let validator = await validation();
+
+            class A {
+
+            }
+
+            class B {
+
+            }
+
+            let schema = object().instanceOf(A);
+
+            let result = await validator.validate(schema, new B());
+            result.errors[0].message.should.be.eq('is not instance of');
+
+            result = await validator.validate(schema, new A());
+
+            result.errors.length.should.be.eq(0);
+
+        });
+
 
         it('should validate nested object', async () => {
             let validator = await validation();
@@ -255,9 +444,6 @@ describe("validator", function () {
 
         });
     });
-
-
-
 
 
     describe("Any Schema", () => {
@@ -337,8 +523,6 @@ describe("validator", function () {
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq("3 min that was expected for this number");
         });
-
-
 
 
         it('should validate with and', async () => {
@@ -426,8 +610,6 @@ describe("validator", function () {
             result.errors[0].message.should.be.deep.equal("b is not valid");
         });
     });
-
-
 
 
     describe("Decorators", () => {

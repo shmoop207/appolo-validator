@@ -2,7 +2,7 @@ import {Objects, Promises} from "appolo-utils/index";
 import {AnySchema} from "../../schema/types/anySchema";
 import {ValidationError} from "../../common/errors/ValidationError";
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../IConstraint";
-import {registerConstraint} from "../../schema/registerConstraint";
+import {registerConstraint} from "../registerConstraint";
 import {NumberSchema} from "../../schema/types/numberSchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {MinNumberConstraint} from "../numbers/minNumberConstraint";

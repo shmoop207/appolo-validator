@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const registerConverter_1 = require("../../schema/registerConverter");
+const registerConverter_1 = require("../registerConverter");
 const anySchema_1 = require("../../schema/types/anySchema");
 class DefaultConverter {
     convert(params) {

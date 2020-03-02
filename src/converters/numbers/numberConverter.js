@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const numberSchema_1 = require("../../schema/types/numberSchema");
-const registerConverter_1 = require("../../schema/registerConverter");
+const registerConverter_1 = require("../registerConverter");
 class NumberConverter {
     convert(params) {
         return typeof params.value === 'string' ? parseFloat(params.value) : params.value;

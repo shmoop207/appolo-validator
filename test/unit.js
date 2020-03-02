@@ -135,6 +135,48 @@ describe("validator", function () {
             result.errors[0].property.should.be.eq(0);
         });
     });
+    describe("Function", () => {
+        it('should validate function isClass ', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.func().isClass();
+            let result = await validator.validate(schema, function () {
+            });
+            result.errors[0].message.should.be.eq('is not a valid class');
+            result = await validator.validate(schema, class A {
+            });
+            result.errors.length.should.be.eq(0);
+        });
+        it('should validate function args size', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.func().argsSize(3);
+            let result = await validator.validate(schema, function (a, b) {
+            });
+            result.errors[0].message.should.be.eq('is not valid size');
+            result = await validator.validate(schema, function (a, b, c) {
+            });
+            result.errors.length.should.be.eq(0);
+        });
+        it('should validate function min args size', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.func().minArgs(3);
+            let result = await validator.validate(schema, function (a, b) {
+            });
+            result.errors[0].message.should.be.eq('is not valid size');
+            result = await validator.validate(schema, function (a, b, c, d) {
+            });
+            result.errors.length.should.be.eq(0);
+        });
+        it('should validate function max args size', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.func().maxArgs(3);
+            let result = await validator.validate(schema, function (a, b, c, d) {
+            });
+            result.errors[0].message.should.be.eq('is not valid size');
+            result = await validator.validate(schema, function (a, b) {
+            });
+            result.errors.length.should.be.eq(0);
+        });
+    });
     describe("Object", () => {
         it('should validate object', async () => {
             let validator = await index_1.validation();
@@ -142,6 +184,67 @@ describe("validator", function () {
             let result = await validator.validate(schema, { a: 1, b: "11" });
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq('11 is not a number');
+        });
+        it('should validate plain object', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().isPlain();
+            let result = await validator.validate(schema, { a: 1, b: "11" });
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, class A {
+            });
+            result.errors[0].message.should.be.eq('is not a valid object');
+        });
+        it('should validate object size', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().size(2);
+            let result = await validator.validate(schema, { a: 1, b: "11" });
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, {});
+            result.errors[0].message.should.be.eq('is not valid size');
+        });
+        it('should validate object min', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().minKeys(2);
+            let result = await validator.validate(schema, { a: 1, b: "11" });
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, {});
+            result.errors[0].message.should.be.eq('is not valid size');
+        });
+        it('should validate object max', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().maxKeys(2);
+            let result = await validator.validate(schema, { a: 1, b: "11" });
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, { a: 1, b: "11", c: "11" });
+            result.errors[0].message.should.be.eq('is not valid size');
+        });
+        it('should validate object with', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().with("a", ["b"]);
+            let result = await validator.validate(schema, { a: 1, b: "11" });
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, { a: 1 });
+            result.errors[0].message.should.be.eq('Property that should have been present at the same time as another one was missing.');
+        });
+        it('should validate object without', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().without("a", ["b"]);
+            let result = await validator.validate(schema, { a: 1 });
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, { a: 1, b: 11 });
+            result.errors[0].message.should.be.eq('Property that should have been absent at the same time as another one was present');
+        });
+        it('should validate object instanceOf ', async () => {
+            let validator = await index_1.validation();
+            class A {
+            }
+            class B {
+            }
+            let schema = index_1.object().instanceOf(A);
+            let result = await validator.validate(schema, new B());
+            result.errors[0].message.should.be.eq('is not instance of');
+            result = await validator.validate(schema, new A());
+            result.errors.length.should.be.eq(0);
         });
         it('should validate nested object', async () => {
             let validator = await index_1.validation();

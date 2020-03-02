@@ -1,4 +1,4 @@
-import {registerConstraint} from "../../schema/registerConstraint";
+import {registerConstraint} from "../registerConstraint";
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../IConstraint";
 import {Promises} from "appolo-utils";
 import {ValidationError} from "../../common/errors/ValidationError";

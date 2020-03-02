@@ -1,7 +1,7 @@
-import {IConstraintClass} from "../constraints/IConstraint";
+import {IConstraintClass} from "./IConstraint";
 import {Arrays, Objects} from "appolo-utils"
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
-import {AnySchema} from "./types/anySchema";
+import {AnySchema} from "../schema/types/anySchema";
 import {ReflectMetadata} from "appolo-utils/index";
 import {PropertySymbol} from "../decorators/registerDecorator";
 

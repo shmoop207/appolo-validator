@@ -1,5 +1,5 @@
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../IConstraint";
-import {registerConstraint} from "../../schema/registerConstraint";
+import {registerConstraint} from "../registerConstraint";
 import {NumberSchema} from "../../schema/types/numberSchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {Ref} from "../../schema/types/ref";

@@ -1,7 +1,7 @@
 import {AnySchema} from "../schema/types/anySchema";
-import {ReflectMetadata,Objects} from "appolo-utils";
-import {registerConstraint} from "../schema/registerConstraint";
-import {registerConverter} from "../schema/registerConverter";
+import {ReflectMetadata, Objects} from "appolo-utils";
+import {registerConstraint} from "../constraints/registerConstraint";
+import {registerConverter} from "../converters/registerConverter";
 
 type DecoratorFn = (target: any, propertyKey: string, descriptor?: PropertyDescriptor | number) => void
 export const PropertySymbol = "__PropertySymbol__";
@@ -21,13 +21,16 @@ export class RegisterDecorator {
 
         fn[SchemaFnSymbol] = schema;
 
-        let extended: { name: string }[] = (registerConstraint.constraints.get(schema.constructor as typeof AnySchema) as { name: string }[])
-            .concat(registerConstraint.constraints.get(AnySchema) as { name: string }[])
-            .concat(registerConverter.converters.get(schema.constructor as typeof AnySchema) as { name: string }[])
-            .concat(registerConverter.converters.get(AnySchema)).concat([{name:"options"}]);
+        let schemaProto = Object.getPrototypeOf(schema);
+        let fnNames = [{name: "options"}];
 
-        for (let i=0;i<extended.length ;i++) {
-            let constraint = extended[i];
+        while (schemaProto) {
+            fnNames.push(...registerConstraint.constraints.get(schemaProto.constructor) || []);
+            fnNames.push(...registerConverter.converters.get(schemaProto.constructor)||[]);
+            schemaProto = Object.getPrototypeOf(schemaProto)
+        }
+        for (let i = 0; i < fnNames.length; i++) {
+            let constraint = fnNames[i];
             fn[constraint.name] = function () {
                 let schema = fn[SchemaFnSymbol];
                 schema[constraint.name].apply(schema, arguments);

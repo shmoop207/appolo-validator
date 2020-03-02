@@ -1,4 +1,4 @@
-import {registerConstraint} from "../../schema/registerConstraint";
+import {registerConstraint} from "../registerConstraint";
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../IConstraint";
 
 

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const registerConstraint_1 = require("../../schema/registerConstraint");
+const registerConstraint_1 = require("../registerConstraint");
 const numberSchema_1 = require("../../schema/types/numberSchema");
 class MaxNumberConstraint {
     async validate(params) {
