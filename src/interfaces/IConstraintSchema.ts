@@ -1,4 +1,4 @@
-import {IConstraintClass} from "../constraints/IConstraint";
+import {IConstraintClass} from "./IConstraint";
 import {IConstraintOptions} from "./IConstraintOptions";
 
 export interface IConstraintSchema {

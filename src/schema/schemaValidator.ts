@@ -3,7 +3,7 @@ import {
     IConstraint,
     ValidationParams,
     IConstraintValidateResult, IConverterClass
-} from "../constraints/IConstraint";
+} from "../interfaces/IConstraint";
 import {ValidationError} from "../common/errors/ValidationError";
 import {inject, Injector, Util, define, singleton} from "appolo-engine";
 import {IValidateOptions} from "../interfaces/IOptions";
@@ -11,17 +11,17 @@ import {Objects, Promises, Arrays} from "appolo-utils";
 import {ValidateDefaults} from "../defaults/defaults";
 import {Validator} from "../validator/validator";
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
-import {any, AnySchema} from "./types/anySchema";
-import {IConverter} from "../converters/IConverter";
+import {any, AnySchema} from "../types/any/anySchema";
+import {IConverter} from "../interfaces/IConverter";
 import {IConverterSchema} from "../interfaces/IConverterSchema";
 import {IConstraintOptions} from "../interfaces/IConstraintOptions";
-import {Ref} from "./types/ref";
-import {SchemaFnWhen, When} from "../constraints/when/when";
+import {Ref} from "./ref";
+import {SchemaFnWhen, When} from "../when/when";
 import {IClass} from "appolo-engine/index";
 import {PropertySymbol, RegisterDecorator, SchemaFnSymbol} from "../decorators/registerDecorator";
 import {object} from "../../index";
 import {SchemaSymbol} from "../decorators/decorators";
-import {ObjectSchema} from "./types/objectSchema";
+import {ObjectSchema} from "../types/object/objectSchema";
 
 @define()
 export class SchemaValidator {
@@ -66,10 +66,10 @@ export class SchemaValidator {
     private _handleConverters(schema: AnySchema, options: IValidateOptions) {
         let converters: IConverterSchema[] = (schema.converters || []);
 
-        if (options.convert && schema.converter) {
-            converters = converters.slice();
-            converters.unshift({converter: schema.converter, args: []})
-        }
+        // if (options.convert && schema.converter) {
+        //     converters = converters.slice();
+        //     converters.unshift({converter: schema.converter, args: []})
+        // }
 
         if (converters.length) {
             return this._runConverters(converters);
@@ -86,9 +86,16 @@ export class SchemaValidator {
 
     private async _convertValue(converterSchema: IConverterSchema) {
         try {
-            let converter = this._getInstance(converterSchema.converter);
 
             let params = this._createValidationParams(converterSchema.options, converterSchema.args);
+
+
+            if (converterSchema.options && converterSchema.options.runIf && !converterSchema.options.runIf(params)) {
+                return;
+            }
+
+            let converter = this._getInstance(converterSchema.converter);
+
 
             let value = await converter.convert(params);
 
@@ -156,6 +163,10 @@ export class SchemaValidator {
         try {
 
             let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
+
+            if (constraintSchema.options && constraintSchema.options.runIf && !constraintSchema.options.runIf(params)) {
+                return null;
+            }
 
             params.args = this._prepareArgs(constraintSchema.args, params);
 
@@ -230,8 +241,8 @@ export class SchemaValidator {
 
     public getSchemaFromParams(schema: AnySchema | When | IClass): AnySchema {
 
-        if(schema[SchemaFnSymbol] || schema[SchemaFnWhen]){
-            schema =  schema[SchemaFnSymbol] || schema[SchemaFnWhen]
+        if (schema[SchemaFnSymbol] || schema[SchemaFnWhen]) {
+            schema = schema[SchemaFnSymbol] || schema[SchemaFnWhen]
         }
 
         if (schema instanceof AnySchema) {
@@ -248,9 +259,9 @@ export class SchemaValidator {
             throw new Error("invalid schema")
         }
 
-        let schemaMeta:{schema:ObjectSchema} = Reflect.getMetadata(SchemaSymbol, schema.prototype);
+        let schemaMeta: { schema: ObjectSchema } = Reflect.getMetadata(SchemaSymbol, schema.prototype);
 
-        let output:ObjectSchema =  (schemaMeta) ?schemaMeta.schema : object();
+        let output: ObjectSchema = (schemaMeta) ? schemaMeta.schema : object();
 
         output.keys(meta);
 

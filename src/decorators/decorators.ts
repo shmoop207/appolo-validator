@@ -1,4 +1,4 @@
-import {ObjectSchema} from "../schema/types/objectSchema";
+import {ObjectSchema} from "../types/object/objectSchema";
 import {ReflectMetadata} from "appolo-utils";
 
 export const SchemaSymbol = "__SchemaSymbol__";

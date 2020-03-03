@@ -1,4 +1,4 @@
-import {IConstraint} from "../../constraints/IConstraint";
+import {IConstraint} from "../../interfaces/IConstraint";
 
 export class ValidationError extends Error {
 

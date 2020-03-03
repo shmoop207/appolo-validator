@@ -1,7 +1,7 @@
-import {AnySchema} from "../schema/types/anySchema";
+import {AnySchema} from "../types/any/anySchema";
 import {ReflectMetadata, Objects} from "appolo-utils";
-import {registerConstraint} from "../constraints/registerConstraint";
-import {registerConverter} from "../converters/registerConverter";
+import {registerConstraint} from "../schema/registerConstraint";
+import {registerConverter} from "../schema/registerConverter";
 
 export type DecoratorFn = (target: any, propertyKey: string, descriptor?: PropertyDescriptor | number) => void
 export const PropertySymbol = "__PropertySymbol__";

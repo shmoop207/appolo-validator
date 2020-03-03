@@ -1,4 +1,4 @@
-import {IConstraintClass, IConverterClass} from "../constraints/IConstraint";
+import {IConstraintClass, IConverterClass} from "./IConstraint";
 import {IConstraintOptions} from "./IConstraintOptions";
 import {IConverterOptions} from "./IConverterOptions";
 

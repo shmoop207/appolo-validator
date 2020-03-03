@@ -4,9 +4,9 @@ const tslib_1 = require("tslib");
 const ValidationError_1 = require("../common/errors/ValidationError");
 const appolo_engine_1 = require("appolo-engine");
 const appolo_utils_1 = require("appolo-utils");
-const anySchema_1 = require("./types/anySchema");
-const ref_1 = require("./types/ref");
-const when_1 = require("../constraints/when/when");
+const anySchema_1 = require("../types/any/anySchema");
+const ref_1 = require("./ref");
+const when_1 = require("../when/when");
 const registerDecorator_1 = require("../decorators/registerDecorator");
 const index_1 = require("../../index");
 const decorators_1 = require("../decorators/decorators");
@@ -32,10 +32,10 @@ let SchemaValidator = class SchemaValidator {
     }
     _handleConverters(schema, options) {
         let converters = (schema.converters || []);
-        if (options.convert && schema.converter) {
-            converters = converters.slice();
-            converters.unshift({ converter: schema.converter, args: [] });
-        }
+        // if (options.convert && schema.converter) {
+        //     converters = converters.slice();
+        //     converters.unshift({converter: schema.converter, args: []})
+        // }
         if (converters.length) {
             return this._runConverters(converters);
         }
@@ -48,8 +48,11 @@ let SchemaValidator = class SchemaValidator {
     }
     async _convertValue(converterSchema) {
         try {
-            let converter = this._getInstance(converterSchema.converter);
             let params = this._createValidationParams(converterSchema.options, converterSchema.args);
+            if (converterSchema.options && converterSchema.options.runIf && !converterSchema.options.runIf(params)) {
+                return;
+            }
+            let converter = this._getInstance(converterSchema.converter);
             let value = await converter.convert(params);
             this._value = value;
         }
@@ -98,6 +101,9 @@ let SchemaValidator = class SchemaValidator {
         let constraint = null, error, message;
         try {
             let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
+            if (constraintSchema.options && constraintSchema.options.runIf && !constraintSchema.options.runIf(params)) {
+                return null;
+            }
             params.args = this._prepareArgs(constraintSchema.args, params);
             constraint = this._getInstance(constraintSchema.constraint);
             let result = await constraint.validate(params);

@@ -4,8 +4,8 @@ import {Arrays, Objects} from "appolo-utils/index";
 import {SchemaDefaults, ValidateDefaults, ValidatorDefaults} from "../defaults/defaults";
 import {ValidationError} from "../common/errors/ValidationError";
 import {SchemaValidator} from "../schema/schemaValidator";
-import {any, AnySchema} from "../schema/types/anySchema";
-import {When} from "../constraints/when/when";
+import {any, AnySchema} from "../types/any/anySchema";
+import {When} from "../when/when";
 import {Classes} from "appolo-utils";
 import {object} from "../../index";
 

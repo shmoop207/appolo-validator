@@ -1,8 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const appolo_utils_1 = require("appolo-utils");
-const registerConstraint_1 = require("../constraints/registerConstraint");
-const registerConverter_1 = require("../converters/registerConverter");
+const registerConstraint_1 = require("../schema/registerConstraint");
+const registerConverter_1 = require("../schema/registerConverter");
 exports.PropertySymbol = "__PropertySymbol__";
 exports.SchemaFnSymbol = "@schema";
 class RegisterDecorator {
