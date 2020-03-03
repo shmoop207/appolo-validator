@@ -51,3 +51,5 @@ export async function validation(options: IOptions = {}): Promise<Validator> {
 //TODO custom message
 
 //TODO ValidateIf
+
+// TODO toPromise

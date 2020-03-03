@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const ref_1 = require("../../schema/types/ref");
+const index_1 = require("appolo-utils/index");
+const registerDecorator_1 = require("../../decorators/registerDecorator");
 class When {
     constructor(prop) {
         this._params = { cases: [] };
@@ -70,8 +72,34 @@ class When {
     }
 }
 exports.When = When;
+exports.SchemaFnWhen = "__SchemaFnWhen__";
 function when(prop) {
-    return new When(prop);
+    let when = new When(prop);
+    let fn = function (target, propertyKey, descriptor) {
+        let validations = index_1.ReflectMetadata.getNestedMetadata(registerDecorator_1.PropertySymbol, target, {});
+        validations[propertyKey] = when;
+    };
+    fn[exports.SchemaFnWhen] = when;
+    let fnNames = ["default", "else", "case", "then", "schema", "group", "fn", "value", "refFn", "ref", "property"];
+    for (let i = 0; i < fnNames.length; i++) {
+        let fnName = fnNames[i];
+        fn[fnName] = function () {
+            let when = fn[exports.SchemaFnWhen];
+            when[fnName].apply(when, arguments);
+            return fn;
+        };
+    }
+    Object.defineProperty(fn, "params", {
+        get: function () {
+            return when.params;
+        }
+    });
+    Object.defineProperty(fn, "is", {
+        get: function () {
+            return fn;
+        }
+    });
+    return fn;
 }
 exports.when = when;
 //# sourceMappingURL=when.js.map

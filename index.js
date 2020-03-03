@@ -42,4 +42,5 @@ async function validation(options = {}) {
 exports.validation = validation;
 //TODO custom message
 //TODO ValidateIf
+// TODO toPromise
 //# sourceMappingURL=index.js.map

@@ -151,8 +151,8 @@ let SchemaValidator = class SchemaValidator {
         return new klass();
     }
     getSchemaFromParams(schema) {
-        if (schema[registerDecorator_1.SchemaFnSymbol]) {
-            return schema[registerDecorator_1.SchemaFnSymbol];
+        if (schema[registerDecorator_1.SchemaFnSymbol] || schema[when_1.SchemaFnWhen]) {
+            schema = schema[registerDecorator_1.SchemaFnSymbol] || schema[when_1.SchemaFnWhen];
         }
         if (schema instanceof anySchema_1.AnySchema) {
             return schema;

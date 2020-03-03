@@ -16,7 +16,7 @@ import {IConverter} from "../converters/IConverter";
 import {IConverterSchema} from "../interfaces/IConverterSchema";
 import {IConstraintOptions} from "../interfaces/IConstraintOptions";
 import {Ref} from "./types/ref";
-import {When} from "../constraints/when/when";
+import {SchemaFnWhen, When} from "../constraints/when/when";
 import {IClass} from "appolo-engine/index";
 import {PropertySymbol, RegisterDecorator, SchemaFnSymbol} from "../decorators/registerDecorator";
 import {object} from "../../index";
@@ -230,8 +230,8 @@ export class SchemaValidator {
 
     public getSchemaFromParams(schema: AnySchema | When | IClass): AnySchema {
 
-        if(schema[SchemaFnSymbol]){
-            return schema[SchemaFnSymbol]
+        if(schema[SchemaFnSymbol] || schema[SchemaFnWhen]){
+            schema =  schema[SchemaFnSymbol] || schema[SchemaFnWhen]
         }
 
         if (schema instanceof AnySchema) {

@@ -3,6 +3,8 @@ import {AnySchema} from "../../schema/types/anySchema";
 import {ICaseParams} from "./ICaseParams";
 import {IWhenParams} from "./IWhenParams";
 import {Ref} from "../../schema/types/ref";
+import {ReflectMetadata} from "appolo-utils/index";
+import {DecoratorFn, PropertySymbol, SchemaFnSymbol} from "../../decorators/registerDecorator";
 
 export class When implements Pick<When, "ref"> {
 
@@ -101,7 +103,42 @@ export class When implements Pick<When, "ref"> {
 
 }
 
-export function when(prop?: Ref | ((params: ValidationParams) => any)): Omit<When, "default" | "else" | "then"> {
-    return new When(prop);
+export const SchemaFnWhen = "__SchemaFnWhen__";
+
+export function when(prop?: Ref | ((params: ValidationParams) => any)): DecoratorFn & Omit<When, "default" | "else" | "then"> {
+
+    let when = new When(prop);
+    let fn = function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+        let validations = ReflectMetadata.getNestedMetadata<{ [index: string]: When }>(PropertySymbol, target, {});
+        validations[propertyKey] = when;
+    };
+
+    fn[SchemaFnWhen] = when;
+
+    let fnNames = ["default", "else", "case", "then", "schema", "group", "fn", "value", "refFn", "ref", "property"];
+
+    for (let i = 0; i < fnNames.length; i++) {
+        let fnName = fnNames[i];
+        fn[fnName] = function () {
+            let when = fn[SchemaFnWhen];
+            when[fnName].apply(when, arguments);
+            return fn;
+        }
+    }
+
+    Object.defineProperty(fn, "params", {
+        get: function () {
+            return when.params;
+        }
+    });
+
+    Object.defineProperty(fn, "is", {
+        get: function () {
+            return fn;
+        }
+    });
+
+
+    return fn as any;
 }
 
