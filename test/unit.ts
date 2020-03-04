@@ -1,7 +1,7 @@
 "use strict";
 import chai = require('chai');
 import {Promises} from 'appolo-utils';
-import {array, any, object, string, number, validation, ref, when, schema, and, func} from "../index";
+import {array, any, object, string, number, validation, ref, when, schema, and, func, date} from "../index";
 import {ValidationError} from "../src/common/errors/ValidationError";
 
 let should = chai.should();
@@ -218,7 +218,7 @@ describe("validator", function () {
         });
     });
 
-    describe("Function",()=>{
+    describe("Function", () => {
         it('should validate function isClass ', async () => {
             let validator = await validation();
 
@@ -241,12 +241,12 @@ describe("validator", function () {
 
             let schema = func().argsSize(3);
 
-            let result = await validator.validate(schema, function (a,b) {
+            let result = await validator.validate(schema, function (a, b) {
 
             });
             result.errors[0].message.should.be.eq('is not valid size');
 
-            result = await validator.validate(schema, function (a,b,c) {
+            result = await validator.validate(schema, function (a, b, c) {
 
             });
 
@@ -258,12 +258,12 @@ describe("validator", function () {
 
             let schema = func().minArgs(3);
 
-            let result = await validator.validate(schema, function (a,b) {
+            let result = await validator.validate(schema, function (a, b) {
 
             });
             result.errors[0].message.should.be.eq('is not valid size');
 
-            result = await validator.validate(schema, function (a,b,c,d) {
+            result = await validator.validate(schema, function (a, b, c, d) {
 
             });
 
@@ -275,12 +275,12 @@ describe("validator", function () {
 
             let schema = func().maxArgs(3);
 
-            let result = await validator.validate(schema, function (a,b,c,d) {
+            let result = await validator.validate(schema, function (a, b, c, d) {
 
             });
             result.errors[0].message.should.be.eq('is not valid size');
 
-            result = await validator.validate(schema, function (a,b) {
+            result = await validator.validate(schema, function (a, b) {
 
             });
 
@@ -361,7 +361,7 @@ describe("validator", function () {
 
             result.errors.length.should.be.eq(0);
 
-            result = await validator.validate(schema, {a: 1, b: "11",c:"11"});
+            result = await validator.validate(schema, {a: 1, b: "11", c: "11"});
 
 
             result.errors[0].message.should.be.eq('is not valid size');
@@ -371,7 +371,7 @@ describe("validator", function () {
         it('should validate object with', async () => {
             let validator = await validation();
 
-            let schema = object().with("a",["b"]);
+            let schema = object().with("a", ["b"]);
 
             let result = await validator.validate(schema, {a: 1, b: "11"});
 
@@ -387,19 +387,18 @@ describe("validator", function () {
         it('should validate object without', async () => {
             let validator = await validation();
 
-            let schema = object().without("a",["b"]);
+            let schema = object().without("a", ["b"]);
 
             let result = await validator.validate(schema, {a: 1});
 
             result.errors.length.should.be.eq(0);
 
-            result = await validator.validate(schema, {a: 1,b:11});
+            result = await validator.validate(schema, {a: 1, b: 11});
 
 
             result.errors[0].message.should.be.eq('Property that should have been absent at the same time as another one was present');
 
         });
-
 
 
         it('should validate object instanceOf ', async () => {
@@ -578,6 +577,21 @@ describe("validator", function () {
             result.value.should.be.deep.equal({a: 1, b: 2});
         });
 
+        it('should validate with await promise', async () => {
+            let result: { errors: ValidationError[], value: any };
+
+            let validator = await validation();
+
+            let schema = object().keys({
+                a: number().await(),
+            });
+
+            result = await validator.validate(schema, {a: Promise.resolve(1)});
+
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.deep.equal({a: 1});
+        });
+
         it('should validate with forbidden', async () => {
             let result: { errors: ValidationError[], value: any };
 
@@ -611,6 +625,81 @@ describe("validator", function () {
         });
     });
 
+    describe("Date", () => {
+        it("should convert date", async () => {
+            let validator = await validation();
+
+            let schema = date().toDate();
+
+            let result = await validator.validate(schema, "2019-02-01 11:44");
+
+            result.errors.length.should.be.eq(0);
+
+            result.value.should.be.instanceOf(Date);
+            result.value.toString().should.include("11:44:00");
+
+            result = await validator.validate(schema, "2019-02--01 11:44");
+
+            result.errors.length.should.be.eq(1);
+        });
+
+        it("should convert date with format", async () => {
+            let validator = await validation();
+
+            let schema = date().toDate("dd/MM/yyyy HH:mm:ss X");
+
+            let result = await validator.validate(schema, "01/02/2001 11:44:11 +00");
+
+            result.errors.length.should.be.eq(0);
+
+            result.value.should.be.instanceOf(Date);
+            result.value.toUTCString().should.include("11:44:11");
+
+            result = await validator.validate(schema, "2019-02--01 11:44");
+
+            result.errors.length.should.be.eq(1);
+
+        });
+
+        it("should validate date with min", async () => {
+            let validator = await validation();
+
+            let schema = object().keys({
+                from: date().toDate().required(),
+                to: date().toDate().min(ref('from')).required()
+            });
+
+            let result = await validator.validate(schema, {from: "2020-01-02", to: "2020-03-01"});
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, {from: "2020-01-02", to: "2020-01-01"});
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("is not a valid min date");
+
+        });
+
+        it.only("should validate date with max", async () => {
+            let validator = await validation();
+
+            let schema = object().keys({
+                from: date().toDate().required(),
+                to: date().toDate().max("2020-01-02").required()
+            });
+
+            let result = await validator.validate(schema, {from: "2020-01-02", to: "2020-01-01"});
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, {from: "2020-01-01", to: "2020-03-01"});
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("is not a valid max date");
+
+        });
+
+    });
 
     describe("Decorators", () => {
         it('should validate decorators', async () => {

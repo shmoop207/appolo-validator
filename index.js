@@ -26,6 +26,8 @@ const orConstraint_1 = require("./src/types/any/constraints/orConstraint");
 exports.or = orConstraint_1.or;
 const andConstraint_1 = require("./src/types/any/constraints/andConstraint");
 exports.and = andConstraint_1.and;
+const dateSchema_1 = require("./src/types/date/dateSchema");
+exports.date = dateSchema_1.date;
 const appolo_utils_2 = require("appolo-utils");
 const decorators_1 = require("./src/decorators/decorators");
 exports.schema = decorators_1.schema;
@@ -41,6 +43,5 @@ async function validation(options = {}) {
 }
 exports.validation = validation;
 //TODO custom message
-//TODO ValidateIf
-// TODO toPromise
+// TODO istimestamp is unix is iso
 //# sourceMappingURL=index.js.map

@@ -346,6 +346,16 @@ describe("validator", function () {
             result.errors.length.should.be.eq(0);
             result.value.should.be.deep.equal({ a: 1, b: 2 });
         });
+        it('should validate with await promise', async () => {
+            let result;
+            let validator = await index_1.validation();
+            let schema = index_1.object().keys({
+                a: index_1.number().await(),
+            });
+            result = await validator.validate(schema, { a: Promise.resolve(1) });
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.deep.equal({ a: 1 });
+        });
         it('should validate with forbidden', async () => {
             let result;
             let validator = await index_1.validation();
@@ -367,6 +377,52 @@ describe("validator", function () {
             result = await validator.validate(schema, { a: 4, b: 2 });
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.deep.equal("b is not valid");
+        });
+    });
+    describe("Date", () => {
+        it("should convert date", async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.date().toDate();
+            let result = await validator.validate(schema, "2019-02-01 11:44");
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.instanceOf(Date);
+            result.value.toString().should.include("11:44:00");
+            result = await validator.validate(schema, "2019-02--01 11:44");
+            result.errors.length.should.be.eq(1);
+        });
+        it("should convert date with format", async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.date().toDate("dd/MM/yyyy HH:mm:ss X");
+            let result = await validator.validate(schema, "01/02/2001 11:44:11 +00");
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.instanceOf(Date);
+            result.value.toUTCString().should.include("11:44:11");
+            result = await validator.validate(schema, "2019-02--01 11:44");
+            result.errors.length.should.be.eq(1);
+        });
+        it("should validate date with min", async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().keys({
+                from: index_1.date().toDate().required(),
+                to: index_1.date().toDate().min(index_1.ref('from')).required()
+            });
+            let result = await validator.validate(schema, { from: "2020-01-02", to: "2020-03-01" });
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, { from: "2020-01-02", to: "2020-01-01" });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("is not a valid min date");
+        });
+        it.only("should validate date with max", async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().keys({
+                from: index_1.date().toDate().required(),
+                to: index_1.date().toDate().max("2020-01-02").required()
+            });
+            let result = await validator.validate(schema, { from: "2020-01-02", to: "2020-01-01" });
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, { from: "2020-01-01", to: "2020-03-01" });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("is not a valid max date");
         });
     });
     describe("Decorators", () => {

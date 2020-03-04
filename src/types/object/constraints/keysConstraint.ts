@@ -17,7 +17,9 @@ export class KeysConstraint implements IConstraint {
 
         let keys = [...new Set(Object.keys(args.value).concat(Object.keys(schemasIndex)))];
 
-        let results = await Promises.map(keys, key => this._validateProperty(schemasIndex, key, args));
+        let results = await Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, {convertOnly: true}));
+
+        results = await Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, {validateOnly: true}));
 
         //let error = new ValidationError();
 
@@ -40,9 +42,6 @@ export class KeysConstraint implements IConstraint {
 
                 delete args.value[key];
 
-            } else if (result.value !== undefined) {
-
-                args.value[key] = result.value;
             }
         }
 
@@ -54,18 +53,26 @@ export class KeysConstraint implements IConstraint {
         return {isValid: false, errors};
     }
 
-    private async _validateProperty(schemasIndex: { [index: string]: AnySchema }, key: string, args: ValidationParams): Promise<{ errors: ValidationError[], value: any }> {
+    private async _validateProperty(schemasIndex: { [index: string]: AnySchema }, key: string, args: ValidationParams, runTypes: { validateOnly?: boolean, convertOnly?: boolean } = {}): Promise<{ errors: ValidationError[], value: any }> {
         let schema = schemasIndex[key], value = args.value[key];
 
         if (!schema) {
             return {errors: [], value: value}
         }
 
-        return args.validator.validate(schema, value, {
+        let result = await args.validator.validate(schema, value, {
             ...(args.validateOptions || {}),
             object: args.value,
-            property: key
-        })
+            property: key,
+            validateOnly: runTypes.validateOnly,
+            convertOnly: runTypes.convertOnly
+        });
+
+        if (runTypes.convertOnly && result.value != undefined) {
+            args.value[key] = result.value
+        }
+
+        return result;
     }
 
     public get type(): string {

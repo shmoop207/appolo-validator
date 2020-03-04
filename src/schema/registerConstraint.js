@@ -23,6 +23,15 @@ class RegisterConstraint {
             return this;
         };
     }
+    // private static _hasRef(args: any[]) {
+    //     for (let i = 0; i < args.length; i++) {
+    //         if (args[i] instanceof Ref) {
+    //             return true;
+    //         }
+    //     }
+    //
+    //     return false;
+    // }
     get constraints() {
         return this._constraints;
     }

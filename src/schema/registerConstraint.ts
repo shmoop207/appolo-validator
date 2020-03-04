@@ -4,6 +4,7 @@ import {IConstraintSchema} from "../interfaces/IConstraintSchema";
 import {AnySchema} from "../types/any/anySchema";
 import {ReflectMetadata} from "appolo-utils/index";
 import {PropertySymbol} from "../decorators/registerDecorator";
+import {Ref} from "./ref";
 
 
 interface IExtendParams {
@@ -15,15 +16,14 @@ interface IExtendParams {
 }
 
 
-
 export class RegisterConstraint {
 
     private _constraints = new Map<typeof AnySchema, IExtendParams[]>();
 
     public extend(params: IExtendParams) {
 
-        if(!this._constraints.has(params.base)){
-            this._constraints.set(params.base,[]);
+        if (!this._constraints.has(params.base)) {
+            this._constraints.set(params.base, []);
         }
 
         this._constraints.get(params.base).push(params);
@@ -31,6 +31,7 @@ export class RegisterConstraint {
         params.base.prototype[params.name] = function (this: AnySchema) {
 
             let args = Array.from(arguments), options = args[args.length - 1];
+
 
             let config: IConstraintSchema = {
                 args: args,
@@ -45,6 +46,16 @@ export class RegisterConstraint {
             return this;
         };
     }
+
+    // private static _hasRef(args: any[]) {
+    //     for (let i = 0; i < args.length; i++) {
+    //         if (args[i] instanceof Ref) {
+    //             return true;
+    //         }
+    //     }
+    //
+    //     return false;
+    // }
 
     public get constraints() {
         return this._constraints;

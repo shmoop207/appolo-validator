@@ -7,21 +7,22 @@ class AnySchema {
     constructor(options = {}) {
         this._constraints = [];
         this._converters = [];
+        this._contexts = [];
         this._options = appolo_utils_1.Objects.defaults({}, defaults_1.SchemaDefaults);
         this._type = "any";
-        this._params = {};
+        this._context = {};
     }
-    // public get converter(): IConverterClass {
-    //     return null
-    // }
-    get params() {
-        return this._params;
+    get context() {
+        return this._context;
     }
     get constraints() {
         return this._constraints;
     }
     get converters() {
         return this._converters;
+    }
+    get contexts() {
+        return this._contexts;
     }
     options(options) {
         this._options = Object.assign({}, this._options, options);
@@ -36,6 +37,10 @@ class AnySchema {
     }
     addConverter(schema, top = false) {
         top ? this._converters.unshift(schema) : this._converters.push(schema);
+        return this;
+    }
+    addContext(schema, top = false) {
+        top ? this._contexts.unshift(schema) : this._contexts.push(schema);
         return this;
     }
 }

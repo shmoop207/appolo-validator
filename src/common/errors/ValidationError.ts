@@ -10,13 +10,17 @@ export class ValidationError extends Error {
     private _message: string;
     private readonly _parents: { object: any, property: string | number }[];
 
-    constructor() {
+    constructor(message?: string) {
 
         super();
 
         this._parents = [];
 
         Object.setPrototypeOf(this, ValidationError.prototype);
+
+        if (message) {
+            this.message = message;
+        }
     }
 
     public get object(): Object {

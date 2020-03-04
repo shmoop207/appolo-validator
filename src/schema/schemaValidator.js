@@ -16,7 +16,12 @@ let SchemaValidator = class SchemaValidator {
         this._schema = schema;
         this._value = value;
         this._groupsIndex = appolo_utils_1.Arrays.keyBy(options.groups || []);
-        await this._handleConverters(schema, options);
+        if (options.validateOnly) {
+            await this._handleConverters(schema, options);
+        }
+        if (options.convertOnly) {
+            return { errors: [], value: this._value };
+        }
         let { blackList, parallel, whiteList } = this._distributeConstraint(schema.constraints);
         if (whiteList.length && await this._checkWhiteListConstraint(whiteList)) {
             return { errors: [], value };
@@ -33,8 +38,8 @@ let SchemaValidator = class SchemaValidator {
     _handleConverters(schema, options) {
         let converters = (schema.converters || []);
         // if (options.convert && schema.converter) {
-        //     converters = converters.slice();
-        //     converters.unshift({converter: schema.converter, args: []})
+        //     contexts = contexts.slice();
+        //     contexts.unshift({converter: schema.converter, args: []})
         // }
         if (converters.length) {
             return this._runConverters(converters);
@@ -136,7 +141,8 @@ let SchemaValidator = class SchemaValidator {
             validator: this.validator,
             property: this._options.property,
             object: this._options.object,
-            validateOptions: this._options
+            validateOptions: this._options,
+            schema: this._schema
         };
         return params;
     }

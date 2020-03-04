@@ -7,7 +7,8 @@ class KeysConstraint {
     async validate(args) {
         let schemasIndex = args.args[0];
         let keys = [...new Set(Object.keys(args.value).concat(Object.keys(schemasIndex)))];
-        let results = await appolo_utils_1.Promises.map(keys, key => this._validateProperty(schemasIndex, key, args));
+        let results = await appolo_utils_1.Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, { convertOnly: true }));
+        results = await appolo_utils_1.Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, { validateOnly: true }));
         //let error = new ValidationError();
         let errors = [];
         for (let i = 0; i < results.length; i++) {
@@ -23,21 +24,22 @@ class KeysConstraint {
             else if (!schemasIndex[key] && args.validateOptions.stripUnknown) {
                 delete args.value[key];
             }
-            else if (result.value !== undefined) {
-                args.value[key] = result.value;
-            }
         }
         if (errors.length == 0) {
             return { isValid: true };
         }
         return { isValid: false, errors };
     }
-    async _validateProperty(schemasIndex, key, args) {
+    async _validateProperty(schemasIndex, key, args, runTypes = {}) {
         let schema = schemasIndex[key], value = args.value[key];
         if (!schema) {
             return { errors: [], value: value };
         }
-        return args.validator.validate(schema, value, Object.assign(Object.assign({}, (args.validateOptions || {})), { object: args.value, property: key }));
+        let result = await args.validator.validate(schema, value, Object.assign(Object.assign({}, (args.validateOptions || {})), { object: args.value, property: key, validateOnly: runTypes.validateOnly, convertOnly: runTypes.convertOnly }));
+        if (runTypes.convertOnly && result.value != undefined) {
+            args.value[key] = result.value;
+        }
+        return result;
     }
     get type() {
         return "IsObject";

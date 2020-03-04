@@ -1,8 +1,9 @@
-import {IConstraintClass, IConverterClass} from "../interfaces/IConstraint";
+import {IConstraintClass} from "../interfaces/IConstraint";
 import {Arrays, Objects} from "appolo-utils"
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
 import {AnySchema} from "../types/any/anySchema";
 import {IConverterSchema} from "../interfaces/IConverterSchema";
+import {IConverterClass} from "../interfaces/IConverter";
 
 interface IExtendParams {
     name: string,

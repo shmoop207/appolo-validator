@@ -11,6 +11,8 @@ export interface IValidateOptions extends ICommonOptions {
     object?: Object;
 
     property?: string | number;
+    validateOnly?: boolean;
+    convertOnly?: boolean;
 }
 
 

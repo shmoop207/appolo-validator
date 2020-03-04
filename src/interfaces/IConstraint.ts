@@ -3,6 +3,7 @@ import {Validator} from "../validator/validator";
 import {IConstraintOptions} from "./IConstraintOptions";
 import {IValidateOptions} from "./IOptions";
 import {IConverter} from "./IConverter";
+import {AnySchema} from "../types/any/anySchema";
 
 export interface IConstraintValidateResult {
     isValid: boolean,
@@ -19,13 +20,13 @@ export interface IConstraint {
 
 }
 
+
+
 export interface IConstraintClass {
     new(): IConstraint
 }
 
-export interface IConverterClass {
-    new(): IConverter
-}
+
 
 export interface ValidationParams {
 
@@ -46,6 +47,7 @@ export interface ValidationParams {
     validateOptions: IValidateOptions
 
     validator: Validator
+    schema: AnySchema
 
 }
 

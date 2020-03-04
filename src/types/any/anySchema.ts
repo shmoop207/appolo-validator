@@ -10,28 +10,28 @@ import {registerDecorator} from "../../decorators/registerDecorator";
 import {NumberSchema} from "../number/numberSchema";
 import {registerSchema} from "../../schema/registerSchema";
 import {Objects} from "appolo-utils";
+import {IContextSchema} from "../../interfaces/IContext";
 
 export class AnySchema {
 
     private _options: ISchemaOptions;
     private readonly _constraints: IConstraintSchema[] = [];
     private readonly _converters: IConverterSchema[] = [];
+    private readonly _contexts: IContextSchema[] = [];
+
+    public hasRef: boolean;
 
     protected _type: string;
-    protected _params: {};
+    protected _context: { [index: string]: any };
 
     constructor(options: IConstraintOptions = {}) {
         this._options = Objects.defaults({}, SchemaDefaults);
         this._type = "any";
-        this._params = {}
+        this._context = {}
     }
 
-    // public get converter(): IConverterClass {
-    //     return null
-    // }
-
-    public get params() {
-        return this._params;
+    public get context() {
+        return this._context;
     }
 
     public get constraints(): IConstraintSchema[] {
@@ -40,6 +40,10 @@ export class AnySchema {
 
     public get converters(): IConverterSchema[] {
         return this._converters;
+    }
+
+    public get contexts(): IContextSchema[] {
+        return this._contexts;
     }
 
     public options(options: ISchemaOptions): this {
@@ -59,6 +63,11 @@ export class AnySchema {
 
     public addConverter(schema: IConverterSchema, top: boolean = false): AnySchema {
         top ? this._converters.unshift(schema) : this._converters.push(schema);
+        return this
+    }
+
+    public addContext(schema: IContextSchema, top: boolean = false): AnySchema {
+        top ? this._contexts.unshift(schema) : this._contexts.push(schema);
         return this
     }
 

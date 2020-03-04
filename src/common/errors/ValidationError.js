@@ -1,10 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 class ValidationError extends Error {
-    constructor() {
+    constructor(message) {
         super();
         this._parents = [];
         Object.setPrototypeOf(this, ValidationError.prototype);
+        if (message) {
+            this.message = message;
+        }
     }
     get object() {
         return this._object;

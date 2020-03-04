@@ -15,6 +15,7 @@ import {ref} from "./src/schema/ref";
 import {when} from "./src/when/when";
 import {or,} from "./src/types/any/constraints/orConstraint";
 import {and} from "./src/types/any/constraints/andConstraint";
+import {date} from "./src/types/date/dateSchema";
 import {Files} from "appolo-utils";
 import {schema} from "./src/decorators/decorators";
 import {DefaultConverter} from "./src/types/any/converters/defaultConverter";
@@ -25,6 +26,7 @@ import {InvalidConstraint} from "./src/types/any/constraints/invalidConstraint";
 import {ArgsSizeConstraint} from "./src/types/function/constraints/argsSizeConstraint";
 import {MaxArgsConstraint} from "./src/types/function/constraints/maxArgsConstraint";
 import {IConstraintOptions} from "./src/interfaces/IConstraintOptions";
+import {isDateConstraint} from "./src/types/date/constraints/isDateConstraint";
 
 
 for (let file of Files.walk(__dirname, "src")) {
@@ -32,7 +34,7 @@ for (let file of Files.walk(__dirname, "src")) {
 }
 
 
-export {Validator, any, number, string, array, object, ref, when, or, schema,and,func}
+export {Validator, any, number, string, array, object, ref, when, or, schema, and, func,date}
 
 export async function validation(options: IOptions = {}): Promise<Validator> {
 
@@ -47,9 +49,6 @@ export async function validation(options: IOptions = {}): Promise<Validator> {
     return server;
 }
 
-
 //TODO custom message
+// TODO istimestamp is unix is iso
 
-//TODO ValidateIf
-
-// TODO toPromise

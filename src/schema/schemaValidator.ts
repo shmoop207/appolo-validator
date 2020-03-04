@@ -2,7 +2,7 @@ import {
     IConstraintClass,
     IConstraint,
     ValidationParams,
-    IConstraintValidateResult, IConverterClass
+    IConstraintValidateResult
 } from "../interfaces/IConstraint";
 import {ValidationError} from "../common/errors/ValidationError";
 import {inject, Injector, Util, define, singleton} from "appolo-engine";
@@ -12,7 +12,6 @@ import {ValidateDefaults} from "../defaults/defaults";
 import {Validator} from "../validator/validator";
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
 import {any, AnySchema} from "../types/any/anySchema";
-import {IConverter} from "../interfaces/IConverter";
 import {IConverterSchema} from "../interfaces/IConverterSchema";
 import {IConstraintOptions} from "../interfaces/IConstraintOptions";
 import {Ref} from "./ref";
@@ -42,7 +41,14 @@ export class SchemaValidator {
         this._value = value;
         this._groupsIndex = Arrays.keyBy(options.groups || []);
 
-        await this._handleConverters(schema, options);
+        if (options.validateOnly) {
+            await this._handleConverters(schema, options);
+        }
+
+        if (options.convertOnly) {
+            return {errors: [], value: this._value}
+        }
+
 
         let {blackList, parallel, whiteList} = this._distributeConstraint(schema.constraints);
 
@@ -67,8 +73,8 @@ export class SchemaValidator {
         let converters: IConverterSchema[] = (schema.converters || []);
 
         // if (options.convert && schema.converter) {
-        //     converters = converters.slice();
-        //     converters.unshift({converter: schema.converter, args: []})
+        //     contexts = contexts.slice();
+        //     contexts.unshift({converter: schema.converter, args: []})
         // }
 
         if (converters.length) {
@@ -212,7 +218,8 @@ export class SchemaValidator {
             validator: this.validator,
             property: this._options.property,
             object: this._options.object,
-            validateOptions: this._options
+            validateOptions: this._options,
+            schema: this._schema
         };
 
         return params;
