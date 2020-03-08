@@ -20,8 +20,8 @@ export class InstanceOfConstraint implements IConstraint {
         return "isPlain"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not instance of`
+    public get defaultMessage(): string {
+        return "${property} is not instanceof"
     }
 }
 

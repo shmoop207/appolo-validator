@@ -16,16 +16,14 @@ export interface IConstraint {
 
     type: string
 
-    defaultMessage(validationArguments: ValidationParams): string;
+    defaultMessage: string;
 
 }
-
 
 
 export interface IConstraintClass {
     new(): IConstraint
 }
-
 
 
 export interface ValidationParams {

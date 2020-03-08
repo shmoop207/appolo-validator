@@ -23,8 +23,8 @@ export class StringConstraint implements IConstraint {
         return "string"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.value} is not a string`
+    public get defaultMessage(): string {
+        return "${property} is not valid string"
     }
 }
 

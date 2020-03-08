@@ -11,7 +11,7 @@ class ObjectSchema extends anySchema_1.AnySchema {
 exports.ObjectSchema = ObjectSchema;
 function object(options) {
     let schema = registerSchema_1.registerSchema.extend({ type: ObjectSchema, options });
-    schema.isObject().toJson({ runIf: (params) => params.validateOptions.convert });
+    schema.isObject(options).toJson({ runIf: (params) => params.validateOptions.convert });
     return schema;
 }
 exports.object = object;

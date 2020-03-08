@@ -21,8 +21,8 @@ export class IsPlainConstraint implements IConstraint {
         return "isPlain"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not a valid object`
+    public get defaultMessage(): string {
+        return "${property} is not valid object"
     }
 }
 

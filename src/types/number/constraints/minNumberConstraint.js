@@ -10,8 +10,8 @@ class MinNumberConstraint {
     get type() {
         return "minNumber";
     }
-    defaultMessage(args) {
-        return `${args.value} min that was expected for this number`;
+    get defaultMessage() {
+        return "${property} must be larger than ${arg0}";
     }
 }
 exports.MinNumberConstraint = MinNumberConstraint;

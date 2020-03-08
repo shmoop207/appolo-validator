@@ -19,7 +19,7 @@ export function number(options?: IConstraintOptions) {
 
     let schema = registerSchema.extend<NumberSchema>({type: NumberSchema, options});
 
-    schema.float().toFloat({runIf: (params) => params.validateOptions.convert});
+    schema.float(options).toFloat({runIf: (params) => params.validateOptions.convert});
 
     return schema;
 }

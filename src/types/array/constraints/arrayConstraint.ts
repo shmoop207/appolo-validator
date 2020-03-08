@@ -19,8 +19,8 @@ export class ArrayConstraint implements IConstraint {
         return "array"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `value is not a valid array`
+    public get defaultMessage(): string {
+        return "${property} has valid array"
     }
 }
 

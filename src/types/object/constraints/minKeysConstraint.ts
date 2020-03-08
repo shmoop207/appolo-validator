@@ -21,8 +21,8 @@ export class MinKeysConstraint implements IConstraint {
         return "MinKeys"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not valid size`
+    public get defaultMessage(): string {
+        return "${property} has invalid min keys size"
     }
 }
 

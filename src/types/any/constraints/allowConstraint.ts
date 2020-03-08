@@ -29,8 +29,8 @@ export class AllowConstraint implements IConstraint {
         return "allow"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.property || args.value} is required`
+    public get defaultMessage(): string {
+        return ""
     }
 }
 registerConstraint.extend({

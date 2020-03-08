@@ -18,7 +18,7 @@ export function object(options?: IConstraintOptions) {
 
     let schema = registerSchema.extend<ObjectSchema>({type: ObjectSchema, options});
 
-    schema.isObject().toJson({runIf: (params) => params.validateOptions.convert});
+    schema.isObject(options).toJson({runIf: (params) => params.validateOptions.convert});
 
     return schema
 }

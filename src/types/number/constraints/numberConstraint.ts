@@ -23,8 +23,8 @@ export class NumberConstraint implements IConstraint {
         return "number"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.value} is not a number`
+    public get defaultMessage(): string {
+        return "${property} must be a number"
     }
 }
 

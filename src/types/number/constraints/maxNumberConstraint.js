@@ -10,8 +10,8 @@ class MaxNumberConstraint {
     get type() {
         return "maxNumber";
     }
-    defaultMessage(args) {
-        return `${args.value} max that was expected for this number`;
+    get defaultMessage() {
+        return "${property} must be smaller than ${arg0}";
     }
 }
 exports.MaxNumberConstraint = MaxNumberConstraint;

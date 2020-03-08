@@ -10,8 +10,8 @@ class RequiredConstraint {
     get type() {
         return "required";
     }
-    defaultMessage(args) {
-        return `${args.property || args.value} is required`;
+    get defaultMessage() {
+        return "${property} is required";
     }
 }
 exports.RequiredConstraint = RequiredConstraint;

@@ -31,8 +31,8 @@ export class MinConstraint implements IConstraint {
         return "date"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not a valid min date`
+    public get defaultMessage(): string {
+        return "${property} is under min date"
     }
 }
 

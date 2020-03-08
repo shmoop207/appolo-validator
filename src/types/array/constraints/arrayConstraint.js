@@ -10,8 +10,8 @@ class ArrayConstraint {
     get type() {
         return "array";
     }
-    defaultMessage(args) {
-        return `value is not a valid array`;
+    get defaultMessage() {
+        return "${property} has valid array";
     }
 }
 exports.ArrayConstraint = ArrayConstraint;

@@ -21,8 +21,8 @@ export class SizeConstraint implements IConstraint {
         return "Size"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not valid size`
+    public get defaultMessage(): string {
+        return "${property} has invalid keys size"
     }
 }
 

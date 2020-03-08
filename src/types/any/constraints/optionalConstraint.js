@@ -10,8 +10,8 @@ class OptionalConstraint {
     get type() {
         return "optional";
     }
-    defaultMessage(args) {
-        return `${args.property || args.value} is required`;
+    get defaultMessage() {
+        return "";
     }
 }
 exports.OptionalConstraint = OptionalConstraint;

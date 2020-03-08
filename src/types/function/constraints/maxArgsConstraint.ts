@@ -23,8 +23,8 @@ export class MaxArgsConstraint implements IConstraint {
         return "MaxArgs"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not valid size`
+    public get defaultMessage(): string {
+        return "${property} args is over max args size"
     }
 }
 

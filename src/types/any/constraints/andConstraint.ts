@@ -45,8 +45,8 @@ export class AndConstraint implements IConstraint {
         return "and"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.property || args.value} is required`
+    public get defaultMessage(): string {
+        return "${args.property} is not valid and condition"
     }
 }
 

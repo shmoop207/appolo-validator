@@ -53,8 +53,8 @@ export class ItemsConstraint implements IConstraint {
         return "array"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not a valid array`
+    public get defaultMessage(): string {
+        return "${property} has invalid array items"
     }
 }
 

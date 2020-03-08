@@ -41,7 +41,7 @@ export class SchemaValidator {
         this._value = value;
         this._groupsIndex = Arrays.keyBy(options.groups || []);
 
-        if (options.validateOnly) {
+        if (options.convertOnly || !options.validateOnly) {
             await this._handleConverters(schema, options);
         }
 
@@ -165,10 +165,8 @@ export class SchemaValidator {
 
     private async _validateConstraint(constraintSchema: IConstraintSchema): Promise<ValidationError[]> {
         let constraint: IConstraint = null, error: ValidationError, message: string;
-
+        let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
         try {
-
-            let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
 
             if (constraintSchema.options && constraintSchema.options.runIf && !constraintSchema.options.runIf(params)) {
                 return null;
@@ -190,14 +188,15 @@ export class SchemaValidator {
             if (result.errors && result.errors.length) {
                 return result.errors;
             }
-
-            return [this._createError(constraint.defaultMessage(params), constraint.type)];
+            let message = params.options.message || constraint.defaultMessage;
+            return [this._createError(params, message, constraint.type)];
 
         } catch (e) {
-            return [this._createError("failed to run validation", "unknown")];
+            return [this._createError(params, "failed to run validation", "unknown")];
         }
 
     }
+
 
     private _prepareArgs(args: any[], params: ValidationParams): any[] {
         let output = [];
@@ -225,16 +224,18 @@ export class SchemaValidator {
         return params;
     }
 
-    private _createError(message: string, type: string) {
+    private _createError(params: ValidationParams, message: string, type: string) {
         let error = new ValidationError();
-        error.value = this._value;
+        error.value = params.value;
         error.message = message;
         error.type = type;
         error.property = this._options.property;
         error.object = this._options.object;
+        error.args = params.args;
 
         return error;
     }
+
 
     private _getInstance<T>(klass: (new() => T)): T {
         let classId = Util.getClassName(klass);

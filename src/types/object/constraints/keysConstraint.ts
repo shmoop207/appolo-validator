@@ -79,8 +79,8 @@ export class KeysConstraint implements IConstraint {
         return "IsObject"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `have in valid object keys`
+    public get defaultMessage(): string {
+        return "${property} has invalid keys"
     }
 }
 

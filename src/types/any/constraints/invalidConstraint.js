@@ -19,8 +19,8 @@ class InvalidConstraint {
     get type() {
         return "invalid";
     }
-    defaultMessage(args) {
-        return `${args.property || args.value} is not valid`;
+    get defaultMessage() {
+        return "${property} has invalid values";
     }
 }
 exports.InvalidConstraint = InvalidConstraint;

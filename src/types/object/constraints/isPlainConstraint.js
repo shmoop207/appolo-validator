@@ -11,8 +11,8 @@ class IsPlainConstraint {
     get type() {
         return "isPlain";
     }
-    defaultMessage(args) {
-        return `is not a valid object`;
+    get defaultMessage() {
+        return "${property} is not valid object";
     }
 }
 exports.IsPlainConstraint = IsPlainConstraint;

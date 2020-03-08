@@ -18,7 +18,7 @@ export class ArraySchema extends AnySchema {
 export function array(options?: IConstraintOptions) {
     let schema = registerSchema.extend<ArraySchema>({type: ArraySchema, options});
 
-    schema.isArray().toJson({runIf: (params) => params.validateOptions.convert});
+    schema.isArray(options).toJson({runIf: (params) => params.validateOptions.convert});
 
     return schema
 

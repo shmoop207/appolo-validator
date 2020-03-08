@@ -1,4 +1,4 @@
-import {IConstraint} from "../../interfaces/IConstraint";
+import {Strings} from "appolo-utils";
 
 export class ValidationError extends Error {
 
@@ -7,6 +7,7 @@ export class ValidationError extends Error {
     private _property: string | number;
     private _value: any;
     private _type: string;
+    private _args: any[];
     private _message: string;
     private readonly _parents: { object: any, property: string | number }[];
 
@@ -25,6 +26,14 @@ export class ValidationError extends Error {
 
     public get object(): Object {
         return this._object;
+    }
+
+    public get args(): any[] {
+        return this._args;
+    }
+
+    public set args(value: any[]) {
+        this._args = value;
     }
 
     public set object(value: Object) {
@@ -48,7 +57,7 @@ export class ValidationError extends Error {
     }
 
     public get message(): string {
-        return this._message;
+        return this._createMessage();
     }
 
     public set message(value: string) {
@@ -74,6 +83,59 @@ export class ValidationError extends Error {
 
     public set type(value: string) {
         this._type = value;
+    }
+
+    private _createMessage(): string {
+
+        if (!this._message) {
+            return "";
+        }
+
+        let dto = {
+            value: this._value,
+            object: this._object,
+            property: this._property
+        };
+
+        if (this._args && this._args.length) {
+            for (let i = 0; i < this._args.length; i++) {
+                dto[`arg${i}`] = this._args[i];
+            }
+        }
+
+        let output = "";
+        for (let i = 0; i < this._parents.length; i++) {
+            let prop = this._parents[i];
+
+            output = this._addPrefix(prop.property, output);
+        }
+
+        dto.property =   this._addPrefix(dto.property != undefined ?dto.property : "value", output, false);
+
+        let message = Strings.replaceFormat(this._message, dto);
+
+        return message;
+    }
+
+    private _addPrefix(property: string | number, output: string, addDot = true): string {
+        if (typeof property == "number") {
+            output = output.slice(0, -1);
+            output += `[${property}]`
+
+        } else {
+            output += `${property}`
+        }
+
+        if (addDot) {
+            output += `.`
+        }
+
+        return output;
+    }
+
+
+    public toString() {
+        return this.message;
     }
 
 }

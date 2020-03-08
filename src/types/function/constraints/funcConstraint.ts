@@ -20,8 +20,8 @@ export class FuncConstraint implements IConstraint {
         return "isFunction"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not a valid function`
+    public get defaultMessage(): string {
+        return "${property}  is not valid function"
     }
 }
 

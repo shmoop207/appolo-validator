@@ -24,8 +24,8 @@ class AndConstraint {
     get type() {
         return "and";
     }
-    defaultMessage(args) {
-        return `${args.property || args.value} is required`;
+    get defaultMessage() {
+        return "${args.property} is not valid and condition";
     }
 }
 exports.AndConstraint = AndConstraint;

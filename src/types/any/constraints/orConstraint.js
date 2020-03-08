@@ -23,8 +23,8 @@ class OrConstraint {
     get type() {
         return "or";
     }
-    defaultMessage(args) {
-        return `${args.property || args.value} is required`;
+    get defaultMessage() {
+        return "";
     }
 }
 exports.OrConstraint = OrConstraint;

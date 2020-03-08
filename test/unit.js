@@ -14,7 +14,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { min: 5, max: 4 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('4 min that was expected for this number');
+            result.errors[0].message.should.be.eq('max must be larger than 5');
         });
         it('should validate object when with schema', async () => {
             let validator = await index_1.validation();
@@ -24,7 +24,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { min: 5, max: 4 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('4 min that was expected for this number');
+            result.errors[0].message.should.be.eq('max must be larger than 6');
             let result2 = await validator.validate(schema, { min: 5, max: 7 });
             result2.errors.length.should.be.eq(0);
         });
@@ -36,7 +36,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { min: 5, max: 4 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('4 min that was expected for this number');
+            result.errors[0].message.should.be.eq('max must be larger than 5');
         });
         it('should validate object when with group else', async () => {
             let validator = await index_1.validation({ groups: ["test"] });
@@ -48,7 +48,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { min: 5, max: 6 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('6 min that was expected for this number');
+            result.errors[0].message.should.be.eq('max must be larger than 7');
         });
         it('should validate object when with switch', async () => {
             let validator = await index_1.validation({ groups: ["test"] });
@@ -61,7 +61,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { min: 5, max: 5 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('5 min that was expected for this number');
+            result.errors[0].message.should.be.eq('max must be larger than 6');
         });
     });
     describe("Numbers", () => {
@@ -71,7 +71,7 @@ describe("validator", function () {
             let result = await validator.validate(schema, 5);
             result.errors.length.should.be.eq(0);
             result = await validator.validate(schema, "5");
-            result.errors[0].message.should.be.eq("5 is not a number");
+            result.errors[0].message.should.be.eq("value must be a number");
             result.errors[0].type.should.be.eq("number");
         });
         it('should validate min number', async () => {
@@ -80,7 +80,7 @@ describe("validator", function () {
             let result = await validator.validate(schema, 5);
             result.errors.length.should.be.eq(0);
             result = await validator.validate(schema, 3);
-            result.errors[0].message.should.be.eq("3 min that was expected for this number");
+            result.errors[0].message.should.be.eq("value must be larger than 5");
             result.errors[0].type.should.be.eq("minNumber");
         });
         it('should validate with convert numbers', async () => {
@@ -90,10 +90,12 @@ describe("validator", function () {
             result = await validator.validate(schema, { a: 1, b: "11" });
             result.errors.length.should.be.eq(0);
             result.value.b.should.be.eq(11);
-            schema = index_1.object().keys({ a: index_1.number(), b: index_1.number() });
-            result = await validator.validate(schema, { a: 1, b: "11" });
-            result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('11 is not a number');
+            // schema = object().keys({a: number(), b: number()});
+            //
+            // result = await validator.validate(schema, {a: 1, b: "11"});
+            //
+            // result.errors.length.should.be.eq(1);
+            // result.errors[0].message.should.be.eq('b must be a number');
         });
         it('should validate with convert precision', async () => {
             let result;
@@ -110,7 +112,7 @@ describe("validator", function () {
             let schema = index_1.array().items(index_1.number());
             let result = await validator.validate(schema, [5, "aa"]);
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('aa is not a number');
+            result.errors[0].message.should.be.eq('[1] must be a number');
         });
         it('should validate array or', async () => {
             let validator = await index_1.validation();
@@ -131,7 +133,7 @@ describe("validator", function () {
             let schema = index_1.array().items(index_1.array().items(index_1.number()));
             let result = await validator.validate(schema, [[5], ["aa"]]);
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('aa is not a number');
+            result.errors[0].message.should.be.eq('[1][0] must be a number');
             result.errors[0].property.should.be.eq(0);
         });
     });
@@ -141,7 +143,7 @@ describe("validator", function () {
             let schema = index_1.func().isClass();
             let result = await validator.validate(schema, function () {
             });
-            result.errors[0].message.should.be.eq('is not a valid class');
+            result.errors[0].message.should.be.eq('value is not valid class');
             result = await validator.validate(schema, class A {
             });
             result.errors.length.should.be.eq(0);
@@ -151,7 +153,7 @@ describe("validator", function () {
             let schema = index_1.func().argsSize(3);
             let result = await validator.validate(schema, function (a, b) {
             });
-            result.errors[0].message.should.be.eq('is not valid size');
+            result.errors[0].message.should.be.eq('value has invalid arguments size');
             result = await validator.validate(schema, function (a, b, c) {
             });
             result.errors.length.should.be.eq(0);
@@ -161,7 +163,7 @@ describe("validator", function () {
             let schema = index_1.func().minArgs(3);
             let result = await validator.validate(schema, function (a, b) {
             });
-            result.errors[0].message.should.be.eq('is not valid size');
+            result.errors[0].message.should.be.eq('value args is under min args size');
             result = await validator.validate(schema, function (a, b, c, d) {
             });
             result.errors.length.should.be.eq(0);
@@ -171,7 +173,7 @@ describe("validator", function () {
             let schema = index_1.func().maxArgs(3);
             let result = await validator.validate(schema, function (a, b, c, d) {
             });
-            result.errors[0].message.should.be.eq('is not valid size');
+            result.errors[0].message.should.be.eq('value args is over max args size');
             result = await validator.validate(schema, function (a, b) {
             });
             result.errors.length.should.be.eq(0);
@@ -183,7 +185,7 @@ describe("validator", function () {
             let schema = index_1.object().keys({ a: index_1.number(), b: index_1.number() });
             let result = await validator.validate(schema, { a: 1, b: "11" });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq('11 is not a number');
+            result.errors[0].message.should.be.eq('b must be a number');
         });
         it('should validate plain object', async () => {
             let validator = await index_1.validation();
@@ -192,7 +194,7 @@ describe("validator", function () {
             result.errors.length.should.be.eq(0);
             result = await validator.validate(schema, class A {
             });
-            result.errors[0].message.should.be.eq('is not a valid object');
+            result.errors[0].message.should.be.eq('value is not valid object');
         });
         it('should validate object size', async () => {
             let validator = await index_1.validation();
@@ -200,7 +202,7 @@ describe("validator", function () {
             let result = await validator.validate(schema, { a: 1, b: "11" });
             result.errors.length.should.be.eq(0);
             result = await validator.validate(schema, {});
-            result.errors[0].message.should.be.eq('is not valid size');
+            result.errors[0].message.should.be.eq('value has invalid keys size');
         });
         it('should validate object min', async () => {
             let validator = await index_1.validation();
@@ -208,7 +210,7 @@ describe("validator", function () {
             let result = await validator.validate(schema, { a: 1, b: "11" });
             result.errors.length.should.be.eq(0);
             result = await validator.validate(schema, {});
-            result.errors[0].message.should.be.eq('is not valid size');
+            result.errors[0].message.should.be.eq('value has invalid min keys size');
         });
         it('should validate object max', async () => {
             let validator = await index_1.validation();
@@ -216,7 +218,7 @@ describe("validator", function () {
             let result = await validator.validate(schema, { a: 1, b: "11" });
             result.errors.length.should.be.eq(0);
             result = await validator.validate(schema, { a: 1, b: "11", c: "11" });
-            result.errors[0].message.should.be.eq('is not valid size');
+            result.errors[0].message.should.be.eq('value has invalid max keys size');
         });
         it('should validate object with', async () => {
             let validator = await index_1.validation();
@@ -224,7 +226,7 @@ describe("validator", function () {
             let result = await validator.validate(schema, { a: 1, b: "11" });
             result.errors.length.should.be.eq(0);
             result = await validator.validate(schema, { a: 1 });
-            result.errors[0].message.should.be.eq('Property that should have been present at the same time as another one was missing.');
+            result.errors[0].message.should.be.eq('value has invalid keys');
         });
         it('should validate object without', async () => {
             let validator = await index_1.validation();
@@ -232,7 +234,7 @@ describe("validator", function () {
             let result = await validator.validate(schema, { a: 1 });
             result.errors.length.should.be.eq(0);
             result = await validator.validate(schema, { a: 1, b: 11 });
-            result.errors[0].message.should.be.eq('Property that should have been absent at the same time as another one was present');
+            result.errors[0].message.should.be.eq('value has invalid keys');
         });
         it('should validate object instanceOf ', async () => {
             let validator = await index_1.validation();
@@ -242,7 +244,7 @@ describe("validator", function () {
             }
             let schema = index_1.object().instanceOf(A);
             let result = await validator.validate(schema, new B());
-            result.errors[0].message.should.be.eq('is not instance of');
+            result.errors[0].message.should.be.eq('value is not instanceof');
             result = await validator.validate(schema, new A());
             result.errors.length.should.be.eq(0);
         });
@@ -257,7 +259,7 @@ describe("validator", function () {
             });
             let result = await validator.validate(schema, { a: { b: [11, "bb"] } });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq("bb is not a number");
+            result.errors[0].message.should.be.eq("a.b[1] must be a number");
             result.errors[0].parents.length.should.be.eq(2);
         });
     });
@@ -308,7 +310,7 @@ describe("validator", function () {
             result.value.should.be.deep.equal({ a: 4, b: 5 });
             result = await validator.validate(schema, { a: 4, b: 3 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq("3 min that was expected for this number");
+            result.errors[0].message.should.be.eq("b must be larger than 4");
         });
         it('should validate with and', async () => {
             let result;
@@ -322,7 +324,7 @@ describe("validator", function () {
             result.value.should.be.deep.equal({ a: 4, b: 4 });
             result = await validator.validate(schema, { a: 4, b: 6 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq("6 max that was expected for this number");
+            result.errors[0].message.should.be.eq("b must be smaller than 5");
         });
         it('should validate with optional', async () => {
             let result;
@@ -376,7 +378,7 @@ describe("validator", function () {
             });
             result = await validator.validate(schema, { a: 4, b: 2 });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.deep.equal("b is not valid");
+            result.errors[0].message.should.be.deep.equal("b has invalid values");
         });
     });
     describe("Date", () => {
@@ -410,9 +412,9 @@ describe("validator", function () {
             result.errors.length.should.be.eq(0);
             result = await validator.validate(schema, { from: "2020-01-02", to: "2020-01-01" });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq("is not a valid min date");
+            result.errors[0].message.should.be.eq("to is under min date");
         });
-        it.only("should validate date with max", async () => {
+        it("should validate date with max", async () => {
             let validator = await index_1.validation();
             let schema = index_1.object().keys({
                 from: index_1.date().toDate().required(),
@@ -422,7 +424,7 @@ describe("validator", function () {
             result.errors.length.should.be.eq(0);
             result = await validator.validate(schema, { from: "2020-01-01", to: "2020-03-01" });
             result.errors.length.should.be.eq(1);
-            result.errors[0].message.should.be.eq("is not a valid max date");
+            result.errors[0].message.should.be.eq("to is over max date");
         });
     });
     describe("Decorators", () => {
@@ -461,10 +463,34 @@ describe("validator", function () {
             let validator = await index_1.validation();
             let result = await validator.validate(A, { a: 6, d: 1 });
             result.errors.length.should.be.eq(3);
-            result.errors[0].message.should.be.eq("1 min that was expected for this number");
+            result.errors[0].message.should.be.eq("d must be larger than 5");
             result.errors[1].message.should.be.eq("c is required");
             result = await validator.validate(A, { a: 6, b: 6, c: 6, d: 6 });
             result.errors.length.should.be.eq(0);
+        });
+    });
+    describe("messages", () => {
+        it("should have nested message", async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().keys({
+                test: index_1.object().keys({ a: index_1.array().items(index_1.object().keys({ a: index_1.number() })) }),
+            });
+            let result = await validator.validate(schema, { test: { a: [{ a: "aa" }] } });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("test.a[0].a must be a number");
+        });
+        it("should have nested custom message", async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().keys({
+                test: index_1.object().keys({
+                    a: index_1.array().items(index_1.object().keys({
+                        a: index_1.number({ message: "${property} not a number" })
+                    }))
+                }),
+            });
+            let result = await validator.validate(schema, { test: { a: [{ a: "aa" }] } });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("test.a[0].a not a number");
         });
     });
 });

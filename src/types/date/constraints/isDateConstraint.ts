@@ -21,8 +21,8 @@ export class isDateConstraint implements IConstraint {
         return "date"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.value} is not a valid date`
+    public get defaultMessage(): string {
+        return "${property} is not valid date"
     }
 }
 

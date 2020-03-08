@@ -41,8 +41,8 @@ export class OrConstraint implements IConstraint {
         return "or"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.property || args.value} is required`
+    public get defaultMessage(): string {
+        return ""
     }
 }
 

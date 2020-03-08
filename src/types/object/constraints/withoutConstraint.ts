@@ -32,8 +32,8 @@ export class WithoutConstraint implements IConstraint {
         return "without"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `Property that should have been absent at the same time as another one was present`
+    public get defaultMessage(): string {
+        return "${property} has invalid keys"
     }
 }
 

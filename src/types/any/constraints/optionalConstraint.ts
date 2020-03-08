@@ -17,8 +17,8 @@ export class OptionalConstraint implements IConstraint {
         return "optional"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.property || args.value} is required`
+    public get defaultMessage(): string {
+        return ""
     }
 }
 

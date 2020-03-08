@@ -44,8 +44,8 @@ class KeysConstraint {
     get type() {
         return "IsObject";
     }
-    defaultMessage(args) {
-        return `have in valid object keys`;
+    get defaultMessage() {
+        return "${property} has invalid keys";
     }
 }
 exports.KeysConstraint = KeysConstraint;

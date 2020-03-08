@@ -17,8 +17,8 @@ export class MaxNumberConstraint implements IConstraint {
         return "maxNumber"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.value} max that was expected for this number`
+    public get defaultMessage(): string {
+        return "${property} must be smaller than ${arg0}"
     }
 }
 

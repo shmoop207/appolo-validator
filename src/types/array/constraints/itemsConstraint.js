@@ -34,8 +34,8 @@ class ItemsConstraint {
     get type() {
         return "array";
     }
-    defaultMessage(args) {
-        return `is not a valid array`;
+    get defaultMessage() {
+        return "${property} has invalid array items";
     }
 }
 exports.ItemsConstraint = ItemsConstraint;

@@ -17,8 +17,8 @@ export class ForbiddenConstraint implements IConstraint {
         return "forbidden"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.property || args.value} is forbidden`
+    public get defaultMessage(): string {
+        return "${property} is forbidden"
     }
 }
 

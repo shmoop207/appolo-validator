@@ -17,8 +17,8 @@ export class MinNumberConstraint implements IConstraint {
         return "minNumber"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.value} min that was expected for this number`
+    public get defaultMessage(): string {
+        return "${property} must be larger than ${arg0}"
     }
 }
 

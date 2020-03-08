@@ -23,8 +23,8 @@ export class MinArgsConstraint implements IConstraint {
         return "MinArgs"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not valid size`
+    public get defaultMessage(): string {
+        return "${property} args is under min args size"
     }
 }
 

@@ -20,8 +20,8 @@ export class IsClassConstraint implements IConstraint {
         return "isClass"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not a valid class`
+    public get defaultMessage(): string {
+        return "${property} is not valid class"
     }
 }
 

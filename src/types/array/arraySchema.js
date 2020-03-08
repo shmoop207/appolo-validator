@@ -11,7 +11,7 @@ class ArraySchema extends anySchema_1.AnySchema {
 exports.ArraySchema = ArraySchema;
 function array(options) {
     let schema = registerSchema_1.registerSchema.extend({ type: ArraySchema, options });
-    schema.isArray().toJson({ runIf: (params) => params.validateOptions.convert });
+    schema.isArray(options).toJson({ runIf: (params) => params.validateOptions.convert });
     return schema;
 }
 exports.array = array;

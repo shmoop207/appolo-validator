@@ -30,8 +30,8 @@ export class ValidConstraint implements IConstraint {
         return "equals"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `${args.property || args.value} is not valid`
+    public get defaultMessage(): string {
+        return "${property} has invalid value"
     }
 }
 

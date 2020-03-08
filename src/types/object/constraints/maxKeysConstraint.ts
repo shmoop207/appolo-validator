@@ -21,8 +21,8 @@ export class MaxKeysConstraint implements IConstraint {
         return "MaxKeys"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not valid size`
+    public get defaultMessage(): string {
+        return "${property} has invalid max keys size"
     }
 }
 

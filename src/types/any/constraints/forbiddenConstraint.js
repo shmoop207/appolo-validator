@@ -10,8 +10,8 @@ class ForbiddenConstraint {
     get type() {
         return "forbidden";
     }
-    defaultMessage(args) {
-        return `${args.property || args.value} is forbidden`;
+    get defaultMessage() {
+        return "${property} is forbidden";
     }
 }
 exports.ForbiddenConstraint = ForbiddenConstraint;

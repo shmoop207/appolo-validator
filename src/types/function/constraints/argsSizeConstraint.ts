@@ -23,8 +23,8 @@ export class ArgsSizeConstraint implements IConstraint {
         return "ArgsSize"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not valid size`
+    public get defaultMessage(): string {
+        return "${property} has invalid arguments size"
     }
 }
 

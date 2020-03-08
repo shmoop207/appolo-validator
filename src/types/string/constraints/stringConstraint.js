@@ -13,8 +13,8 @@ class StringConstraint {
     get type() {
         return "string";
     }
-    defaultMessage(args) {
-        return `${args.value} is not a string`;
+    get defaultMessage() {
+        return "${property} is not valid string";
     }
 }
 exports.StringConstraint = StringConstraint;

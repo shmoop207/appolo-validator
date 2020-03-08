@@ -13,8 +13,8 @@ class NumberConstraint {
     get type() {
         return "number";
     }
-    defaultMessage(args) {
-        return `${args.value} is not a number`;
+    get defaultMessage() {
+        return "${property} must be a number";
     }
 }
 exports.NumberConstraint = NumberConstraint;

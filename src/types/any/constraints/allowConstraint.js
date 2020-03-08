@@ -19,8 +19,8 @@ class AllowConstraint {
     get type() {
         return "allow";
     }
-    defaultMessage(args) {
-        return `${args.property || args.value} is required`;
+    get defaultMessage() {
+        return "";
     }
 }
 exports.AllowConstraint = AllowConstraint;

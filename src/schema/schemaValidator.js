@@ -16,7 +16,7 @@ let SchemaValidator = class SchemaValidator {
         this._schema = schema;
         this._value = value;
         this._groupsIndex = appolo_utils_1.Arrays.keyBy(options.groups || []);
-        if (options.validateOnly) {
+        if (options.convertOnly || !options.validateOnly) {
             await this._handleConverters(schema, options);
         }
         if (options.convertOnly) {
@@ -104,8 +104,8 @@ let SchemaValidator = class SchemaValidator {
     }
     async _validateConstraint(constraintSchema) {
         let constraint = null, error, message;
+        let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
         try {
-            let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
             if (constraintSchema.options && constraintSchema.options.runIf && !constraintSchema.options.runIf(params)) {
                 return null;
             }
@@ -119,10 +119,11 @@ let SchemaValidator = class SchemaValidator {
             if (result.errors && result.errors.length) {
                 return result.errors;
             }
-            return [this._createError(constraint.defaultMessage(params), constraint.type)];
+            let message = params.options.message || constraint.defaultMessage;
+            return [this._createError(params, message, constraint.type)];
         }
         catch (e) {
-            return [this._createError("failed to run validation", "unknown")];
+            return [this._createError(params, "failed to run validation", "unknown")];
         }
     }
     _prepareArgs(args, params) {
@@ -146,13 +147,14 @@ let SchemaValidator = class SchemaValidator {
         };
         return params;
     }
-    _createError(message, type) {
+    _createError(params, message, type) {
         let error = new ValidationError_1.ValidationError();
-        error.value = this._value;
+        error.value = params.value;
         error.message = message;
         error.type = type;
         error.property = this._options.property;
         error.object = this._options.object;
+        error.args = params.args;
         return error;
     }
     _getInstance(klass) {

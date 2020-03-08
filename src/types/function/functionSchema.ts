@@ -23,7 +23,7 @@ export function func(options?: IConstraintOptions) {
 
     let schema = registerSchema.extend<FunctionSchema>({type: FunctionSchema, options});
 
-    return schema.isFunction();
+    return schema.isFunction(options);
 
 
 }

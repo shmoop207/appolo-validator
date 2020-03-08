@@ -30,8 +30,8 @@ export class MaxConstraint implements IConstraint {
         return "date"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return `is not a valid max date`
+    public get defaultMessage(): string {
+        return "${property} is over max date"
     }
 }
 
