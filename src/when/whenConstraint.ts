@@ -108,8 +108,8 @@ export class WhenConstraint implements IConstraint {
         return "condition"
     }
 
-    public defaultMessage(args: ValidationParams): string {
-        return ``
+    public get defaultMessage(): string {
+        return ""
     }
 }
 

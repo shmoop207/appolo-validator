@@ -25,7 +25,7 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "appolo-engine": "^6.0.81",
-    "appolo-utils": "^0.0.36",
+    "appolo-utils": "^0.0.38",
     "date-fns": "^2.10.0",
     "reflect-metadata": "^0.1.13"
   },

@@ -69,8 +69,8 @@ class WhenConstraint {
     get type() {
         return "condition";
     }
-    defaultMessage(args) {
-        return ``;
+    get defaultMessage() {
+        return "";
     }
 }
 exports.WhenConstraint = WhenConstraint;

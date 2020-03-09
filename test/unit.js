@@ -114,6 +114,76 @@ describe("validator", function () {
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq('[1] must be a number');
         });
+        it('should validate array contains', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.array().items(index_1.number()).contains(6);
+            let result = await validator.validate(schema, [5, 6]);
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, [5, 7]);
+            result.errors[0].message.should.be.eq('value has invalid values');
+            schema = index_1.array().items(index_1.object()).contains((item) => item.a == 5);
+            result = await validator.validate(schema, [{ a: 5 }]);
+            result.errors.length.should.be.eq(0);
+        });
+        it('should validate array size', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.array().items(index_1.number()).size(3);
+            let result = await validator.validate(schema, [5, 6, 3]);
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, [5, 7]);
+            result.errors[0].message.should.be.eq('value has invalid size');
+        });
+        it('should validate array uniq', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.array().items(index_1.number()).uniq();
+            let result = await validator.validate(schema, [5, 6, 3,]);
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, [5, 7, 5]);
+            result.errors[0].message.should.be.eq('value array is not uniq');
+            schema = index_1.array().items(index_1.number()).uniq().toUniq();
+            result = await validator.validate(schema, [5, 7, 5]);
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.deep.equal([5, 7]);
+        });
+        it('should validate array min size', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.array().items(index_1.number()).min(3);
+            let result = await validator.validate(schema, [5, 6, 3]);
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, [5, 7]);
+            result.errors[0].message.should.be.eq('value has invalid min size');
+        });
+        it('should validate array order size', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.array().order([index_1.number(), index_1.string()]);
+            let result = await validator.validate(schema, [5, "aa"]);
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, [5, 7]);
+            result.errors[0].message.should.be.eq('[1] is not valid string');
+        });
+        it('should sort array', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.array().items(index_1.number()).toSort().toUniq();
+            let result = await validator.validate(schema, [5, 1, 3, 4, 7, 3]);
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.deep.equal([1, 3, 4, 5, 7]);
+        });
+        it('should validate array max size', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.array().items(index_1.number()).max(3);
+            let result = await validator.validate(schema, [5, 6, 5]);
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, [5, 7, 6, 6]);
+            result.errors[0].message.should.be.eq('value has invalid max size');
+        });
+        it('should validate array has schema', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.array().items(index_1.number()).has(index_1.number().valid([1, 2, 3]));
+            let result = await validator.validate(schema, [1]);
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, [5, 7, 6, 6]);
+            result.errors[0].message.should.be.eq('value has invalid array values');
+        });
         it('should validate array or', async () => {
             let validator = await index_1.validation();
             let schema = index_1.array().items(index_1.number().or(index_1.string()));

@@ -8,21 +8,27 @@ import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 
 export class ItemsConstraint implements IConstraint {
 
-    public async validate(args: ValidationParams): Promise<IConstraintValidateResult> {
+    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
 
-        let schema = args.args[0] as AnySchema;
+        let schema = params.args[0] as AnySchema;
 
         if (Array.isArray(schema)) {
             schema = any().or(schema);
         }
 
-        let results = await Promises.map(args.value, (item, index) =>
-            args.validator.validate(schema, item, {
-                ...(args.validateOptions || {}),
-                object: args.value,
+        let results = await Promises.map(params.value, (item, index) =>
+            params.validator.validate(schema, item, {
+                ...(params.validateOptions || {}),
+                object: params.value,
                 property: index
             }));
 
+        let errors = ItemsConstraint.handleErrors(params, results);
+
+        return {isValid: errors.length == 0, errors};
+    }
+
+    public static handleErrors(params: ValidationParams, results: { errors: ValidationError[], value: any }[]): ValidationError[] {
         let errors: ValidationError[] = [];
 
         for (let i = 0; i < results.length; i++) {
@@ -30,23 +36,18 @@ export class ItemsConstraint implements IConstraint {
             if (result.errors && result.errors.length) {
                 errors.push(...result.errors);
 
-                if (args.object) {
+                if (params.object) {
                     for (let j = 0; j < result.errors.length; j++) {
-                        result.errors[j].addParent({property: args.property, object: args.object})
+                        result.errors[j].addParent({property: params.property, object: params.object})
                     }
                 }
 
-
             } else {
-                args.value[i] = result.value;
+                params.value[i] = result.value;
             }
         }
 
-        if (errors.length == 0) {
-            return {isValid: true}
-        }
-
-        return {isValid: false, errors};
+        return errors;
     }
 
     public get type(): string {

@@ -5,31 +5,32 @@ const appolo_utils_1 = require("appolo-utils");
 const anySchema_1 = require("../../any/anySchema");
 const arraySchema_1 = require("../arraySchema");
 class ItemsConstraint {
-    async validate(args) {
-        let schema = args.args[0];
+    async validate(params) {
+        let schema = params.args[0];
         if (Array.isArray(schema)) {
             schema = anySchema_1.any().or(schema);
         }
-        let results = await appolo_utils_1.Promises.map(args.value, (item, index) => args.validator.validate(schema, item, Object.assign(Object.assign({}, (args.validateOptions || {})), { object: args.value, property: index })));
+        let results = await appolo_utils_1.Promises.map(params.value, (item, index) => params.validator.validate(schema, item, Object.assign(Object.assign({}, (params.validateOptions || {})), { object: params.value, property: index })));
+        let errors = ItemsConstraint.handleErrors(params, results);
+        return { isValid: errors.length == 0, errors };
+    }
+    static handleErrors(params, results) {
         let errors = [];
         for (let i = 0; i < results.length; i++) {
             let result = results[i];
             if (result.errors && result.errors.length) {
                 errors.push(...result.errors);
-                if (args.object) {
+                if (params.object) {
                     for (let j = 0; j < result.errors.length; j++) {
-                        result.errors[j].addParent({ property: args.property, object: args.object });
+                        result.errors[j].addParent({ property: params.property, object: params.object });
                     }
                 }
             }
             else {
-                args.value[i] = result.value;
+                params.value[i] = result.value;
             }
         }
-        if (errors.length == 0) {
-            return { isValid: true };
-        }
-        return { isValid: false, errors };
+        return errors;
     }
     get type() {
         return "array";
