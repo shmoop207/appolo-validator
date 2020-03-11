@@ -3,14 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const anySchema_1 = require("../anySchema");
 class AllowConstraint {
-    async validate(params) {
+    validate(params) {
         let allowed = params.args[0], value = params.value;
         if (!allowed || !allowed.length) {
             return { isValid: true };
         }
         for (let i = 0; i < allowed.length; i++) {
             let allowedItem = allowed[i];
-            if (allowedItem === value || (isNaN(allowedItem) && isNaN(value))) {
+            if (allowedItem === value || (Number.isNaN(allowedItem) && Number.isNaN(value))) {
                 return { isValid: true };
             }
         }

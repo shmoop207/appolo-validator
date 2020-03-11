@@ -3,21 +3,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const anySchema_1 = require("../anySchema");
 class ValidConstraint {
-    async validate(params) {
+    validate(params) {
         let valid = params.args[0], value = params.value;
         if (!valid || !valid.length) {
             return { isValid: true };
         }
         for (let i = 0; i < valid.length; i++) {
             let validItem = valid[i];
-            if (validItem === value || (isNaN(validItem) && isNaN(value))) {
+            if (validItem === value) {
                 return { isValid: true };
             }
         }
         return { isValid: false };
     }
     get type() {
-        return "equals";
+        return "valid";
     }
     get defaultMessage() {
         return "${property} has invalid value";

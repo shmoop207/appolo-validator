@@ -3,9 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const stringSchema_1 = require("../stringSchema");
 class StringConstraint {
-    async validate(args) {
-        let options = args.options, value = args.value;
-        if (typeof args.value !== "string") {
+    validate(params) {
+        let value = params.value;
+        if (typeof params.value !== "string") {
             return { isValid: false };
         }
         return { isValid: true };

@@ -8,7 +8,7 @@ import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 
 export class IsObjectConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let isValid = typeof params.value === "object";
 

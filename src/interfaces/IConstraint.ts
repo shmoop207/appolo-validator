@@ -12,7 +12,7 @@ export interface IConstraintValidateResult {
 }
 
 export interface IConstraint {
-    validate(validationArguments: ValidationParams): Promise<IConstraintValidateResult>
+    validate(validationArguments: ValidationParams): Promise<IConstraintValidateResult> | IConstraintValidateResult
 
     type: string
 

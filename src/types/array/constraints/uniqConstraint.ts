@@ -10,7 +10,7 @@ import {ValidationError} from "../../../common/errors/ValidationError";
 
 export class UniqConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let fn = params.args[0] || ((item) => item);
 

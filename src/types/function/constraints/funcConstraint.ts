@@ -9,7 +9,7 @@ import {KeysConstraint} from "../../object/constraints/keysConstraint";
 
 export class FuncConstraint implements IConstraint {
 
-    public async validate(args: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(args: ValidationParams): IConstraintValidateResult {
 
         let isValid = typeof args.value ==="function";
         return {isValid};

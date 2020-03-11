@@ -9,7 +9,7 @@ import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 
 export class IsPlainConstraint implements IConstraint {
 
-    public async validate(args: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(args: ValidationParams): IConstraintValidateResult {
 
         let isValid = Objects.isPlain(args.value);
 

@@ -9,7 +9,7 @@ import {ValidationError} from "../../../common/errors/ValidationError";
 
 export class MaxConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let options = params.options, value = params.value, maxValue = params.args[0], format = params.args[1];
 

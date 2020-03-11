@@ -9,7 +9,7 @@ import {Arrays} from "appolo-utils";
 
 export class WithoutConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let key = params.args[0];
         let peers = Arrays.arrayify(params.args[1]);

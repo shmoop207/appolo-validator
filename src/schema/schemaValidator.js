@@ -15,7 +15,7 @@ let SchemaValidator = class SchemaValidator {
         this._options = options;
         this._schema = schema;
         this._value = value;
-        this._groupsIndex = appolo_utils_1.Arrays.keyBy(options.groups || []);
+        this._groupsIndex = options.groups ? appolo_utils_1.Arrays.keyBy(options.groups || []) : {};
         if (options.convertOnly || !options.validateOnly) {
             await this._handleConverters(schema, options);
         }
@@ -58,7 +58,10 @@ let SchemaValidator = class SchemaValidator {
                 return;
             }
             let converter = this._getInstance(converterSchema.converter);
-            let value = await converter.convert(params);
+            let value = converter.convert(params);
+            if (value instanceof Promise) {
+                value = await value;
+            }
             this._value = value;
         }
         catch (e) {
@@ -94,7 +97,7 @@ let SchemaValidator = class SchemaValidator {
     }
     async _checkParallelConstraint(constraintSchema) {
         let output = [];
-        let errors = await appolo_utils_1.Promises.map(constraintSchema, constraintSchema => this._validateConstraint(constraintSchema));
+        let errors = await Promise.all(constraintSchema.map(constraintSchema => this._validateConstraint(constraintSchema)));
         for (let i = 0; i < errors.length; i++) {
             if (errors[i]) {
                 output.push(...errors[i]);
@@ -103,7 +106,7 @@ let SchemaValidator = class SchemaValidator {
         return output;
     }
     async _validateConstraint(constraintSchema) {
-        let constraint = null, error, message;
+        let constraint = null;
         let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
         try {
             if (constraintSchema.options && constraintSchema.options.runIf && !constraintSchema.options.runIf(params)) {
@@ -111,7 +114,10 @@ let SchemaValidator = class SchemaValidator {
             }
             params.args = this._prepareArgs(constraintSchema.args, params);
             constraint = this._getInstance(constraintSchema.constraint);
-            let result = await constraint.validate(params);
+            let result = constraint.validate(params);
+            if (result instanceof Promise) {
+                result = await result;
+            }
             if (result.isValid) {
                 (result.value != undefined) && (this._value = result.value);
                 return null;

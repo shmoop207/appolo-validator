@@ -13,6 +13,8 @@ import {object} from "./src/types/object/objectSchema";
 import {func} from "./src/types/function/functionSchema";
 import {ref} from "./src/schema/ref";
 import {when} from "./src/when/when";
+import {buffer} from "./src/types/buffer/bufferSchema";
+import {boolean} from "./src/types/boolean/booleanSchema";
 import {or,} from "./src/types/any/constraints/orConstraint";
 import {and} from "./src/types/any/constraints/andConstraint";
 import {date} from "./src/types/date/dateSchema";
@@ -34,7 +36,7 @@ for (let file of Files.walk(__dirname, "src")) {
 }
 
 
-export {Validator, any, number, string, array, object, ref, when, or, schema, and, func,date}
+export {Validator, any, number, string, array, object, ref, when, or, schema, and, func, date, buffer, boolean}
 
 export async function validation(options: IOptions = {}): Promise<Validator> {
 

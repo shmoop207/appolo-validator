@@ -4,7 +4,7 @@ const registerConstraint_1 = require("../../../schema/registerConstraint");
 const objectSchema_1 = require("../objectSchema");
 const appolo_utils_1 = require("appolo-utils");
 class IsPlainConstraint {
-    async validate(args) {
+    validate(args) {
         let isValid = appolo_utils_1.Objects.isPlain(args.value);
         return { isValid };
     }

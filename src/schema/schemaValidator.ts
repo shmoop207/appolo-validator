@@ -39,7 +39,7 @@ export class SchemaValidator {
         this._options = options;
         this._schema = schema;
         this._value = value;
-        this._groupsIndex = Arrays.keyBy(options.groups || []);
+        this._groupsIndex = options.groups ? Arrays.keyBy(options.groups || []) : {};
 
         if (options.convertOnly || !options.validateOnly) {
             await this._handleConverters(schema, options);
@@ -95,15 +95,17 @@ export class SchemaValidator {
 
             let params = this._createValidationParams(converterSchema.options, converterSchema.args);
 
-
             if (converterSchema.options && converterSchema.options.runIf && !converterSchema.options.runIf(params)) {
                 return;
             }
 
             let converter = this._getInstance(converterSchema.converter);
 
+            let value = converter.convert(params);
 
-            let value = await converter.convert(params);
+            if (value instanceof Promise) {
+                value = await value
+            }
 
             this._value = value;
 
@@ -152,7 +154,7 @@ export class SchemaValidator {
 
     private async _checkParallelConstraint(constraintSchema: IConstraintSchema[]): Promise<ValidationError[]> {
         let output = [];
-        let errors = await Promises.map(constraintSchema, constraintSchema => this._validateConstraint(constraintSchema));
+        let errors = await Promise.all(constraintSchema.map(constraintSchema => this._validateConstraint(constraintSchema)));
 
         for (let i = 0; i < errors.length; i++) {
             if (errors[i]) {
@@ -164,7 +166,7 @@ export class SchemaValidator {
     }
 
     private async _validateConstraint(constraintSchema: IConstraintSchema): Promise<ValidationError[]> {
-        let constraint: IConstraint = null, error: ValidationError, message: string;
+        let constraint: IConstraint = null;
         let params = this._createValidationParams(constraintSchema.options, constraintSchema.args);
         try {
 
@@ -176,7 +178,11 @@ export class SchemaValidator {
 
             constraint = this._getInstance(constraintSchema.constraint);
 
-            let result = await constraint.validate(params);
+            let result = constraint.validate(params);
+
+            if (result instanceof Promise) {
+                result = await result;
+            }
 
             if (result.isValid) {
 

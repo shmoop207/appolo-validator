@@ -7,7 +7,7 @@ import {truncate} from "fs";
 
 export class InvalidConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let valid: any[] = params.args[0], value = params.value;
 

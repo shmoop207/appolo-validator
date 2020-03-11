@@ -12,12 +12,11 @@ let Validator = class Validator {
     //
     //     return new Schema(options);
     // }
-    async validate(schema, value, options = {}) {
+    validate(schema, value, options = {}) {
         let validator = this.createSchemaValidator();
         schema = validator.getSchemaFromParams(schema);
         options = index_1.Objects.defaults({}, options, schema.getOptions(), this.options, defaults_1.ValidateDefaults);
-        let result = await validator.validate(value, schema, options);
-        return result;
+        return validator.validate(value, schema, options);
     }
     async validateAndTrow(schema, value, options) {
         throw new Error("not implemented");

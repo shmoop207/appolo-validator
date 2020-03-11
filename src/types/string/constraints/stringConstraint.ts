@@ -8,11 +8,11 @@ import {StringSchema} from "../stringSchema";
 
 export class StringConstraint implements IConstraint {
 
-    public async validate(args: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
-        let options = args.options, value = args.value;
+        let  value:string = params.value;
 
-        if (typeof args.value !== "string") {
+        if (typeof params.value !== "string") {
             return {isValid: false};
         }
 

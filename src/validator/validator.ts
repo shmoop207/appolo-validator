@@ -22,7 +22,7 @@ export class Validator {
     //     return new Schema(options);
     // }
 
-    public async validate(schema: AnySchema | When | IClass, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {
+    public validate(schema: AnySchema | When | IClass, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {
 
 
         let validator = this.createSchemaValidator();
@@ -31,9 +31,8 @@ export class Validator {
 
         options = Objects.defaults({}, options, schema.getOptions(), this.options, ValidateDefaults);
 
-        let result = await validator.validate(value, schema, options);
+        return validator.validate(value, schema, options);
 
-        return result;
     }
 
     public async validateAndTrow(schema: AnySchema, value: any, options: IValidateOptions) {

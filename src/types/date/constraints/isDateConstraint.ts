@@ -7,7 +7,7 @@ import {parse, toDate, isValid, parseISO, parseJSON} from "date-fns";
 
 export class isDateConstraint implements IConstraint {
 
-    public async validate(args: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(args: ValidationParams): IConstraintValidateResult{
 
         let options = args.options, value = args.value;
         if (value instanceof Date && !isNaN(value.getTime()) && isValid(value)) {

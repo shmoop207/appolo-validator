@@ -8,7 +8,7 @@ class KeysConstraint {
         let schemasIndex = args.args[0];
         let keys = [...new Set(Object.keys(args.value).concat(Object.keys(schemasIndex)))];
         let results = await appolo_utils_1.Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, { convertOnly: true }));
-        results = await appolo_utils_1.Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, { validateOnly: true }));
+        results = await Promise.all(keys.map(key => this._validateProperty(schemasIndex, key, args, { validateOnly: true })));
         //let error = new ValidationError();
         let errors = [];
         for (let i = 0; i < results.length; i++) {

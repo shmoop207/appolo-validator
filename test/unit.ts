@@ -1,7 +1,22 @@
 "use strict";
 import chai = require('chai');
-import {Promises} from 'appolo-utils';
-import {array, any, object, string, number, validation, ref, when, schema, and, func, date} from "../index";
+import {Guid} from 'appolo-utils';
+import {
+    array,
+    any,
+    object,
+    string,
+    number,
+    validation,
+    ref,
+    when,
+    schema,
+    and,
+    func,
+    date,
+    buffer,
+    boolean
+} from "../index";
 import {ValidationError} from "../src/common/errors/ValidationError";
 
 let should = chai.should();
@@ -167,8 +182,212 @@ describe("validator", function () {
 
         });
 
+        it('should validate with number positive', async () => {
+            let result: { errors: ValidationError[], value: any };
+
+            let validator = await validation();
+
+            let schema = number().positive();
+
+            result = await validator.validate(schema, 1);
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, -1);
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("value must be a positive number");
+
+        });
+
+        it('should validate with number negative', async () => {
+            let result: { errors: ValidationError[], value: any };
+
+            let validator = await validation();
+
+            let schema = number().negative();
+
+            result = await validator.validate(schema, -1);
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 1);
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("value must be a negative number");
+
+        });
+
+        it('should validate with number integer', async () => {
+            let result: { errors: ValidationError[], value: any };
+
+            let validator = await validation();
+
+            let schema = number().integer().positive();
+
+            result = await validator.validate(schema, 123);
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 123.3);
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("value must be an integer number");
+
+        });
+
+        it('should validate with number multiple', async () => {
+            let result: { errors: ValidationError[], value: any };
+
+            let validator = await validation();
+
+            let schema = number().integer().positive().multiple(5);
+
+            result = await validator.validate(schema, 20);
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 21);
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("value must be divided by the multiple 5 ");
+
+        });
+
+        it('should validate port', async () => {
+
+            let validator = await validation({});
+
+            let schema = number().port();
+
+            let result = await validator.validate(schema, 8080);
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 8434243);
+
+            result.errors[0].message.should.be.eq("value must be a valid port");
+
+        });
+
 
     });
+
+    describe("Boolean", () => {
+        it('should validate boolean', async () => {
+            let validator = await validation();
+
+            let schema = boolean();
+
+            let result = await validator.validate(schema, true);
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "true");
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('value is not valid boolean');
+        });
+
+        it('should validate boolean convert', async () => {
+            let validator = await validation({convert: true});
+
+            let schema = boolean({truthy: ["yes"], falsy: ["no"]});
+
+            let result = await validator.validate(schema, "true");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 0);
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "yes");
+
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.eq(true);
+
+            result = await validator.validate(schema, "true1");
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('value is not valid boolean');
+        });
+    });
+
+    describe("Buffers", () => {
+        it('should validate buffer', async () => {
+            let validator = await validation();
+
+            let schema = buffer();
+
+            let result = await validator.validate(schema, Buffer.from("Hello World"));
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "Hello World");
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('value is not valid buffer');
+
+        });
+
+        it('should validate convert to  buffer', async () => {
+            let validator = await validation();
+
+            let schema = buffer().toBuffer('base64');
+
+            let result = await validator.validate(schema, "SGVsbG8gV29ybGQ=");
+
+            result.errors.length.should.be.eq(0);
+            result.value.toString('ascii').should.be.eq("Hello World");
+        });
+
+        it('should validate buffer size', async () => {
+            let validator = await validation();
+
+            let schema = buffer().toBuffer('base64').size(11);
+
+            let result = await validator.validate(schema, "SGVsbG8gV29ybGQ=");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "SGVsbG8gV29ybG=");
+
+            result.errors[0].message.should.be.eq('value buffer has invalid length');
+
+        });
+
+        it('should validate buffer min', async () => {
+            let validator = await validation();
+
+            let schema = buffer().toBuffer('base64').min(11);
+
+            let result = await validator.validate(schema, "SGVsbG8gV29ybGQ=");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "SGVsbG8gV29ybG=");
+
+            result.errors[0].message.should.be.eq('value contains less bytes then 11');
+
+        });
+
+        it('should validate buffer max', async () => {
+            let validator = await validation();
+
+            let schema = buffer().toBuffer('base64').max(11);
+
+            let result = await validator.validate(schema, "SGVsbG8gV29ybGQ=");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "SGVsbG8gV29ybaaaG=");
+
+            result.errors[0].message.should.be.eq('value contains more bytes then 11');
+
+        });
+    });
+
     describe("Arrays", () => {
         it('should validate array', async () => {
             let validator = await validation();
@@ -276,7 +495,7 @@ describe("validator", function () {
 
             let schema = array().items(number()).toSort().toUniq();
 
-            let result = await validator.validate(schema, [5, 1, 3, 4, 7,3]);
+            let result = await validator.validate(schema, [5, 1, 3, 4, 7, 3]);
 
             result.errors.length.should.be.eq(0);
             result.value.should.be.deep.equal([1, 3, 4, 5, 7])
@@ -311,6 +530,21 @@ describe("validator", function () {
 
             result.errors[0].message.should.be.eq('value has invalid array values');
 
+        });
+
+        it('should validate array has schema with valid', async () => {
+            let validator = await validation();
+
+            let schema = array().items(object().keys({
+                id: string().required(),
+                level: string().valid(['debug', 'info', 'notice']).required()
+            }));
+
+            let result = await validator.validate(schema, [{id: '1', level: 'info'},
+                {id: '2', level: 'warning'}]);
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("[1].level has invalid value");
         });
 
         it('should validate array or', async () => {
@@ -760,7 +994,7 @@ describe("validator", function () {
         it("should convert date", async () => {
             let validator = await validation();
 
-            let schema = date().toDate();
+            let schema = date().format();
 
             let result = await validator.validate(schema, "2019-02-01 11:44");
 
@@ -774,10 +1008,32 @@ describe("validator", function () {
             result.errors.length.should.be.eq(1);
         });
 
+        it("should convert date timestamp", async () => {
+            let validator = await validation();
+
+            let schema = date().format("t");
+
+            let result = await validator.validate(schema, "1583848620");
+
+            result.errors.length.should.be.eq(0);
+
+            result.value.should.be.instanceOf(Date);
+            result.value.getTime().should.be.eq(1583848620000);
+
+            schema = date().format("T");
+            result = await validator.validate(schema, "1583848620000");
+
+            result.errors.length.should.be.eq(0);
+
+            result.value.should.be.instanceOf(Date);
+            result.value.getTime().should.be.eq(1583848620000);
+
+        });
+
         it("should convert date with format", async () => {
             let validator = await validation();
 
-            let schema = date().toDate("dd/MM/yyyy HH:mm:ss X");
+            let schema = date().format("dd/MM/yyyy HH:mm:ss X");
 
             let result = await validator.validate(schema, "01/02/2001 11:44:11 +00");
 
@@ -796,8 +1052,8 @@ describe("validator", function () {
             let validator = await validation();
 
             let schema = object().keys({
-                from: date().toDate().required(),
-                to: date().toDate().min(ref('from')).required()
+                from: date().format().required(),
+                to: date().format().min(ref('from')).required()
             });
 
             let result = await validator.validate(schema, {from: "2020-01-02", to: "2020-03-01"});
@@ -815,8 +1071,8 @@ describe("validator", function () {
             let validator = await validation();
 
             let schema = object().keys({
-                from: date().toDate().required(),
-                to: date().toDate().max("2020-01-02").required()
+                from: date().format().required(),
+                to: date().format().max("2020-01-02").required()
             });
 
             let result = await validator.validate(schema, {from: "2020-01-02", to: "2020-01-01"});
@@ -882,6 +1138,439 @@ describe("validator", function () {
             result.errors.length.should.be.eq(0);
 
         })
+
+    });
+
+    describe("String", () => {
+        it("should validate string uuid", async () => {
+            let validator = await validation();
+
+            let schema = string().uuid();
+            let result = await validator.validate(schema, Guid.guid());
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, Guid.guid() + "1");
+
+            result.errors[0].message.should.be.eq("value is not valid uuid string");
+        });
+
+        it("should validate string url", async () => {
+            let validator = await validation();
+
+            let schema = string().url();
+            let result = await validator.validate(schema, "http://www.foobar.com:65535/");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "http://com/");
+
+            result.errors[0].message.should.be.eq("value is not valid url string");
+        });
+
+        it("should validate string uppercase", async () => {
+            let validator = await validation();
+
+            let schema = string().uppercase();
+            let result = await validator.validate(schema, "ABC");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "ABc");
+
+            result.errors[0].message.should.be.eq("value is not valid upperCase string");
+        });
+
+        it("should validate string token", async () => {
+            let validator = await validation();
+
+            let schema = string().token();
+            let result = await validator.validate(schema, "0skfitn-wklfot8-0ksibg-fkmnm823n7c");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "AB+c");
+
+            result.errors[0].message.should.be.eq("value is not valid token string");
+        });
+
+        it("should validate string", async () => {
+            let validator = await validation();
+
+            let schema = string();
+            let result = await validator.validate(schema, "a");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 1);
+
+            result.errors[0].message.should.be.eq("value is not valid string");
+        });
+
+        it("should validate string slug", async () => {
+            let validator = await validation();
+
+            let schema = string().slug();
+            let result = await validator.validate(schema, "cscz");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "-not-slug");
+
+            result.errors[0].message.should.be.eq("value is not valid slug string");
+        });
+
+        it("should validate string size", async () => {
+            let validator = await validation();
+
+            let schema = string().size(5);
+            let result = await validator.validate(schema, "cscz5");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "aaa");
+
+            result.errors[0].message.should.be.eq("value must be of size 5");
+        });
+
+        it("should validate string regex", async () => {
+            let validator = await validation();
+
+            let schema = string().regex(/^[a-z]+$/);
+            let result = await validator.validate(schema, "aaaa");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "aaa5");
+
+            result.errors[0].message.should.be.eq("value do not match regex");
+        });
+
+        it("should validate string numeric", async () => {
+            let validator = await validation();
+
+            let schema = string().numeric();
+            let result = await validator.validate(schema, "-1.3");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "-1..3");
+
+            result.errors[0].message.should.be.eq("value is not valid numeric string");
+        });
+
+        it("should validate string mongoid", async () => {
+            let validator = await validation();
+
+            let schema = string().mongoId();
+            let result = await validator.validate(schema, "5e54278d75454a0017114d7b");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "5e54278d75454a0017114d7h");
+
+            result.errors[0].message.should.be.eq("value is not valid mongo id");
+        });
+
+        it("should validate string min", async () => {
+            let validator = await validation();
+
+            let schema = string().min(5);
+            let result = await validator.validate(schema, "12345");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "1234");
+
+            result.errors[0].message.should.be.eq("value length must be at least 5");
+        });
+
+        it("should validate string md5", async () => {
+            let validator = await validation();
+
+            let schema = string().md5();
+            let result = await validator.validate(schema, "d94f3f016ae679c3008de268209132f2");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "KYT0bf1c35032a71a14c2f719e5a14c1");
+
+            result.errors[0].message.should.be.eq("value is not valid md5 string");
+        });
+
+        it("should validate string max", async () => {
+            let validator = await validation();
+
+            let schema = string().max(5);
+            let result = await validator.validate(schema, "12345");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "123456");
+
+            result.errors[0].message.should.be.eq("value length must be at most 5");
+        });
+
+        it("should validate string lowercase", async () => {
+            let validator = await validation();
+
+            let schema = string().lowercase();
+            let result = await validator.validate(schema, "abc");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "ABc");
+
+            result.errors[0].message.should.be.eq("value is not valid lowerCase string");
+        });
+
+        it("should validate string jwt", async () => {
+            let validator = await validation();
+
+            let schema = string().jwt();
+            let result = await validator.validate(schema, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dnZWRJbkFzIjoiYWRtaW4iLCJpYXQiOjE0MjI3Nzk2Mzh9.gzSraSYS8EXBxLN_oWnFSRgCzcmJmMjLiuyu5CSpyHI");
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9");
+
+            result.errors[0].message.should.be.eq("value is not valid jwt string");
+        });
+
+        it("should validate string json", async () => {
+            let validator = await validation();
+
+            let schema = string().json();
+            let result = await validator.validate(schema, '{"a":1}');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, '{ key: "value" }');
+
+            result.errors[0].message.should.be.eq("value is not valid json string");
+        });
+
+        it("should validate string iso date", async () => {
+            let validator = await validation();
+
+            let schema = string().isoDate();
+            let result = await validator.validate(schema, '2009-05-19 14:39:22-06:00');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, '2009-05-19 14:39:22+06a00');
+
+            result.errors[0].message.should.be.eq("value is not valid iso date string");
+        });
+
+        it("should validate string ip", async () => {
+            let validator = await validation();
+
+            let schema = string().ip();
+            let result = await validator.validate(schema, '255.255.255.255');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, '200.0200.200.200');
+
+            result.errors[0].message.should.be.eq("value is not valid ip string");
+        });
+
+        it("should validate string hexadecimal", async () => {
+            let validator = await validation();
+
+            let schema = string().hexadecimal();
+            let result = await validator.validate(schema, '0X0123456789abcDEF');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, '0xa20x');
+
+            result.errors[0].message.should.be.eq("value is not valid hexadecimal string");
+        });
+
+        it("should validate string hash", async () => {
+            let validator = await validation();
+
+            let schema = string().hash("sha1");
+            let result = await validator.validate(schema, '3ca25ae354e192b26879f651a51d92aa8a34d8d3');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 'KYT0bf1c35032a71a14c2f719e5a14c1');
+
+            result.errors[0].message.should.be.eq("value is not valid hash string");
+        });
+
+        it("should validate string enum", async () => {
+            let validator = await validation();
+
+            enum A {
+                B = "b",
+                C = "c"
+            }
+
+            let schema = string().enum(A);
+            let result = await validator.validate(schema, 'b');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 'd');
+
+            result.errors[0].message.should.be.eq("value is not valid enum");
+        });
+
+        it("should validate string email", async () => {
+            let validator = await validation();
+
+            let schema = string().email();
+            let result = await validator.validate(schema, 'foo@bar.com.au');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 'foo@bar.com.');
+
+            result.errors[0].message.should.be.eq("value is not valid email string");
+        });
+
+        it("should validate string domain", async () => {
+            let validator = await validation();
+
+            let schema = string().domain();
+            let result = await validator.validate(schema, 'domain.com');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 'domain.com/');
+
+            result.errors[0].message.should.be.eq("value is not valid domain string");
+        });
+
+        it("should validate string contains", async () => {
+            let validator = await validation();
+
+            let schema = string().contains("aa");
+            let result = await validator.validate(schema, 'bbbaaaccc');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 'bbbccc');
+
+            result.errors[0].message.should.be.eq("value dose not contain aa");
+        });
+
+        it("should validate string base64", async () => {
+            let validator = await validation();
+
+            let schema = string().base64();
+            let result = await validator.validate(schema, 'TG9yZW0gaXBzdW0gZG9sb3Igc2l0IGFtZXQsIGNvbnNlY3RldHVyIGFkaXBpc2NpbmcgZWxpdC4=');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, '=m9vYg==');
+
+            result.errors[0].message.should.be.eq("value is not valid base64 string");
+        });
+
+        it("should validate string ascii", async () => {
+            let validator = await validation();
+
+            let schema = string().ascii();
+            let result = await validator.validate(schema, '1234abcDEF');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 'ｶﾀｶﾅ');
+
+            result.errors[0].message.should.be.eq("value is not valid ascii string");
+        });
+
+        it("should validate string alphanum", async () => {
+            let validator = await validation();
+
+            let schema = string().alphanum();
+            let result = await validator.validate(schema, 'abc123');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 'foo!!');
+
+            result.errors[0].message.should.be.eq("value is not valid alpha numeric string");
+        });
+
+        it("should validate string alpha", async () => {
+            let validator = await validation();
+
+            let schema = string().alpha();
+            let result = await validator.validate(schema, 'abc');
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, 'abc123');
+
+            result.errors[0].message.should.be.eq("value is not valid alpha string");
+        });
+
+        it("should validate escape", async () => {
+            let validator = await validation();
+
+            let schema = string().decode();
+            let result = await validator.validate(schema, 'http%3A%2F%2Ffoo.bar');
+
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.eq("http://foo.bar");
+        });
+
+        it("should validate replace", async () => {
+            let validator = await validation();
+
+            let schema = string().replace("foo", "bar");
+            let result = await validator.validate(schema, 'foobar');
+
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.eq("barbar");
+        });
+
+        it("should validate replace", async () => {
+            let validator = await validation();
+
+            let schema = string().sanitize();
+            let result = await validator.validate(schema, 'foo\x00');
+
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.eq("foo");
+        });
+
+        it("should validate slugify", async () => {
+            let validator = await validation();
+
+            let schema = string().slugify();
+            let result = await validator.validate(schema, ' foo bar ');
+
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.eq("foo-bar");
+        });
+
+        it("should validate trim", async () => {
+            let validator = await validation();
+
+            let schema = string().trim();
+            let result = await validator.validate(schema, ' foo bar ');
+
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.eq("foo bar");
+        });
+
+        it("should validate trim", async () => {
+            let validator = await validation();
+
+            let schema = string().truncate(5);
+            let result = await validator.validate(schema, 'foobar');
+
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.eq("fooba...");
+        });
+
 
     });
 

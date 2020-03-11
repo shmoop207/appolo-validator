@@ -19,8 +19,6 @@ export class AnySchema {
     private readonly _converters: IConverterSchema[] = [];
     private readonly _contexts: IContextSchema[] = [];
 
-    public hasRef: boolean;
-
     protected _type: string;
     protected _context: { [index: string]: any };
 
@@ -48,6 +46,17 @@ export class AnySchema {
 
     public options(options: ISchemaOptions): this {
         this._options = Object.assign({}, this._options, options);
+
+        return this;
+    }
+
+    public getContext(name: string): any {
+        return this._contexts[name];
+
+    }
+
+    public setContext(name: string, value: any) {
+        this._contexts[name] = value;
 
         return this;
     }

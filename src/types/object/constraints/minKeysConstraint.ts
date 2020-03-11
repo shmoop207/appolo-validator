@@ -9,7 +9,7 @@ import {Ref} from "../../../schema/ref";
 
 export class MinKeysConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let isValid = Object.keys(params.value || {}).length >= params.args[0];
 

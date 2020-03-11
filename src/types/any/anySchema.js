@@ -28,6 +28,13 @@ class AnySchema {
         this._options = Object.assign({}, this._options, options);
         return this;
     }
+    getContext(name) {
+        return this._contexts[name];
+    }
+    setContext(name, value) {
+        this._contexts[name] = value;
+        return this;
+    }
     getOptions() {
         return this._options;
     }

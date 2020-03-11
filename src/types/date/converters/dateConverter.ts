@@ -57,13 +57,13 @@ export class DateConverter implements IConverter {
 
 registerConverter.extend({
     base: DateSchema,
-    name: "toDate",
+    name: "format",
     converter: DateConverter
 });
 
 declare module '../dateSchema' {
 
     interface DateSchema {
-        toDate(format?: string, options?: IConverterOptions): this;
+        format(format?: string, options?: IConverterOptions): this;
     }
 }

@@ -8,7 +8,7 @@ import {ArraySchema} from "../arraySchema";
 
 export class ArrayConstraint implements IConstraint {
 
-    public async validate(args: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(args: ValidationParams):IConstraintValidateResult {
 
         let isValid = Array.isArray(args.value);
 

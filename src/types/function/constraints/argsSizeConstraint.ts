@@ -11,7 +11,7 @@ import {FunctionSchema} from "../functionSchema";
 
 export class ArgsSizeConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let isValid = params.value.length == params.args[0] ;
 

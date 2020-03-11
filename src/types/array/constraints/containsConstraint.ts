@@ -9,7 +9,7 @@ import {ArraySchema} from "../arraySchema";
 
 export class ContainsConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let values = Arrays.arrayify(params.args[0]);
 
@@ -54,7 +54,7 @@ declare module '../arraySchema' {
 
 
     interface ArraySchema {
-        size(item: any | Ref, options?: IConstraintOptions): this;
+        contains(item: any | Ref, options?: IConstraintOptions): this;
     }
 }
 

@@ -10,7 +10,7 @@ import {ValidationError} from "../../../common/errors/ValidationError";
 
 export class MinConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let options = params.options, value = params.value, minValue = params.args[0], format = params.args[1];
 

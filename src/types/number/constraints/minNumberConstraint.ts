@@ -6,7 +6,7 @@ import {Ref} from "../../../schema/ref";
 
 export class MinNumberConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let options = params.options, value = params.value;
 

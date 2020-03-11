@@ -6,7 +6,7 @@ import {AnySchema} from "../anySchema";
 
 export class RequiredConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public  validate(params: ValidationParams): IConstraintValidateResult {
 
         let value = params.value;
 

@@ -6,7 +6,7 @@ import {AnySchema} from "../anySchema";
 
 export class AllowConstraint implements IConstraint {
 
-    public async validate(params: ValidationParams): Promise<IConstraintValidateResult> {
+    public validate(params: ValidationParams): IConstraintValidateResult {
 
         let allowed: any[] = params.args[0], value = params.value;
 
@@ -17,7 +17,7 @@ export class AllowConstraint implements IConstraint {
         for (let i = 0; i < allowed.length; i++) {
             let allowedItem = allowed[i];
 
-            if (allowedItem === value || (isNaN(allowedItem) && isNaN(value))) {
+            if (allowedItem === value || (Number.isNaN(allowedItem) && Number.isNaN(value))) {
                 return {isValid: true};
             }
         }
@@ -33,11 +33,12 @@ export class AllowConstraint implements IConstraint {
         return ""
     }
 }
+
 registerConstraint.extend({
     base: AnySchema,
     name: "allow",
     constraint: AllowConstraint,
-    whiteList:true
+    whiteList: true
 });
 
 declare module '../anySchema' {

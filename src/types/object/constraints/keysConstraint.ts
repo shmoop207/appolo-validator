@@ -19,7 +19,7 @@ export class KeysConstraint implements IConstraint {
 
         let results = await Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, {convertOnly: true}));
 
-        results = await Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, {validateOnly: true}));
+        results = await Promise.all(keys.map( key => this._validateProperty(schemasIndex, key, args, {validateOnly: true})));
 
         //let error = new ValidationError();
 
