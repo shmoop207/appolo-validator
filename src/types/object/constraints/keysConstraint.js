@@ -3,10 +3,21 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const objectSchema_1 = require("../objectSchema");
 const appolo_utils_1 = require("appolo-utils");
+const registerDecorator_1 = require("../../../decorators/registerDecorator");
 class KeysConstraint {
     async validate(args) {
+        if (!args.value) {
+            return { isValid: false };
+        }
         let schemasIndex = args.args[0];
-        let keys = [...new Set(Object.keys(args.value).concat(Object.keys(schemasIndex)))];
+        if (typeof schemasIndex == "function") {
+            let meta = Reflect.getMetadata(registerDecorator_1.PropertySymbol, schemasIndex.prototype);
+            if (!meta) {
+                throw new Error("invalid schema");
+            }
+            schemasIndex = meta;
+        }
+        let keys = [...new Set(Object.keys(args.value || {}).concat(Object.keys(schemasIndex)))];
         let results = await appolo_utils_1.Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, { convertOnly: true }));
         results = await Promise.all(keys.map(key => this._validateProperty(schemasIndex, key, args, { validateOnly: true })));
         //let error = new ValidationError();

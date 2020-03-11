@@ -678,6 +678,65 @@ describe("validator", function () {
             result = await validator.validate(A, { a: 6, b: 6, c: 6, d: 6 });
             result.errors.length.should.be.eq(0);
         });
+        it('should validate decorators with nested array', async () => {
+            class B {
+            }
+            tslib_1.__decorate([
+                index_1.number().min(5).required()
+            ], B.prototype, "b", void 0);
+            class A {
+            }
+            tslib_1.__decorate([
+                index_1.array().items(B)
+            ], A.prototype, "a", void 0);
+            let validator = await index_1.validation();
+            let result = await validator.validate(A, { a: [{ b: 4 }] });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("a[0].b must be larger than 5");
+            result = await validator.validate(A, { a: [{ b: 6 }] });
+            result.errors.length.should.be.eq(0);
+        });
+        it('should validate decorators with nested object', async () => {
+            class B {
+            }
+            tslib_1.__decorate([
+                index_1.number().min(5).required()
+            ], B.prototype, "b", void 0);
+            class A {
+            }
+            tslib_1.__decorate([
+                index_1.object().keys(B)
+            ], A.prototype, "a", void 0);
+            let validator = await index_1.validation();
+            let result = await validator.validate(A, { a: { b: 4 } });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("a.b must be larger than 5");
+            result = await validator.validate(A, { a: { b: 6 } });
+            result.errors.length.should.be.eq(0);
+        });
+        it.only('should validate decorators with nested object array', async () => {
+            class C {
+            }
+            tslib_1.__decorate([
+                index_1.number().min(5).required()
+            ], C.prototype, "c", void 0);
+            class B {
+            }
+            tslib_1.__decorate([
+                index_1.object().keys(C)
+            ], B.prototype, "b", void 0);
+            class A {
+            }
+            tslib_1.__decorate([
+                index_1.array().items(B)
+            ], A.prototype, "a", void 0);
+            let validator = await index_1.validation();
+            let result = await validator.validate(A, { a: [{ b: { c: 4 } }] });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("a[0].b.c must be larger than 5");
+            result = await validator.validate(A, { a: [{ b: { c: 6 } }] });
+            result.errors.length.should.be.eq(0);
+        });
     });
     describe("String", () => {
         it("should validate string uuid", async () => {

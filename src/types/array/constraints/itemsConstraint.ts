@@ -4,7 +4,9 @@ import {Promises} from "appolo-utils";
 import {ValidationError} from "../../../common/errors/ValidationError";
 import {any, AnySchema} from "../../any/anySchema";
 import {ArraySchema} from "../arraySchema";
+import {IClass} from "appolo-engine";
 import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
+import {Schema} from "../../../schema/registerSchema";
 
 export class ItemsConstraint implements IConstraint {
 
@@ -67,7 +69,8 @@ registerConstraint.extend({
 
 declare module '../arraySchema' {
 
+
     interface ArraySchema {
-        items(schema?: AnySchema | AnySchema[], options?: IConstraintOptions): this;
+        items(schema?: Schema | Schema[] | IClass | IClass[], options?: IConstraintOptions): this;
     }
 }

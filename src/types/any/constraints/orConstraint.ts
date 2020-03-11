@@ -5,7 +5,7 @@ import {any, AnySchema} from "../anySchema";
 import {Promises} from "appolo-utils";
 import {truncate} from "fs";
 import {Validator} from "../../../validator/validator";
-
+import {Schema} from "../../../schema/registerSchema";
 
 export class OrConstraint implements IConstraint {
 
@@ -55,8 +55,10 @@ registerConstraint.extend({
 
 declare module '../anySchema' {
 
+
+
     interface AnySchema {
-        or(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
+        or(schemas: Schema[] | Schema, options?: IConstraintOptions): this;
     }
 }
 

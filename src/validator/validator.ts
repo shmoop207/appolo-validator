@@ -8,6 +8,8 @@ import {any, AnySchema} from "../types/any/anySchema";
 import {When} from "../when/when";
 import {Classes} from "appolo-utils";
 import {object} from "../../index";
+import {ValidationErrorsError} from "../common/errors/ValidationErrorsError";
+import {Schema} from "../schema/registerSchema";
 
 @define()
 @singleton()
@@ -15,28 +17,27 @@ export class Validator {
     @inject() private options: IOptions;
     @injectFactoryMethod(SchemaValidator) private createSchemaValidator: () => SchemaValidator;
 
-    // public schema(options: ISchemaOptions = {}) {
-    //
-    //     options = Objects.defaults({}, options, this.options, ValidatorDefaults);
-    //
-    //     return new Schema(options);
-    // }
 
-    public validate(schema: AnySchema | When | IClass, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {
-
+    public validate(schema: Schema | When | IClass, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {
 
         let validator = this.createSchemaValidator();
 
-        schema = validator.getSchemaFromParams(schema);
+        let schem = validator.getSchemaFromParams(schema);
 
-        options = Objects.defaults({}, options, schema.getOptions(), this.options, ValidateDefaults);
+        options = Objects.defaults({}, options, schem.getOptions(), this.options, ValidateDefaults);
 
-        return validator.validate(value, schema, options);
+        return validator.validate(value, schem, options);
 
     }
 
     public async validateAndTrow(schema: AnySchema, value: any, options: IValidateOptions) {
-        throw new Error("not implemented")
+        let results = await this.validate(schema, value, options);
+
+        if (results.errors.length == 0) {
+            return results.value;
+        }
+
+        throw new ValidationErrorsError(results.errors)
     }
 }
 

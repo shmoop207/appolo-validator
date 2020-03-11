@@ -21,6 +21,7 @@ import {PropertySymbol, RegisterDecorator, SchemaFnSymbol} from "../decorators/r
 import {object} from "../../index";
 import {SchemaSymbol} from "../decorators/decorators";
 import {ObjectSchema} from "../types/object/objectSchema";
+import {Schema} from "./registerSchema";
 
 @define()
 export class SchemaValidator {
@@ -253,7 +254,7 @@ export class SchemaValidator {
         return new klass();
     }
 
-    public getSchemaFromParams(schema: AnySchema | When | IClass): AnySchema {
+    public getSchemaFromParams(schema: AnySchema | Schema | When | IClass): AnySchema {
 
         if (schema[SchemaFnSymbol] || schema[SchemaFnWhen]) {
             schema = schema[SchemaFnSymbol] || schema[SchemaFnWhen]
@@ -267,15 +268,15 @@ export class SchemaValidator {
             return new AnySchema().if(schema)
         }
 
-        let meta = Reflect.getMetadata(PropertySymbol, schema.prototype);
+        let meta = Reflect.getMetadata(PropertySymbol, (schema as Function).prototype);
 
         if (!meta) {
             throw new Error("invalid schema")
         }
 
-        let schemaMeta: { schema: ObjectSchema } = Reflect.getMetadata(SchemaSymbol, schema.prototype);
+        let schemaMeta: { schema: ObjectSchema } = Reflect.getMetadata(SchemaSymbol, (schema as Function).prototype);
 
-        let output: ObjectSchema = (schemaMeta) ? schemaMeta.schema : object();
+        let output = (schemaMeta) ? schemaMeta.schema : object();
 
         output.keys(meta);
 

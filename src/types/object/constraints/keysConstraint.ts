@@ -2,24 +2,39 @@ import {AnySchema} from "../../any/anySchema";
 import {ValidationError} from "../../../common/errors/ValidationError";
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../../../interfaces/IConstraint";
 import {registerConstraint} from "../../../schema/registerConstraint";
-import {NumberSchema} from "../../number/numberSchema";
 import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
-import {MinNumberConstraint} from "../../number/constraints/minNumberConstraint";
 import {ObjectSchema} from "../objectSchema";
 import {When} from "../../../when/when";
 import {Promises} from "appolo-utils";
+import {IClass} from "appolo-engine";
+import {PropertySymbol} from "../../../decorators/registerDecorator";
 
 export class KeysConstraint implements IConstraint {
 
     public async validate(args: ValidationParams): Promise<IConstraintValidateResult> {
 
+        if (!args.value) {
+            return {isValid: false}
+        }
+
         let schemasIndex = args.args[0] as { [index: string]: AnySchema };
 
-        let keys = [...new Set(Object.keys(args.value).concat(Object.keys(schemasIndex)))];
+        if (typeof schemasIndex == "function") {
+            let meta = Reflect.getMetadata(PropertySymbol, (schemasIndex as Function).prototype);
+
+            if (!meta) {
+                throw new Error("invalid schema")
+            }
+
+            schemasIndex = meta;
+        }
+
+
+        let keys = [...new Set(Object.keys(args.value || {}).concat(Object.keys(schemasIndex)))];
 
         let results = await Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, {convertOnly: true}));
 
-        results = await Promise.all(keys.map( key => this._validateProperty(schemasIndex, key, args, {validateOnly: true})));
+        results = await Promise.all(keys.map(key => this._validateProperty(schemasIndex, key, args, {validateOnly: true})));
 
         //let error = new ValidationError();
 
@@ -94,7 +109,7 @@ declare module '../objectSchema' {
 
 
     interface ObjectSchema {
-        keys(schemaIndex: { [index: string]: AnySchema | Pick<When, any> }, options?: IConstraintOptions): this;
+        keys(schemaIndex: IClass | { [index: string]: AnySchema | Pick<When, any> }, options?: IConstraintOptions): this;
     }
 }
 

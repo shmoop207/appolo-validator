@@ -2,6 +2,7 @@ import {AnySchema} from "../types/any/anySchema";
 import {ReflectMetadata, Objects} from "appolo-utils";
 import {registerConstraint} from "../schema/registerConstraint";
 import {registerConverter} from "../schema/registerConverter";
+import {Schema} from "../schema/registerSchema";
 
 export type DecoratorFn = (target: any, propertyKey: string, descriptor?: PropertyDescriptor | number) => void
 export const PropertySymbol = "__PropertySymbol__";
@@ -10,7 +11,7 @@ export const SchemaFnSymbol = "@schema";
 export class RegisterDecorator {
 
 
-    public extend<T extends AnySchema>(params: { schema: AnySchema }): DecoratorFn & T {
+    public extend<T extends Schema>(params: { schema: AnySchema }): DecoratorFn & T {
 
         let {schema} = params;
 

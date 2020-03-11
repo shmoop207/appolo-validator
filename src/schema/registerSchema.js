@@ -4,7 +4,8 @@ const registerDecorator_1 = require("../decorators/registerDecorator");
 class RegisterSchema {
     extend(params) {
         let schema = new params.type(params.options || {});
-        return registerDecorator_1.registerDecorator.extend({ schema });
+        let fn = registerDecorator_1.registerDecorator.extend({ schema });
+        return fn;
     }
 }
 exports.RegisterSchema = RegisterSchema;

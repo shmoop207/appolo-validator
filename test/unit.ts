@@ -1137,6 +1137,89 @@ describe("validator", function () {
 
             result.errors.length.should.be.eq(0);
 
+        });
+
+        it('should validate decorators with nested array', async () => {
+
+            class B {
+                @number().min(5).required()
+                private b: number;
+            }
+
+            class A {
+
+                @array().items(B)
+                private a: number
+            }
+
+            let validator = await validation();
+
+            let result = await validator.validate(A, {a: [{b: 4}]});
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("a[0].b must be larger than 5");
+
+            result = await validator.validate(A, {a: [{b: 6}]});
+
+            result.errors.length.should.be.eq(0);
+
+        });
+
+        it('should validate decorators with nested object', async () => {
+
+            class B {
+                @number().min(5).required()
+                private b: number;
+            }
+
+            class A {
+
+                @object().keys(B)
+                private a: number
+            }
+
+            let validator = await validation();
+
+            let result = await validator.validate(A, {a: {b: 4}});
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("a.b must be larger than 5");
+
+            result = await validator.validate(A, {a: {b: 6}});
+
+            result.errors.length.should.be.eq(0);
+
+        });
+
+        it.only('should validate decorators with nested object array', async () => {
+
+            class C {
+                @number().min(5).required()
+                private c: number;
+            }
+
+            class B {
+                @object().keys(C)
+                private b;
+            }
+
+            class A {
+
+                @array().items(B)
+                private a: number
+            }
+
+            let validator = await validation();
+
+            let result = await validator.validate(A, {a: [{b: {c: 4}}]});
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("a[0].b.c must be larger than 5");
+
+            result = await validator.validate(A, {a: [{b: {c: 6}}]});
+
+            result.errors.length.should.be.eq(0);
+
         })
 
     });

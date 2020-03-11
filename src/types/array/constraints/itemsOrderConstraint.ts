@@ -8,6 +8,7 @@ import {array, ArraySchema} from "../arraySchema";
 import {Promises} from "appolo-utils/index";
 import {ValidationError} from "../../../common/errors/ValidationError";
 import {ItemsConstraint} from "./itemsConstraint";
+import {Schema} from "../../../schema/registerSchema";
 
 
 export class ItemsOrderConstraint implements IConstraint {
@@ -51,9 +52,8 @@ registerConstraint.extend({
 
 declare module '../arraySchema' {
 
-
     interface ArraySchema {
-        order(schemas: AnySchema[], options?: IConstraintOptions): this;
+        order(schemas: Schema[], options?: IConstraintOptions): this;
     }
 }
 
