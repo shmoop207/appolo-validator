@@ -46,6 +46,4 @@ async function validation(options = {}) {
     return server;
 }
 exports.validation = validation;
-//TODO custom message
-// TODO istimestamp is unix is iso
 //# sourceMappingURL=index.js.map
