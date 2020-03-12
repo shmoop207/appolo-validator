@@ -22,12 +22,20 @@ export class Validator {
 
         let validator = this.createSchemaValidator();
 
-        let schem = validator.getSchemaFromParams(schema);
+        let schem = SchemaValidator.getSchemaFromParams(schema);
+
+        if (!schem) {
+            throw new Error("failed to find schema")
+        }
 
         options = Objects.defaults({}, options, schem.getOptions(), this.options, ValidateDefaults);
 
         return validator.validate(value, schem, options);
 
+    }
+
+    public getSchema(schema: AnySchema | Schema | When | IClass): AnySchema {
+        return SchemaValidator.getSchemaFromParams(schema)
     }
 
     public async validateAndTrow(schema: AnySchema, value: any, options: IValidateOptions) {

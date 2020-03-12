@@ -254,7 +254,7 @@ export class SchemaValidator {
         return new klass();
     }
 
-    public getSchemaFromParams(schema: AnySchema | Schema | When | IClass): AnySchema {
+    public static getSchemaFromParams(schema: AnySchema | Schema | When | IClass): AnySchema {
 
         if (schema[SchemaFnSymbol] || schema[SchemaFnWhen]) {
             schema = schema[SchemaFnSymbol] || schema[SchemaFnWhen]
@@ -271,7 +271,7 @@ export class SchemaValidator {
         let meta = Reflect.getMetadata(PropertySymbol, (schema as Function).prototype);
 
         if (!meta) {
-            throw new Error("invalid schema")
+            return null
         }
 
         let schemaMeta: { schema: ObjectSchema } = Reflect.getMetadata(SchemaSymbol, (schema as Function).prototype);

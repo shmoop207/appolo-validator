@@ -9,9 +9,15 @@ const ValidationErrorsError_1 = require("../common/errors/ValidationErrorsError"
 let Validator = class Validator {
     validate(schema, value, options = {}) {
         let validator = this.createSchemaValidator();
-        let schem = validator.getSchemaFromParams(schema);
+        let schem = schemaValidator_1.SchemaValidator.getSchemaFromParams(schema);
+        if (!schem) {
+            throw new Error("failed to find schema");
+        }
         options = index_1.Objects.defaults({}, options, schem.getOptions(), this.options, defaults_1.ValidateDefaults);
         return validator.validate(value, schem, options);
+    }
+    getSchema(schema) {
+        return schemaValidator_1.SchemaValidator.getSchemaFromParams(schema);
     }
     async validateAndTrow(schema, value, options) {
         let results = await this.validate(schema, value, options);

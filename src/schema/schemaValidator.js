@@ -170,7 +170,7 @@ let SchemaValidator = class SchemaValidator {
         }
         return new klass();
     }
-    getSchemaFromParams(schema) {
+    static getSchemaFromParams(schema) {
         if (schema[registerDecorator_1.SchemaFnSymbol] || schema[when_1.SchemaFnWhen]) {
             schema = schema[registerDecorator_1.SchemaFnSymbol] || schema[when_1.SchemaFnWhen];
         }
@@ -182,7 +182,7 @@ let SchemaValidator = class SchemaValidator {
         }
         let meta = Reflect.getMetadata(registerDecorator_1.PropertySymbol, schema.prototype);
         if (!meta) {
-            throw new Error("invalid schema");
+            return null;
         }
         let schemaMeta = Reflect.getMetadata(decorators_1.SchemaSymbol, schema.prototype);
         let output = (schemaMeta) ? schemaMeta.schema : index_1.object();
