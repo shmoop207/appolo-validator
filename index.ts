@@ -22,6 +22,7 @@ import {Files} from "appolo-utils";
 import {schema} from "./src/decorators/decorators";
 
 
+
 for (let file of Files.walk(__dirname, "src")) {
     require(file);
 }
