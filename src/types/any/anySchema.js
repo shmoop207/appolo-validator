@@ -4,13 +4,14 @@ const defaults_1 = require("../../defaults/defaults");
 const registerSchema_1 = require("../../schema/registerSchema");
 const appolo_utils_1 = require("appolo-utils");
 class AnySchema {
-    constructor(options = {}) {
+    constructor(constraintOptions = {}) {
         this._constraints = [];
         this._converters = [];
         this._contexts = [];
         this._options = appolo_utils_1.Objects.defaults({}, defaults_1.SchemaDefaults);
         this._type = "any";
         this._context = {};
+        this._constraintOptions = constraintOptions || {};
     }
     get context() {
         return this._context;
@@ -23,6 +24,14 @@ class AnySchema {
     }
     get contexts() {
         return this._contexts;
+    }
+    groups(group) {
+        this._constraintOptions.groups = appolo_utils_1.Arrays.arrayify(group);
+        return this;
+    }
+    runIf(fn) {
+        this._constraintOptions.runIf = fn;
+        return this;
     }
     options(options) {
         this._options = Object.assign({}, this._options, options);
@@ -39,6 +48,7 @@ class AnySchema {
         return this._options;
     }
     addConstraint(schema) {
+        schema.options = Object.assign({}, this._constraintOptions, schema.options);
         this._constraints.push(schema);
         return this;
     }

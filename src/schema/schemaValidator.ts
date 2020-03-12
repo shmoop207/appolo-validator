@@ -175,6 +175,10 @@ export class SchemaValidator {
                 return null;
             }
 
+            if (constraintSchema.options && constraintSchema.options.groups && !constraintSchema.options.groups.every(group => this._options.groups.indexOf(group) > -1)) {
+                return null;
+            }
+
             params.args = this._prepareArgs(constraintSchema.args, params);
 
             constraint = this._getInstance(constraintSchema.constraint);

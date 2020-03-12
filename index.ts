@@ -51,6 +51,12 @@ import './src/types/object/constraints/withConstraint';
 import './src/types/object/constraints/withoutConstraint';
 import './src/types/object/converters/jsonConverter';
 
+import './src/types/function/constraints/maxArgsConstraint';
+import './src/types/function/constraints/argsSizeConstraint';
+import './src/types/function/constraints/funcConstraint';
+import './src/types/function/constraints/isClassConstraint';
+import './src/types/function/constraints/minArgsConstraint';
+
 for (let file of Files.walk(__dirname, "src")) {
     require(file);
 }

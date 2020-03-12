@@ -9,7 +9,7 @@ import {IConverter, IConverterClass} from "../../interfaces/IConverter";
 import {registerDecorator} from "../../decorators/registerDecorator";
 import {NumberSchema} from "../number/numberSchema";
 import {registerSchema} from "../../schema/registerSchema";
-import {Objects} from "appolo-utils";
+import {Objects, Arrays} from "appolo-utils";
 import {IContextSchema} from "../../interfaces/IContext";
 
 export class AnySchema {
@@ -21,11 +21,13 @@ export class AnySchema {
 
     protected _type: string;
     protected _context: { [index: string]: any };
+    protected _constraintOptions: IConstraintOptions;
 
-    constructor(options: IConstraintOptions = {}) {
+    constructor(constraintOptions: IConstraintOptions = {}) {
         this._options = Objects.defaults({}, SchemaDefaults);
         this._type = "any";
-        this._context = {}
+        this._context = {};
+        this._constraintOptions = constraintOptions || {};
     }
 
     public get context() {
@@ -42,6 +44,18 @@ export class AnySchema {
 
     public get contexts(): IContextSchema[] {
         return this._contexts;
+    }
+
+    public groups(group: string | string[]) {
+        this._constraintOptions.groups = Arrays.arrayify(group);
+
+        return this;
+    }
+
+    public runIf(fn: (params: ValidationParams) => boolean) {
+        this._constraintOptions.runIf = fn;
+
+        return this;
     }
 
     public options(options: ISchemaOptions): this {
@@ -66,6 +80,7 @@ export class AnySchema {
     }
 
     addConstraint(schema: IConstraintSchema): AnySchema {
+        schema.options = Object.assign({}, this._constraintOptions, schema.options);
         this._constraints.push(schema);
         return this
     }

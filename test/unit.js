@@ -39,6 +39,18 @@ describe("validator", function () {
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq('max must be larger than 5');
         });
+        it('should validate object when with group obj', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().keys({
+                min: index_1.number(),
+                max: index_1.number({ groups: ["test"] }).min(5)
+            });
+            let result = await validator.validate(schema, { min: 5, max: 4 }, { groups: ["test"] });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('max must be larger than 5');
+            result = await validator.validate(schema, { min: 5, max: 4 }, { groups: ["test2"] });
+            result.errors.length.should.be.eq(0);
+        });
         it('should validate object when with group else', async () => {
             let validator = await index_1.validation({ groups: ["test"] });
             let schema = index_1.object().keys({

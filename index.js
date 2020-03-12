@@ -64,6 +64,11 @@ require("./src/types/object/constraints/sizeConstraint");
 require("./src/types/object/constraints/withConstraint");
 require("./src/types/object/constraints/withoutConstraint");
 require("./src/types/object/converters/jsonConverter");
+require("./src/types/function/constraints/maxArgsConstraint");
+require("./src/types/function/constraints/argsSizeConstraint");
+require("./src/types/function/constraints/funcConstraint");
+require("./src/types/function/constraints/isClassConstraint");
+require("./src/types/function/constraints/minArgsConstraint");
 for (let file of appolo_utils_2.Files.walk(__dirname, "src")) {
     require(file);
 }
