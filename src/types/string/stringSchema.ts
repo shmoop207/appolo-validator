@@ -15,7 +15,5 @@ export class StringSchema extends AnySchema {
 export function string(options: IConstraintOptions & ISchemaOptions = {}) {
     let schema = registerSchema.extend<StringSchema>({type: StringSchema, options});
 
-    schema.isString(options);
-
-    return schema;
+    return schema.isString(options);
 }

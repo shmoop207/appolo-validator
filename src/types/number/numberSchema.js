@@ -11,8 +11,8 @@ class NumberSchema extends anySchema_1.AnySchema {
 exports.NumberSchema = NumberSchema;
 function number(options) {
     let schema = registerSchema_1.registerSchema.extend({ type: NumberSchema, options });
-    schema.float(options).toFloat({ runIf: (params) => params.validateOptions.convert });
-    return schema;
+    return schema.float(options)
+        .toFloat({ runIf: (params) => params.validateOptions.convert });
 }
 exports.number = number;
 //# sourceMappingURL=numberSchema.js.map

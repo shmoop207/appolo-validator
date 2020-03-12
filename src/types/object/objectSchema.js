@@ -11,12 +11,10 @@ class ObjectSchema extends anySchema_1.AnySchema {
 exports.ObjectSchema = ObjectSchema;
 function object(keys, options) {
     let schema = registerSchema_1.registerSchema.extend({ type: ObjectSchema, options });
-    schema
-        .toJson({ runIf: (params) => params.validateOptions.convert });
     if (keys) {
         schema.keys(keys);
     }
-    return schema.isObject(options);
+    return schema.isObject(options).toJson({ runIf: (params) => params.validateOptions.convert });
 }
 exports.object = object;
 //# sourceMappingURL=objectSchema.js.map

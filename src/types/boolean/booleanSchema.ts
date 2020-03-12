@@ -15,7 +15,8 @@ export class BooleanSchema extends AnySchema {
 export function boolean(options: IConstraintOptions & ISchemaOptions &  { truthy?: any[], falsy?: any[] } = {}) {
     let schema = registerSchema.extend<BooleanSchema>({type: BooleanSchema, options});
 
-    schema.isBoolean(options).toBoolean(options,{runIf: (params) => params.validateOptions.convert});
+    return schema
+        .isBoolean(options)
+        .toBoolean(options,{runIf: (params) => params.validateOptions.convert});
 
-    return schema;
 }

@@ -19,13 +19,10 @@ export class ObjectSchema extends AnySchema {
 export function object(keys?: IClass | { [index: string]: AnySchema | Pick<When, any> }, options?: IConstraintOptions) {
 
     let schema = registerSchema.extend<ObjectSchema>({type: ObjectSchema, options});
-
-    schema
-        .toJson({runIf: (params) => params.validateOptions.convert});
-
+    
     if (keys) {
         schema.keys(keys);
     }
 
-    return schema.isObject(options)
+    return schema.isObject(options).toJson({runIf: (params) => params.validateOptions.convert})
 }

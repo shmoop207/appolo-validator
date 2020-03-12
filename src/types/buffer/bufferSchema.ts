@@ -15,7 +15,5 @@ export class BufferSchema extends AnySchema {
 export function buffer(options: IConstraintOptions & ISchemaOptions = {}) {
     let schema = registerSchema.extend<BufferSchema>({type: BufferSchema, options});
 
-    schema.isBuffer(options);
-
-    return schema;
+    return schema.isBuffer(options);
 }

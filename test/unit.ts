@@ -1206,7 +1206,10 @@ describe("validator", function () {
             class A {
 
                 @array(B)
-                private a: number
+                private a: number;
+
+                @boolean()
+                c: boolean
             }
 
             let validator = await validation();

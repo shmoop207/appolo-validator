@@ -19,12 +19,11 @@ export class ArraySchema extends AnySchema {
 export function array(items?: Schema | Schema[] | IClass | IClass[], options?: IConstraintOptions) {
     let schema = registerSchema.extend<ArraySchema>({type: ArraySchema, options});
 
-    schema.toJson({runIf: (params) => params.validateOptions.convert});
-
     if (items) {
         schema.items(items)
     }
 
     return schema.isArray(options)
+        .toJson({runIf: (params) => params.validateOptions.convert})
 
 }

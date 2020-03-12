@@ -11,11 +11,11 @@ class ArraySchema extends anySchema_1.AnySchema {
 exports.ArraySchema = ArraySchema;
 function array(items, options) {
     let schema = registerSchema_1.registerSchema.extend({ type: ArraySchema, options });
-    schema.toJson({ runIf: (params) => params.validateOptions.convert });
     if (items) {
         schema.items(items);
     }
-    return schema.isArray(options);
+    return schema.isArray(options)
+        .toJson({ runIf: (params) => params.validateOptions.convert });
 }
 exports.array = array;
 //# sourceMappingURL=arraySchema.js.map

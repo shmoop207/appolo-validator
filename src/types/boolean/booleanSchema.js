@@ -11,8 +11,9 @@ class BooleanSchema extends anySchema_1.AnySchema {
 exports.BooleanSchema = BooleanSchema;
 function boolean(options = {}) {
     let schema = registerSchema_1.registerSchema.extend({ type: BooleanSchema, options });
-    schema.isBoolean(options).toBoolean(options, { runIf: (params) => params.validateOptions.convert });
-    return schema;
+    return schema
+        .isBoolean(options)
+        .toBoolean(options, { runIf: (params) => params.validateOptions.convert });
 }
 exports.boolean = boolean;
 //# sourceMappingURL=booleanSchema.js.map

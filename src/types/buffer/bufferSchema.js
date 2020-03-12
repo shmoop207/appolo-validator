@@ -11,8 +11,7 @@ class BufferSchema extends anySchema_1.AnySchema {
 exports.BufferSchema = BufferSchema;
 function buffer(options = {}) {
     let schema = registerSchema_1.registerSchema.extend({ type: BufferSchema, options });
-    schema.isBuffer(options);
-    return schema;
+    return schema.isBuffer(options);
 }
 exports.buffer = buffer;
 //# sourceMappingURL=bufferSchema.js.map

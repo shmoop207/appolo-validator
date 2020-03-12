@@ -29,7 +29,7 @@ export class RegisterSchema {
 
         let fn = registerDecorator.extend<T>({schema});
 
-        return fn
+        return fn as Omit<DecoratorFn & T, Omited>
     }
 }
 

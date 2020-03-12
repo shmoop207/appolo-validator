@@ -11,8 +11,7 @@ class StringSchema extends anySchema_1.AnySchema {
 exports.StringSchema = StringSchema;
 function string(options = {}) {
     let schema = registerSchema_1.registerSchema.extend({ type: StringSchema, options });
-    schema.isString(options);
-    return schema;
+    return schema.isString(options);
 }
 exports.string = string;
 //# sourceMappingURL=stringSchema.js.map

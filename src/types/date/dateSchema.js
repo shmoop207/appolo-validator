@@ -11,8 +11,7 @@ class DateSchema extends anySchema_1.AnySchema {
 exports.DateSchema = DateSchema;
 function date(options = {}) {
     let schema = registerSchema_1.registerSchema.extend({ type: DateSchema, options });
-    schema.isDate(options);
-    return schema;
+    return schema.isDate(options);
 }
 exports.date = date;
 //# sourceMappingURL=dateSchema.js.map

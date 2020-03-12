@@ -15,7 +15,6 @@ export class DateSchema extends AnySchema {
 export function date(options: IConstraintOptions & ISchemaOptions = {}) {
     let schema = registerSchema.extend<DateSchema>({type: DateSchema, options});
 
-    schema.isDate(options);
+    return  schema.isDate(options);
 
-    return schema;
 }
