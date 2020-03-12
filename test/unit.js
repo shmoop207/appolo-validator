@@ -723,12 +723,12 @@ describe("validator", function () {
             class B {
             }
             tslib_1.__decorate([
-                index_1.object().keys(C)
+                index_1.object(C)
             ], B.prototype, "b", void 0);
             class A {
             }
             tslib_1.__decorate([
-                index_1.array().items(B)
+                index_1.array(B)
             ], A.prototype, "a", void 0);
             let validator = await index_1.validation();
             let result = await validator.validate(A, { a: [{ b: { c: 4 } }] });

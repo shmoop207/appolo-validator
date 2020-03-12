@@ -1199,13 +1199,13 @@ describe("validator", function () {
             }
 
             class B {
-                @object().keys(C)
+                @object(C)
                 private b;
             }
 
             class A {
 
-                @array().items(B)
+                @array(B)
                 private a: number
             }
 

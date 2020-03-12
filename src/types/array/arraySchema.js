@@ -9,10 +9,13 @@ class ArraySchema extends anySchema_1.AnySchema {
     }
 }
 exports.ArraySchema = ArraySchema;
-function array(options) {
+function array(items, options) {
     let schema = registerSchema_1.registerSchema.extend({ type: ArraySchema, options });
-    schema.isArray(options).toJson({ runIf: (params) => params.validateOptions.convert });
-    return schema;
+    schema.toJson({ runIf: (params) => params.validateOptions.convert });
+    if (items) {
+        schema.items(items);
+    }
+    return schema.isArray(options);
 }
 exports.array = array;
 //# sourceMappingURL=arraySchema.js.map

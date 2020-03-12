@@ -2,6 +2,8 @@ import {AnySchema} from "../any/anySchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 
 import {registerSchema} from "../../schema/registerSchema";
+import {IClass} from "appolo-engine/index";
+import {When} from "../../when/when";
 
 export class ObjectSchema extends AnySchema {
 
@@ -14,11 +16,16 @@ export class ObjectSchema extends AnySchema {
 
 }
 
-export function object(options?: IConstraintOptions) {
+export function object(keys?: IClass | { [index: string]: AnySchema | Pick<When, any> }, options?: IConstraintOptions) {
 
     let schema = registerSchema.extend<ObjectSchema>({type: ObjectSchema, options});
 
-    schema.isObject(options).toJson({runIf: (params) => params.validateOptions.convert});
+    schema
+        .toJson({runIf: (params) => params.validateOptions.convert});
 
-    return schema
+    if (keys) {
+        schema.keys(keys);
+    }
+
+    return schema.isObject(options)
 }
