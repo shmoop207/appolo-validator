@@ -1241,6 +1241,46 @@ describe("validator", function () {
 
             result.errors.length.should.be.eq(0);
 
+        });
+
+        it('should validate decorators with nested object array schema', async () => {
+            let value = {
+                "filter": "{}",
+                "fields": "{}",
+                "sort": "{}",
+                "populate": ['{"path":"game","select":"name"}']
+            };
+
+            class GetAllModel {
+
+                @number().optional()
+                public page: number;
+
+                @number().optional()
+                public pageSize: number;
+
+                @object().optional()
+                public sort?: any;
+
+                @object().optional()
+                public filter?: any;
+
+                @object().optional()
+                public fields?: any;
+
+                @array(object()).optional()
+                public populate?: any[];
+
+                @boolean().optional()
+                lean: boolean
+            }
+
+            let validator = await validation();
+
+            let result = await validator.validate(GetAllModel, value, {convert: true});
+
+            result.errors.length.should.be.eq(0);
+
         })
 
     });

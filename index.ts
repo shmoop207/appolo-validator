@@ -57,6 +57,43 @@ import './src/types/function/constraints/funcConstraint';
 import './src/types/function/constraints/isClassConstraint';
 import './src/types/function/constraints/minArgsConstraint';
 
+import './src/types/date/constraints/isDateConstraint';
+import './src/types/date/constraints/maxConstraint';
+import './src/types/date/constraints/minConstraint';
+import './src/types/date/converters/dateConverter';
+
+import './src/types/buffer/converters/toBufferConverter';
+import './src/types/buffer/constraints/minConstraint';
+import './src/types/buffer/constraints/maxConstraint';
+import './src/types/buffer/constraints/sizeConstraint';
+import './src/types/buffer/constraints/bufferConstraint';
+
+import './src/types/boolean/constraints/booleanConstraint';
+import './src/types/boolean/converters/toBooleanConverter';
+
+import './src/types/array/converters/toSortConverter';
+import './src/types/array/converters/toUniqConverter';
+import './src/types/array/constraints/arrayConstraint';
+import './src/types/array/constraints/containsConstraint';
+import './src/types/array/constraints/hasConstraint';
+import './src/types/array/constraints/itemsConstraint';
+import './src/types/array/constraints/maxConstraint';
+import './src/types/array/constraints/minConstraint';
+import './src/types/array/constraints/sizeConstraint';
+import './src/types/array/constraints/uniqConstraint';
+
+import './src/types/any/constraints/requiredConstraint';
+import './src/types/any/constraints/andConstraint';
+import './src/types/any/constraints/forbiddenConstraint';
+import './src/types/any/constraints/invalidConstraint';
+import './src/types/any/constraints/optionalConstraint';
+import './src/types/any/constraints/orConstraint';
+import './src/types/any/constraints/validConstraint';
+import './src/types/any/constraints/allowConstraint';
+import './src/types/any/converters/defaultConverter';
+import './src/types/any/converters/promiseConverter';
+
+
 for (let file of Files.walk(__dirname, "src")) {
     require(file);
 }

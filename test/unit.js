@@ -749,6 +749,40 @@ describe("validator", function () {
             result = await validator.validate(A, { a: [{ b: { c: 6 } }] });
             result.errors.length.should.be.eq(0);
         });
+        it('should validate decorators with nested object array schema', async () => {
+            let value = {
+                "filter": "{}",
+                "fields": "{}",
+                "sort": "{}",
+                "populate": ['{"path":"game","select":"name"}']
+            };
+            class GetAllModel {
+            }
+            tslib_1.__decorate([
+                index_1.number().optional()
+            ], GetAllModel.prototype, "page", void 0);
+            tslib_1.__decorate([
+                index_1.number().optional()
+            ], GetAllModel.prototype, "pageSize", void 0);
+            tslib_1.__decorate([
+                index_1.object().optional()
+            ], GetAllModel.prototype, "sort", void 0);
+            tslib_1.__decorate([
+                index_1.object().optional()
+            ], GetAllModel.prototype, "filter", void 0);
+            tslib_1.__decorate([
+                index_1.object().optional()
+            ], GetAllModel.prototype, "fields", void 0);
+            tslib_1.__decorate([
+                index_1.array(index_1.object()).optional()
+            ], GetAllModel.prototype, "populate", void 0);
+            tslib_1.__decorate([
+                index_1.boolean().optional()
+            ], GetAllModel.prototype, "lean", void 0);
+            let validator = await index_1.validation();
+            let result = await validator.validate(GetAllModel, value, { convert: true });
+            result.errors.length.should.be.eq(0);
+        });
     });
     describe("String", () => {
         it("should validate string uuid", async () => {
