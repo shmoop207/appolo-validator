@@ -11,6 +11,6 @@
     "allowJs": true,
     "preserveConstEnums": true,
     "declaration": true,
-    "outDir": "dist",
+    "declarationDir": "dist",
   }
 }

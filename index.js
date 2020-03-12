@@ -41,6 +41,7 @@ const ValidationError_js_1 = require("./src/common/errors/ValidationError.js");
 exports.ValidationError = ValidationError_js_1.ValidationError;
 const ValidationErrorsError_js_1 = require("./src/common/errors/ValidationErrorsError.js");
 exports.ValidationErrorsError = ValidationErrorsError_js_1.ValidationErrorsError;
+require("./my-module.js");
 for (let file of appolo_utils_2.Files.walk(__dirname, "src")) {
     require(file);
 }

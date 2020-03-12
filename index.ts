@@ -23,7 +23,8 @@ import {schema} from "./src/decorators/decorators";
 import {AnySchema} from "./src/types/any/anySchema";
 import {ValidationError} from "./src/common/errors/ValidationError.js";
 import {ValidationErrorsError} from "./src/common/errors/ValidationErrorsError.js";
-
+import "./my-module.js";
+import {IConverterOptions} from "./src/interfaces/IConverterOptions";
 
 for (let file of Files.walk(__dirname, "src")) {
     require(file);
@@ -64,5 +65,13 @@ export async function validation(options: IOptions = {}): Promise<Validator> {
 
     return server;
 }
+
+declare module './src/types/number/numberSchema' {
+
+    interface NumberSchema {
+        toFloat(options?: IConverterOptions): this;
+    }
+}
+
 
 
