@@ -21,6 +21,8 @@ import {date} from "./src/types/date/dateSchema";
 import {Files} from "appolo-utils";
 import {schema} from "./src/decorators/decorators";
 import {AnySchema} from "./src/types/any/anySchema";
+import {ValidationError} from "./src/common/errors/ValidationError.js";
+import {ValidationErrorsError} from "./src/common/errors/ValidationErrorsError.js";
 
 
 for (let file of Files.walk(__dirname, "src")) {
@@ -47,7 +49,7 @@ export {
     IValidateOptions,
     IOptions,
     ISchemaOptions,
-    AnySchema
+    AnySchema, ValidationErrorsError, ValidationError
 }
 
 export async function validation(options: IOptions = {}): Promise<Validator> {

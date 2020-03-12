@@ -5,14 +5,18 @@ export class ValidationErrorsError extends Error {
 
     constructor(public errors: ValidationError[]) {
 
-        super("validations failed");
+        super("Validations Failed");
 
         Object.setPrototypeOf(this, ValidationErrorsError.prototype);
 
     }
 
-    public toString() {
+    public get message() {
         return this.errors.map(error => error.message).join("\n")
+    }
+
+    public toString() {
+        return this.message
     }
 
 
