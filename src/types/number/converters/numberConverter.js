@@ -13,4 +13,10 @@ registerConverter_1.registerConverter.extend({
     name: "toFloat",
     converter: NumberConverter
 });
+// declare module '../numberSchema' {
+//
+//     interface NumberSchema {
+//         toFloat(options?: IConverterOptions): this;
+//     }
+// }
 //# sourceMappingURL=numberConverter.js.map

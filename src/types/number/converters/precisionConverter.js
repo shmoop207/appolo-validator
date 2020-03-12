@@ -17,4 +17,9 @@ registerConverter_1.registerConverter.extend({
     name: "toPrecision",
     converter: PrecisionConverter
 });
+// declare module '../numberSchema' {
+//
+//     interface NumberSchema {
+//     }
+// }
 //# sourceMappingURL=precisionConverter.js.map

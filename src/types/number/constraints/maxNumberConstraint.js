@@ -20,4 +20,10 @@ registerConstraint_1.registerConstraint.extend({
     name: "max",
     constraint: MaxNumberConstraint
 });
+// declare module '../numberSchema' {
+//
+//     interface NumberSchema {
+//         max(max: number | Ref, options?: IConstraintOptions): this;
+//     }
+// }
 //# sourceMappingURL=maxNumberConstraint.js.map

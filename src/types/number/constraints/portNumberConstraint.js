@@ -20,4 +20,10 @@ registerConstraint_1.registerConstraint.extend({
     name: "port",
     constraint: PortNumberConstraint
 });
+// declare module '../numberSchema' {
+//
+//     interface NumberSchema {
+//         port(options?: IConstraintOptions): this;
+//     }
+// }
 //# sourceMappingURL=portNumberConstraint.js.map

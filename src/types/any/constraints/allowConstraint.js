@@ -30,4 +30,10 @@ registerConstraint_1.registerConstraint.extend({
     constraint: AllowConstraint,
     whiteList: true
 });
+// declare module '../anySchema' {
+//
+//     interface AnySchema {
+//         allow(values: any[], options?: IConstraintOptions): this;
+//     }
+// }
 //# sourceMappingURL=allowConstraint.js.map

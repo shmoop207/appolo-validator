@@ -23,4 +23,10 @@ registerConstraint_1.registerConstraint.extend({
     name: "float",
     constraint: NumberConstraint
 });
+// declare module '../numberSchema' {
+//
+//     interface NumberSchema {
+//         float(options?: IConstraintOptions): this;
+//     }
+// }
 //# sourceMappingURL=numberConstraint.js.map

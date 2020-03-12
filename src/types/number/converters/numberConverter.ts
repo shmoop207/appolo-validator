@@ -17,3 +17,9 @@ registerConverter.extend({
     converter: NumberConverter
 });
 
+declare module '../numberSchema' {
+
+    interface NumberSchema {
+        toFloat(options?: IConverterOptions): this;
+    }
+}

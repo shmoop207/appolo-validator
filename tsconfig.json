@@ -8,9 +8,9 @@
     "sourceMap": true,
     "experimentalDecorators": true,
     "moduleResolution": "node",
-    "allowJs": true,
+    "allowJs": false,
     "preserveConstEnums": true,
-    "declaration": true,
-    "declarationDir": "dist",
+    "outDir": "dist",
+    "declaration": true
   }
 }

@@ -18,5 +18,7 @@ import { schema } from "./src/decorators/decorators";
 import { AnySchema } from "./src/types/any/anySchema";
 import { ValidationError } from "./src/common/errors/ValidationError.js";
 import { ValidationErrorsError } from "./src/common/errors/ValidationErrorsError.js";
+import './src/types/any/constraints/requiredConstraint';
+import './src/types/number/converters/numberConverter';
 export { Validator, any, number, string, array, object, ref, when, or, schema, and, func, date, buffer, boolean, IValidateOptions, IOptions, ISchemaOptions, AnySchema, ValidationErrorsError, ValidationError };
 export declare function validation(options?: IOptions): Promise<Validator>;

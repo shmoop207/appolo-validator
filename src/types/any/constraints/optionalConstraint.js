@@ -21,4 +21,10 @@ registerConstraint_1.registerConstraint.extend({
     constraint: OptionalConstraint,
     whiteList: true
 });
+// declare module '../anySchema' {
+//
+//     interface AnySchema {
+//         optional(options?: IConstraintOptions): this;
+//     }
+// }
 //# sourceMappingURL=optionalConstraint.js.map

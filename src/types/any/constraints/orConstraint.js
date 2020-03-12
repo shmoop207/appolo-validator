@@ -34,6 +34,14 @@ registerConstraint_1.registerConstraint.extend({
     constraint: OrConstraint,
     whiteList: true
 });
+// declare module '../anySchema' {
+//
+//
+//
+//     interface AnySchema {
+//         or(schemas: Schema[] | Schema, options?: IConstraintOptions): this;
+//     }
+// }
 function or(schema) {
     if (Array.isArray(schema)) {
         let [first, ...rest] = schema;

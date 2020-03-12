@@ -11,7 +11,7 @@ import {string} from "./src/types/string/stringSchema";
 import {array} from "./src/types/array/arraySchema";
 import {object} from "./src/types/object/objectSchema";
 import {func} from "./src/types/function/functionSchema";
-import {ref} from "./src/schema/ref";
+import {Ref, ref} from "./src/schema/ref";
 import {when} from "./src/when/when";
 import {buffer} from "./src/types/buffer/bufferSchema";
 import {boolean} from "./src/types/boolean/booleanSchema";
@@ -23,8 +23,11 @@ import {schema} from "./src/decorators/decorators";
 import {AnySchema} from "./src/types/any/anySchema";
 import {ValidationError} from "./src/common/errors/ValidationError.js";
 import {ValidationErrorsError} from "./src/common/errors/ValidationErrorsError.js";
-import "./my-module.js";
+
 import {IConverterOptions} from "./src/interfaces/IConverterOptions";
+import {IConstraintOptions} from "./src/interfaces/IConstraintOptions";
+import './src/types/any/constraints/requiredConstraint';
+import './src/types/number/converters/numberConverter';
 
 for (let file of Files.walk(__dirname, "src")) {
     require(file);
@@ -64,13 +67,6 @@ export async function validation(options: IOptions = {}): Promise<Validator> {
     let server = app.injector.get<Validator>(Validator);
 
     return server;
-}
-
-declare module './src/types/number/numberSchema' {
-
-    interface NumberSchema {
-        toFloat(options?: IConverterOptions): this;
-    }
 }
 
 
