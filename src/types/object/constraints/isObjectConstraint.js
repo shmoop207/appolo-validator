@@ -2,9 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const objectSchema_1 = require("../objectSchema");
+const appolo_utils_1 = require("appolo-utils");
 class IsObjectConstraint {
     validate(params) {
-        let isValid = typeof params.value === "object";
+        let isValid = appolo_utils_1.Util.objects.isObject(params.value);
         return { isValid };
     }
     get type() {

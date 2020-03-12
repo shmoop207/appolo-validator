@@ -1191,7 +1191,7 @@ describe("validator", function () {
 
         });
 
-        it.only('should validate decorators with nested object array', async () => {
+        it('should validate decorators with nested object array', async () => {
 
             class C {
                 @number().min(5).required()
@@ -1208,8 +1208,6 @@ describe("validator", function () {
                 @array(B)
                 private a: number;
 
-                @boolean()
-                c: boolean
             }
 
             let validator = await validation();

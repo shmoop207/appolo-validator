@@ -14,10 +14,4 @@ registerConverter_1.registerConverter.extend({
     name: "toInteger",
     converter: IntegerConverter
 });
-// declare module '../numberSchema' {
-//
-//     interface NumberSchema {
-//         toInteger(options?: IConverterOptions): this;
-//     }
-// }
 //# sourceMappingURL=integerConverter.js.map

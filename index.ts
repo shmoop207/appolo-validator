@@ -21,13 +21,22 @@ import {date} from "./src/types/date/dateSchema";
 import {Files} from "appolo-utils";
 import {schema} from "./src/decorators/decorators";
 import {AnySchema} from "./src/types/any/anySchema";
-import {ValidationError} from "./src/common/errors/ValidationError.js";
-import {ValidationErrorsError} from "./src/common/errors/ValidationErrorsError.js";
+import {ValidationError} from "./src/common/errors/ValidationError";
+import {ValidationErrorsError} from "./src/common/errors/ValidationErrorsError";
 
-import {IConverterOptions} from "./src/interfaces/IConverterOptions";
-import {IConstraintOptions} from "./src/interfaces/IConstraintOptions";
+
 import './src/types/any/constraints/requiredConstraint';
 import './src/types/number/converters/numberConverter';
+import './src/types/number/converters/precisionConverter';
+import './src/types/number/converters/integerConverter';
+import './src/types/number/constraints/integerNumberConstraint';
+import './src/types/number/constraints/maxNumberConstraint';
+import './src/types/number/constraints/minNumberConstraint';
+import './src/types/number/constraints/multipleNumberConstraint';
+import './src/types/number/constraints/negativeNumberConstraint';
+import './src/types/number/constraints/numberConstraint';
+import './src/types/number/constraints/portNumberConstraint';
+import './src/types/number/constraints/positiveNumberConstraint';
 
 for (let file of Files.walk(__dirname, "src")) {
     require(file);

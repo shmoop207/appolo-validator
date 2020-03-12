@@ -14,7 +14,7 @@ function object(keys, options) {
     if (keys) {
         schema.keys(keys);
     }
-    return schema.isObject(options).toJson({ runIf: (params) => params.validateOptions.convert });
+    return schema.isObjectOrClass({}).toJson({ runIf: (params) => params.validateOptions.convert });
 }
 exports.object = object;
 //# sourceMappingURL=objectSchema.js.map

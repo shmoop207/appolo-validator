@@ -20,10 +20,4 @@ registerConstraint_1.registerConstraint.extend({
     name: "integer",
     constraint: IntegerNumberConstraint
 });
-// declare module '../numberSchema' {
-//
-//     interface NumberSchema {
-//         integer(options?: IConstraintOptions): this;
-//     }
-// }
 //# sourceMappingURL=integerNumberConstraint.js.map

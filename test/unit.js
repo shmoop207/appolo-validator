@@ -714,7 +714,7 @@ describe("validator", function () {
             result = await validator.validate(A, { a: { b: 6 } });
             result.errors.length.should.be.eq(0);
         });
-        it.only('should validate decorators with nested object array', async () => {
+        it('should validate decorators with nested object array', async () => {
             class C {
             }
             tslib_1.__decorate([
@@ -730,9 +730,6 @@ describe("validator", function () {
             tslib_1.__decorate([
                 index_1.array(B)
             ], A.prototype, "a", void 0);
-            tslib_1.__decorate([
-                index_1.boolean()
-            ], A.prototype, "c", void 0);
             let validator = await index_1.validation();
             let result = await validator.validate(A, { a: [{ b: { c: 4 } }] });
             result.errors.length.should.be.eq(1);

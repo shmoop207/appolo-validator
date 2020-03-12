@@ -21,10 +21,4 @@ registerConstraint_1.registerConstraint.extend({
     constraint: RequiredConstraint,
     blackList: true
 });
-// declare module '../anySchema' {
-//
-//     interface AnySchema {
-//         required(options?: IConstraintOptions): this;
-//     }
-// }
 //# sourceMappingURL=requiredConstraint.js.map

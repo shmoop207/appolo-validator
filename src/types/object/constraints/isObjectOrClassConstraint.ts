@@ -7,18 +7,18 @@ import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 import {Util} from "appolo-utils";
 
 
-export class IsObjectConstraint implements IConstraint {
+export class IsObjectOrClassConstraint implements IConstraint {
 
     public validate(params: ValidationParams): IConstraintValidateResult {
 
-        let isValid = Util.objects.isObject(params.value);
+        let isValid = Util.objects.isObject(params.value) || Util.classes.isClass(params.value);
 
         return {isValid};
 
     }
 
     public get type(): string {
-        return "isObject"
+        return "isObjectOrClass"
     }
 
     public get defaultMessage(): string {
@@ -28,14 +28,14 @@ export class IsObjectConstraint implements IConstraint {
 
 registerConstraint.extend({
     base: ObjectSchema,
-    name: "isObject",
-    constraint: IsObjectConstraint
+    name: "isObjectOrClass",
+    constraint: IsObjectOrClassConstraint
 });
 
 declare module '../objectSchema' {
 
     interface ObjectSchema {
-        isObject(options?: IConstraintOptions): this;
+        isObjectOrClass(options?: IConstraintOptions): this;
     }
 }
 

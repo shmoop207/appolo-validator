@@ -37,11 +37,22 @@ const decorators_1 = require("./src/decorators/decorators");
 exports.schema = decorators_1.schema;
 const anySchema_2 = require("./src/types/any/anySchema");
 exports.AnySchema = anySchema_2.AnySchema;
-const ValidationError_js_1 = require("./src/common/errors/ValidationError.js");
-exports.ValidationError = ValidationError_js_1.ValidationError;
-const ValidationErrorsError_js_1 = require("./src/common/errors/ValidationErrorsError.js");
-exports.ValidationErrorsError = ValidationErrorsError_js_1.ValidationErrorsError;
-require("./my-module.js");
+const ValidationError_1 = require("./src/common/errors/ValidationError");
+exports.ValidationError = ValidationError_1.ValidationError;
+const ValidationErrorsError_1 = require("./src/common/errors/ValidationErrorsError");
+exports.ValidationErrorsError = ValidationErrorsError_1.ValidationErrorsError;
+require("./src/types/any/constraints/requiredConstraint");
+require("./src/types/number/converters/numberConverter");
+require("./src/types/number/converters/precisionConverter");
+require("./src/types/number/converters/integerConverter");
+require("./src/types/number/constraints/integerNumberConstraint");
+require("./src/types/number/constraints/maxNumberConstraint");
+require("./src/types/number/constraints/minNumberConstraint");
+require("./src/types/number/constraints/multipleNumberConstraint");
+require("./src/types/number/constraints/negativeNumberConstraint");
+require("./src/types/number/constraints/numberConstraint");
+require("./src/types/number/constraints/portNumberConstraint");
+require("./src/types/number/constraints/positiveNumberConstraint");
 for (let file of appolo_utils_2.Files.walk(__dirname, "src")) {
     require(file);
 }

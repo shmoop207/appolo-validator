@@ -9,8 +9,6 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "allowJs": false,
-    "preserveConstEnums": true,
-    "outDir": "dist",
-    "declaration": true
+    "preserveConstEnums": true
   }
 }

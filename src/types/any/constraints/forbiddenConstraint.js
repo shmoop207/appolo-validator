@@ -21,10 +21,4 @@ registerConstraint_1.registerConstraint.extend({
     constraint: ForbiddenConstraint,
     blackList: true
 });
-// declare module '../anySchema' {
-//
-//     interface AnySchema {
-//         forbidden(options?: IConstraintOptions): this;
-//     }
-// }
 //# sourceMappingURL=forbiddenConstraint.js.map

@@ -20,10 +20,4 @@ registerConstraint_1.registerConstraint.extend({
     name: "negative",
     constraint: NegativeNumberConstraint
 });
-// declare module '../numberSchema' {
-//
-//     interface NumberSchema {
-//         negative(options?: IConstraintOptions): this;
-//     }
-// }
 //# sourceMappingURL=negativeNumberConstraint.js.map

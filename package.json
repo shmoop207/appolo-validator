@@ -13,8 +13,7 @@
   "scripts": {
     "test": "mocha test --exit"
   },
-  "main": "./dist/index.js",
-  "type": "./dist/index.d.js",
+  "main": "index.js",
   "version": "1.0.0",
   "license": "MIT",
   "repository": {

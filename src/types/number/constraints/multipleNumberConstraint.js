@@ -20,10 +20,4 @@ registerConstraint_1.registerConstraint.extend({
     name: "multiple",
     constraint: MultipleNumberConstraint
 });
-// declare module '../numberSchema' {
-//
-//     interface NumberSchema {
-//         multiple(base: number, options?: IConstraintOptions): this;
-//     }
-// }
 //# sourceMappingURL=multipleNumberConstraint.js.map

@@ -20,10 +20,4 @@ registerConstraint_1.registerConstraint.extend({
     name: "min",
     constraint: MinNumberConstraint
 });
-// declare module '../numberSchema' {
-//
-//     interface NumberSchema {
-//         min(min: number | Ref, options?: IConstraintOptions): this;
-//     }
-// }
 //# sourceMappingURL=minNumberConstraint.js.map
