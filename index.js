@@ -35,6 +35,8 @@ exports.date = dateSchema_1.date;
 const appolo_utils_2 = require("appolo-utils");
 const decorators_1 = require("./src/decorators/decorators");
 exports.schema = decorators_1.schema;
+const anySchema_2 = require("./src/types/any/anySchema");
+exports.AnySchema = anySchema_2.AnySchema;
 for (let file of appolo_utils_2.Files.walk(__dirname, "src")) {
     require(file);
 }

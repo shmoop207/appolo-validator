@@ -20,7 +20,7 @@ import {and} from "./src/types/any/constraints/andConstraint";
 import {date} from "./src/types/date/dateSchema";
 import {Files} from "appolo-utils";
 import {schema} from "./src/decorators/decorators";
-
+import {AnySchema} from "./src/types/any/anySchema";
 
 
 for (let file of Files.walk(__dirname, "src")) {
@@ -46,7 +46,8 @@ export {
     boolean,
     IValidateOptions,
     IOptions,
-    ISchemaOptions
+    ISchemaOptions,
+    AnySchema
 }
 
 export async function validation(options: IOptions = {}): Promise<Validator> {

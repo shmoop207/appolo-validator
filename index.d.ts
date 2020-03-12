@@ -15,5 +15,6 @@ import { or } from "./src/types/any/constraints/orConstraint";
 import { and } from "./src/types/any/constraints/andConstraint";
 import { date } from "./src/types/date/dateSchema";
 import { schema } from "./src/decorators/decorators";
-export { Validator, any, number, string, array, object, ref, when, or, schema, and, func, date, buffer, boolean, IValidateOptions, IOptions, ISchemaOptions };
+import { AnySchema } from "./src/types/any/anySchema";
+export { Validator, any, number, string, array, object, ref, when, or, schema, and, func, date, buffer, boolean, IValidateOptions, IOptions, ISchemaOptions, AnySchema };
 export declare function validation(options?: IOptions): Promise<Validator>;

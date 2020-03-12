@@ -27,4 +27,4 @@ export declare class AnySchema {
     addConverter(schema: IConverterSchema, top?: boolean): AnySchema;
     addContext(schema: IContextSchema, top?: boolean): AnySchema;
 }
-export declare function any(options?: IConstraintOptions): Pick<import("../../decorators/registerDecorator").DecoratorFn & AnySchema, "required" | "optional" | "default" | "invalid" | "allow" | "options" | "setContext" | "or" | "and" | "forbidden" | "valid" | "await" | "if">;
+export declare function any(options?: IConstraintOptions): Pick<import("../../decorators/registerDecorator").DecoratorFn & AnySchema, "options" | "required" | "optional" | "default" | "invalid" | "allow" | "setContext" | "or" | "and" | "forbidden" | "valid" | "await" | "if">;
