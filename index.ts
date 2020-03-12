@@ -26,6 +26,7 @@ import {ValidationErrorsError} from "./src/common/errors/ValidationErrorsError";
 
 
 import './src/types/any/constraints/requiredConstraint';
+
 import './src/types/number/converters/numberConverter';
 import './src/types/number/converters/precisionConverter';
 import './src/types/number/converters/integerConverter';
@@ -37,6 +38,18 @@ import './src/types/number/constraints/negativeNumberConstraint';
 import './src/types/number/constraints/numberConstraint';
 import './src/types/number/constraints/portNumberConstraint';
 import './src/types/number/constraints/positiveNumberConstraint';
+
+import './src/types/object/constraints/keysConstraint';
+import './src/types/object/constraints/instanceOfConstraint';
+import './src/types/object/constraints/isObjectConstraint';
+import './src/types/object/constraints/isObjectOrClassConstraint';
+import './src/types/object/constraints/isPlainConstraint';
+import './src/types/object/constraints/maxKeysConstraint';
+import './src/types/object/constraints/minKeysConstraint';
+import './src/types/object/constraints/sizeConstraint';
+import './src/types/object/constraints/withConstraint';
+import './src/types/object/constraints/withoutConstraint';
+import './src/types/object/converters/jsonConverter';
 
 for (let file of Files.walk(__dirname, "src")) {
     require(file);

@@ -53,6 +53,17 @@ require("./src/types/number/constraints/negativeNumberConstraint");
 require("./src/types/number/constraints/numberConstraint");
 require("./src/types/number/constraints/portNumberConstraint");
 require("./src/types/number/constraints/positiveNumberConstraint");
+require("./src/types/object/constraints/keysConstraint");
+require("./src/types/object/constraints/instanceOfConstraint");
+require("./src/types/object/constraints/isObjectConstraint");
+require("./src/types/object/constraints/isObjectOrClassConstraint");
+require("./src/types/object/constraints/isPlainConstraint");
+require("./src/types/object/constraints/maxKeysConstraint");
+require("./src/types/object/constraints/minKeysConstraint");
+require("./src/types/object/constraints/sizeConstraint");
+require("./src/types/object/constraints/withConstraint");
+require("./src/types/object/constraints/withoutConstraint");
+require("./src/types/object/converters/jsonConverter");
 for (let file of appolo_utils_2.Files.walk(__dirname, "src")) {
     require(file);
 }
