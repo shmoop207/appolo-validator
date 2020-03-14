@@ -100,7 +100,7 @@ export class SchemaValidator {
                 return;
             }
 
-            let converter = this._getInstance(converterSchema.converter);
+            let converter = this._getInstance(converterSchema.converter, converterSchema.inject);
 
             let value = converter.convert(params);
 
@@ -181,7 +181,7 @@ export class SchemaValidator {
 
             params.args = this._prepareArgs(constraintSchema.args, params);
 
-            constraint = this._getInstance(constraintSchema.constraint);
+            constraint = this._getInstance(constraintSchema.constraint, constraintSchema.inject);
 
             let result = constraint.validate(params);
 
@@ -248,14 +248,18 @@ export class SchemaValidator {
     }
 
 
-    private _getInstance<T>(klass: (new() => T)): T {
-        let classId = Util.getClassName(klass);
+    private _getInstance<T>(klass: (new() => T), inject: boolean): T {
 
-        if (this.injector.hasDefinition(classId)) {
-            return this.injector.get(classId);
+
+        if (inject && this._options.container) {
+            let instance = this._options.container(klass);
+            if (instance) {
+                return instance;
+            }
         }
 
         return new klass();
+
     }
 
     public static getSchemaFromParams(schema: AnySchema | Schema | When | IClass): AnySchema {

@@ -6,5 +6,6 @@ export interface IConstraintSchema {
     options?: IConstraintOptions
     args?: any[]
     whiteList?: boolean
-    blackList?:boolean
+    blackList?: boolean
+    inject?: boolean
 }

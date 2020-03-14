@@ -6,5 +6,6 @@ import {IConverterClass} from "./IConverter";
 export interface IConverterSchema {
     converter: IConverterClass
     options?: IConverterOptions
-    args?: any[]
+    args?: any[],
+    inject?: boolean
 }

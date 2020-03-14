@@ -1,3 +1,5 @@
+import {IConstraintOptions} from "./IConstraintOptions";
+
 export interface IOptions extends ICommonOptions {
 
 }
@@ -20,5 +22,6 @@ interface ICommonOptions {
     convert?: boolean
     groups?: string[]
     stripUnknown?: boolean
+    container?: (klass: (new() => any)) => any
 
 }

@@ -57,7 +57,7 @@ let SchemaValidator = class SchemaValidator {
             if (converterSchema.options && converterSchema.options.runIf && !converterSchema.options.runIf(params)) {
                 return;
             }
-            let converter = this._getInstance(converterSchema.converter);
+            let converter = this._getInstance(converterSchema.converter, converterSchema.inject);
             let value = converter.convert(params);
             if (value instanceof Promise) {
                 value = await value;
@@ -116,7 +116,7 @@ let SchemaValidator = class SchemaValidator {
                 return null;
             }
             params.args = this._prepareArgs(constraintSchema.args, params);
-            constraint = this._getInstance(constraintSchema.constraint);
+            constraint = this._getInstance(constraintSchema.constraint, constraintSchema.inject);
             let result = constraint.validate(params);
             if (result instanceof Promise) {
                 result = await result;
@@ -166,10 +166,12 @@ let SchemaValidator = class SchemaValidator {
         error.args = params.args;
         return error;
     }
-    _getInstance(klass) {
-        let classId = appolo_engine_1.Util.getClassName(klass);
-        if (this.injector.hasDefinition(classId)) {
-            return this.injector.get(classId);
+    _getInstance(klass, inject) {
+        if (inject && this._options.container) {
+            let instance = this._options.container(klass);
+            if (instance) {
+                return instance;
+            }
         }
         return new klass();
     }

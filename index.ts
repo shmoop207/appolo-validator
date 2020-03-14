@@ -18,9 +18,18 @@ import {boolean} from "./src/types/boolean/booleanSchema";
 import {or,} from "./src/types/any/constraints/orConstraint";
 import {and} from "./src/types/any/constraints/andConstraint";
 import {date} from "./src/types/date/dateSchema";
-import {Files} from "appolo-utils";
+import {registerConstraint} from "./src/schema/registerConstraint";
+import {registerConverter} from "./src/schema/registerConverter";
 import {schema} from "./src/decorators/decorators";
 import {AnySchema} from "./src/types/any/anySchema";
+import {NumberSchema} from "./src/types/number/numberSchema";
+import {StringSchema} from "./src/types/string/stringSchema";
+import {ArraySchema} from "./src/types/array/arraySchema";
+import {ObjectSchema} from "./src/types/object/objectSchema";
+import {BooleanSchema} from "./src/types/boolean/booleanSchema";
+import {DateSchema} from "./src/types/date/dateSchema";
+import {BufferSchema} from "./src/types/buffer/bufferSchema";
+import {FunctionSchema} from "./src/types/function/functionSchema";
 import {ValidationError} from "./src/common/errors/ValidationError";
 import {ValidationErrorsError} from "./src/common/errors/ValidationErrorsError";
 
@@ -93,13 +102,46 @@ import './src/types/any/constraints/allowConstraint';
 import './src/types/any/converters/defaultConverter';
 import './src/types/any/converters/promiseConverter';
 
-
-for (let file of Files.walk(__dirname, "src")) {
-    require(file);
-}
+import './src/types/string/constraints/alphanumStringConstraint';
+import './src/types/string/constraints/alphaStringConstraint';
+import './src/types/string/constraints/asciiStringConstraint';
+import './src/types/string/constraints/base64StringConstraint';
+import './src/types/string/constraints/domainStringConstraint';
+import './src/types/string/constraints/emailStringConstraint';
+import './src/types/string/constraints/emailStringConstraint';
+import './src/types/string/constraints/hashStringConstraint';
+import './src/types/string/constraints/hexadecimalStringConstraint';
+import './src/types/string/constraints/ipStringConstraint';
+import './src/types/string/constraints/isoDateStringConstraint';
+import './src/types/string/constraints/jsonStringConstraint';
+import './src/types/string/constraints/jwtStringConstraint';
+import './src/types/string/constraints/lowerCaseStringConstraint';
+import './src/types/string/constraints/maxStringConstraint';
+import './src/types/string/constraints/md5StringConstraint';
+import './src/types/string/constraints/minStringConstraint';
+import './src/types/string/constraints/mongoIdStringConstraint';
+import './src/types/string/constraints/numericStringConstraint';
+import './src/types/string/constraints/regexStringConstraint';
+import './src/types/string/constraints/sizeStringConstraint';
+import './src/types/string/constraints/slugStringConstraint';
+import './src/types/string/constraints/stringConstraint';
+import './src/types/string/constraints/tokenStringConstraint';
+import './src/types/string/constraints/upperCaseStringConstraint';
+import './src/types/string/constraints/urlStringConstraint';
+import './src/types/string/constraints/uuidStringConstraint';
+import './src/types/string/converters/decodeConverter';
+import './src/types/string/converters/replaceConverter';
+import './src/types/string/converters/sanitizeConverter';
+import './src/types/string/converters/slugifyConverter';
+import './src/types/string/converters/trimConverter';
+import './src/types/string/converters/truncateConverter';
+import {IConstraint} from "./src/interfaces/IConstraint";
+import {IConverter} from "./src/interfaces/IConverter";
 
 
 export {
+    registerConstraint,
+    registerConverter,
     Validator,
     any,
     number,
@@ -118,7 +160,8 @@ export {
     IValidateOptions,
     IOptions,
     ISchemaOptions,
-    AnySchema, ValidationErrorsError, ValidationError
+    AnySchema, ValidationErrorsError, ValidationError, FunctionSchema, IConstraint,IConverter,
+    NumberSchema, StringSchema, DateSchema, BufferSchema, BooleanSchema, ObjectSchema, ArraySchema,
 }
 
 export async function validation(options: IOptions = {}): Promise<Validator> {
