@@ -3,7 +3,7 @@ import {AnySchema} from "../types/any/anySchema";
 import {ICaseParams} from "./ICaseParams";
 import {IWhenParams} from "./IWhenParams";
 import {Ref} from "../schema/ref";
-import {ReflectMetadata} from "appolo-utils/index";
+import {Reflector} from "appolo-utils/index";
 import {DecoratorFn, PropertySymbol, SchemaFnSymbol} from "../decorators/registerDecorator";
 
 export class When implements Pick<When, "ref"> {
@@ -109,7 +109,7 @@ export function when(prop?: Ref | ((params: ValidationParams) => any)): Decorato
 
     let when = new When(prop);
     let fn = function (target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-        let validations = ReflectMetadata.getNestedMetadata<{ [index: string]: When }>(PropertySymbol, target, {});
+        let validations = Reflector.getMetadata<{ [index: string]: When }>(PropertySymbol, target, undefined, {});
         validations[propertyKey] = when;
     };
 

@@ -2,9 +2,6 @@ import {IConstraintClass} from "../interfaces/IConstraint";
 import {Arrays, Objects} from "appolo-utils"
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
 import {AnySchema} from "../types/any/anySchema";
-import {ReflectMetadata} from "appolo-utils/index";
-import {PropertySymbol} from "../decorators/registerDecorator";
-import {Ref} from "./ref";
 
 
 interface IExtendParams {

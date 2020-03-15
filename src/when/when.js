@@ -76,7 +76,7 @@ exports.SchemaFnWhen = "__SchemaFnWhen__";
 function when(prop) {
     let when = new When(prop);
     let fn = function (target, propertyKey, descriptor) {
-        let validations = index_1.ReflectMetadata.getNestedMetadata(registerDecorator_1.PropertySymbol, target, {});
+        let validations = index_1.Reflector.getMetadata(registerDecorator_1.PropertySymbol, target, undefined, {});
         validations[propertyKey] = when;
     };
     fn[exports.SchemaFnWhen] = when;

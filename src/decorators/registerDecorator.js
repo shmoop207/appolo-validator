@@ -9,7 +9,7 @@ class RegisterDecorator {
     extend(params) {
         let { schema } = params;
         let fn = function (target, propertyKey, descriptor) {
-            let validations = appolo_utils_1.ReflectMetadata.getNestedMetadata(exports.PropertySymbol, target, {});
+            let validations = appolo_utils_1.Reflector.getMetadata(exports.PropertySymbol, target, undefined, {});
             validations[propertyKey] = schema;
         };
         fn[exports.SchemaFnSymbol] = schema;

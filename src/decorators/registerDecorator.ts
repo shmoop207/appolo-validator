@@ -1,5 +1,5 @@
 import {AnySchema} from "../types/any/anySchema";
-import {ReflectMetadata, Objects} from "appolo-utils";
+import {Reflector, Objects} from "appolo-utils";
 import {registerConstraint} from "../schema/registerConstraint";
 import {registerConverter} from "../schema/registerConverter";
 import {Schema} from "../schema/registerSchema";
@@ -16,7 +16,7 @@ export class RegisterDecorator {
         let {schema} = params;
 
         let fn = function (this: AnySchema, target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-            let validations = ReflectMetadata.getNestedMetadata<{ [index: string]: AnySchema }>(PropertySymbol, target, {});
+            let validations = Reflector.getMetadata<{ [index: string]: AnySchema }>(PropertySymbol, target,undefined, {});
             validations[propertyKey] = schema;
         };
 
