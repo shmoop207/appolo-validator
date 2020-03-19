@@ -18,15 +18,15 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/shmoop207/appolo-decorators.git"
+    "url": "https://github.com/shmoop207/appolo-validator.git"
   },
   "typings": "src",
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
-    "appolo-engine": "^6.0.82",
+    "appolo-engine": "^7.0.0",
     "appolo-utils": "^0.0.42",
-    "date-fns": "^2.10.0",
+    "date-fns": "^2.11.0",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
