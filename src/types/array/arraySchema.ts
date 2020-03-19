@@ -5,6 +5,7 @@ import {ISchemaOptions, IValidateOptions} from "../../interfaces/IOptions";
 import {ArrayConstraint} from "./constraints/arrayConstraint";
 import {registerSchema, Schema} from "../../schema/registerSchema";
 import {IClass} from "appolo-engine/index";
+import {When} from "../../when/when";
 
 export class ArraySchema extends AnySchema {
 
@@ -16,7 +17,7 @@ export class ArraySchema extends AnySchema {
     }
 }
 
-export function array(items?: Schema | Schema[] | IClass | IClass[], options?: IConstraintOptions) {
+export function array(items?: { [index: string]: Schema | Pick<When, any> } | Schema | Schema[] | IClass | IClass[], options?: IConstraintOptions) {
     let schema = registerSchema.extend<ArraySchema>({type: ArraySchema, options});
 
     if (items) {

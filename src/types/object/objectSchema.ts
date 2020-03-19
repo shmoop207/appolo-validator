@@ -2,7 +2,7 @@ import {AnySchema} from "../any/anySchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {Util} from "appolo-utils";
 
-import {registerSchema} from "../../schema/registerSchema";
+import {registerSchema, Schema} from "../../schema/registerSchema";
 import {IClass} from "appolo-engine/index";
 import {When} from "../../when/when";
 
@@ -17,7 +17,7 @@ export class ObjectSchema extends AnySchema {
 
 }
 
-export function object(keys?: IClass | { [index: string]: AnySchema | Pick<When, any> }, options?: IConstraintOptions) {
+export function object(keys?: IClass | { [index: string]: Schema | Pick<When, any> }, options?: IConstraintOptions) {
 
     let schema = registerSchema.extend<ObjectSchema>({type: ObjectSchema, options});
 

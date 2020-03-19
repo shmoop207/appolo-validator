@@ -8,6 +8,7 @@ import {When} from "../../../when/when";
 import {Promises} from "appolo-utils";
 import {IClass} from "appolo-engine";
 import {PropertySymbol} from "../../../decorators/registerDecorator";
+import {Schema} from "../../../schema/registerSchema";
 
 export class KeysConstraint implements IConstraint {
 
@@ -108,8 +109,9 @@ registerConstraint.extend({
 declare module '../objectSchema' {
 
 
+
     interface ObjectSchema {
-        keys(schemaIndex: IClass | { [index: string]: AnySchema | Pick<When, any> }, options?: IConstraintOptions): this;
+        keys(schemaIndex: IClass | { [index: string]: Schema | Pick<When, any> }, options?: IConstraintOptions): this;
     }
 }
 

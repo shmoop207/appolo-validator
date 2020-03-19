@@ -242,6 +242,15 @@ describe("validator", function () {
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq('[1] must be a number');
         });
+        it('should validate array with object', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.array().items({ a: index_1.number(), b: index_1.number() });
+            let result = await validator.validate(schema, [{ a: 5, b: "aa" }]);
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('[0].b must be a number');
+            result = await validator.validate(schema, [{ a: 5, b: 1 }]);
+            result.errors.length.should.be.eq(0);
+        });
         it('should validate array contains', async () => {
             let validator = await index_1.validation();
             let schema = index_1.array().items(index_1.number()).contains(6);
