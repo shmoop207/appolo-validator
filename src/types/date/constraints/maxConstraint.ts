@@ -41,9 +41,4 @@ registerConstraint.extend({
     constraint: MaxConstraint
 });
 
-declare module '../dateSchema' {
 
-    interface DateSchema {
-        max(date: Date | string | number, format?: string, options?: IConstraintOptions): this;
-    }
-}

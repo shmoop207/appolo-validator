@@ -6,12 +6,12 @@ import {
 } from "../interfaces/IConstraint";
 import {ValidationError} from "../common/errors/ValidationError";
 import {inject, Injector, Util, define, singleton} from "appolo-engine";
-import {IValidateOptions} from "../interfaces/IOptions";
+import {IOptions, IValidateOptions} from "../interfaces/IOptions";
 import {Objects, Promises, Arrays} from "appolo-utils";
 import {ValidateDefaults} from "../defaults/defaults";
 import {Validator} from "../validator/validator";
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
-import {any, AnySchema} from "../types/any/anySchema";
+import {any, AnySchema, SchemaWrapper} from "../types/any/anySchema";
 import {IConverterSchema} from "../interfaces/IConverterSchema";
 import {IConstraintOptions} from "../interfaces/IConstraintOptions";
 import {Ref} from "./ref";
@@ -21,7 +21,6 @@ import {PropertySymbol, RegisterDecorator, SchemaFnSymbol} from "../decorators/r
 import {object} from "../../index";
 import {SchemaSymbol} from "../decorators/decorators";
 import {ObjectSchema} from "../types/object/objectSchema";
-import {Schema} from "./registerSchema";
 
 @define()
 export class SchemaValidator {
@@ -35,7 +34,7 @@ export class SchemaValidator {
     private _value: any;
 
 
-    public async validate(value: any, schema: AnySchema, options: IValidateOptions): Promise<{ errors: ValidationError[], value: any }> {
+    public async validate(value: any, schema: AnySchema & SchemaWrapper, options: IValidateOptions): Promise<{ errors: ValidationError[], value: any }> {
 
         this._options = options;
         this._schema = schema;
@@ -70,7 +69,7 @@ export class SchemaValidator {
         return {errors, value: this._value};
     }
 
-    private _handleConverters(schema: AnySchema, options: IValidateOptions) {
+    private _handleConverters(schema: AnySchema & SchemaWrapper, options: IValidateOptions) {
         let converters: IConverterSchema[] = (schema.converters || []);
 
         // if (options.convert && schema.converter) {
@@ -251,8 +250,8 @@ export class SchemaValidator {
     private _getInstance<T>(klass: (new() => T), inject: boolean): T {
 
 
-        if (inject && this._options.container) {
-            let instance = this._options.container(klass);
+        if (inject && (this._options as IOptions).container) {
+            let instance = (this._options as IOptions).container(klass);
             if (instance) {
                 return instance;
             }
@@ -262,18 +261,18 @@ export class SchemaValidator {
 
     }
 
-    public static getSchemaFromParams(schema: AnySchema | Schema | When | IClass): AnySchema {
+    public static getSchemaFromParams(schema: AnySchema | AnySchema | When | IClass): AnySchema & SchemaWrapper {
 
         if (schema[SchemaFnSymbol] || schema[SchemaFnWhen]) {
             schema = schema[SchemaFnSymbol] || schema[SchemaFnWhen]
         }
 
         if (schema instanceof AnySchema) {
-            return schema;
+            return schema as any;
         }
 
         if (schema instanceof When) {
-            return new AnySchema().if(schema)
+            return new AnySchema().if(schema) as any
         }
 
         let meta = Reflect.getMetadata(PropertySymbol, (schema as Function).prototype);

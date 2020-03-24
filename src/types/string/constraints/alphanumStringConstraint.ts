@@ -30,9 +30,4 @@ registerConstraint.extend({
     constraint: AlphanumStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        alphanum(options?: IConstraintOptions): this;
-    }
-}

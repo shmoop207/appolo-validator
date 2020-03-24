@@ -26,9 +26,4 @@ registerConstraint.extend({
     constraint: ContainsStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        contains(value: string, options?: IConstraintOptions): this;
-    }
-}

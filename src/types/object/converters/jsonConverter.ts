@@ -30,13 +30,12 @@ registerConverter.extend({
 declare module '../objectSchema' {
 
     interface ObjectSchema {
-        toJson(options?: IConverterOptions): this;
     }
 }
 
-declare module '../../array/arraySchema' {
-
-    interface ArraySchema {
-        toJson(options?: IConverterOptions): this;
-    }
-}
+// declare module '../../../../index' {
+//
+//     interface ArraySchema {
+//         toJson(options?: IConverterOptions): this;
+//     }
+// }

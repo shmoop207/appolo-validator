@@ -34,11 +34,5 @@ registerConstraint.extend({
     constraint: MaxArgsConstraint
 });
 
-declare module '../functionSchema' {
 
-
-    interface FunctionSchema {
-        maxArgs(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
 

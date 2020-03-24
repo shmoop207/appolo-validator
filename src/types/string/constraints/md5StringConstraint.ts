@@ -26,9 +26,4 @@ registerConstraint.extend({
     constraint: Md5StringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        md5(options?: IConstraintOptions): this;
-    }
-}

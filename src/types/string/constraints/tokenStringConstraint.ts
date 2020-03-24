@@ -28,9 +28,3 @@ registerConstraint.extend({
     constraint: TokenStringConstraint
 });
 
-declare module '../stringSchema' {
-
-    interface StringSchema {
-        token(options?: IConstraintOptions): this;
-    }
-}

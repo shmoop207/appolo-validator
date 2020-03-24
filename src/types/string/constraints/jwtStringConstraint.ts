@@ -31,9 +31,4 @@ registerConstraint.extend({
     constraint: JwtStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        jwt(options?: IConstraintOptions): this;
-    }
-}

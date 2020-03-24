@@ -35,4 +35,11 @@ registerConstraint_1.registerConstraint.extend({
     name: "contains",
     constraint: ContainsConstraint
 });
+// declare module '../../../../index' {
+//
+//
+//     interface ArraySchema {
+//         contains(item: any | Ref, options?: IConstraintOptions): this;
+//     }
+// }
 //# sourceMappingURL=containsConstraint.js.map

@@ -31,10 +31,4 @@ registerConverter.extend({
 });
 
 
-declare module '../stringSchema' {
-
-    interface StringSchema {
-        slugify(options?: IConverterOptions): this;
-    }
-}
 

@@ -43,11 +43,5 @@ registerConstraint.extend({
     constraint: WithoutConstraint
 });
 
-declare module '../objectSchema' {
 
-
-    interface ObjectSchema {
-        without(key: string, peers: string | string[], options?: IConstraintOptions): this;
-    }
-}
 

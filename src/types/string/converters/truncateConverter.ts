@@ -28,10 +28,3 @@ registerConverter.extend({
 });
 
 
-declare module '../stringSchema' {
-
-    interface StringSchema {
-        truncate(limit: number, options?: IConverterOptions): this;
-    }
-}
-

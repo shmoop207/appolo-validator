@@ -29,9 +29,3 @@ registerConstraint.extend({
     constraint: BooleanConstraint
 });
 
-declare module '../booleanSchema' {
-
-    interface BooleanSchema {
-        isBoolean(options?: IConstraintOptions): this;
-    }
-}

@@ -26,9 +26,4 @@ registerConstraint.extend({
     constraint: MaxStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        max(limit: number, options?: IConstraintOptions): this;
-    }
-}

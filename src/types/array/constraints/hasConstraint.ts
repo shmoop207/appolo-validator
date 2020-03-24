@@ -44,11 +44,4 @@ registerConstraint.extend({
     constraint: ContainsConstraint
 });
 
-declare module '../arraySchema' {
-
-
-    interface ArraySchema {
-        has(item:AnySchema, options?: IConstraintOptions): this;
-    }
-}
 

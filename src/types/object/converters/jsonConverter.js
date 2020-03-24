@@ -21,4 +21,10 @@ registerConverter_1.registerConverter.extend({
     name: "toJson",
     converter: JsonConverter
 });
+// declare module '../../../../index' {
+//
+//     interface ArraySchema {
+//         toJson(options?: IConverterOptions): this;
+//     }
+// }
 //# sourceMappingURL=jsonConverter.js.map

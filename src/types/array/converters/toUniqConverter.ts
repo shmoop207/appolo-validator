@@ -25,10 +25,3 @@ registerConverter.extend({
     name: "toUniq",
     converter: ToUniqConverter
 });
-
-declare module '../ArraySchema' {
-
-    interface ArraySchema {
-        toUniq(fn?: ((item: any, index?: number) => any), options?: IConverterOptions): this;
-    }
-}

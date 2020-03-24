@@ -31,10 +31,4 @@ registerConstraint.extend({
     constraint: InstanceOfConstraint
 });
 
-declare module '../objectSchema' {
-
-    interface ObjectSchema {
-        instanceOf(value:any, options?: IConstraintOptions): this;
-    }
-}
 

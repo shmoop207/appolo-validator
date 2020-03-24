@@ -33,9 +33,4 @@ registerConstraint.extend({
     constraint: BufferConstraint
 });
 
-declare module '../bufferSchema' {
 
-    interface BufferSchema {
-        isBuffer(options?: IConstraintOptions): this;
-    }
-}

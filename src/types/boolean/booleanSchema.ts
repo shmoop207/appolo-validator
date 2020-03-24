@@ -2,6 +2,7 @@ import {AnySchema} from "../any/anySchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
 import {ISchemaOptions, IValidateOptions} from "../../interfaces/IOptions";
 import {registerSchema} from "../../schema/registerSchema";
+import {IConverterOptions} from "../../interfaces/IConverterOptions";
 
 export class BooleanSchema extends AnySchema {
 
@@ -18,5 +19,11 @@ export function boolean(options: IConstraintOptions & ISchemaOptions &  { truthy
     return schema
         .isBoolean(options)
         .toBoolean(options,{runIf: (params) => params.validateOptions.convert});
+
+}
+
+export interface BooleanSchema {
+    isBoolean(options?: IConstraintOptions): this;
+    toBoolean(opts: { truthy?: any[], falsy?: any[] }, options?: IConverterOptions): this;
 
 }

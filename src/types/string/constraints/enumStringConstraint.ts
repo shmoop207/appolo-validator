@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: EnumStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        enum(enumType: any, options?: IConstraintOptions): this;
-    }
-}

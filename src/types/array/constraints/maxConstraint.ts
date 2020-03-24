@@ -32,11 +32,3 @@ registerConstraint.extend({
     constraint: MaxConstraint
 });
 
-declare module '../arraySchema' {
-
-
-    interface ArraySchema {
-        max(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
-

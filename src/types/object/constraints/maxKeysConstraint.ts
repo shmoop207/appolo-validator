@@ -32,11 +32,5 @@ registerConstraint.extend({
     constraint: MaxKeysConstraint
 });
 
-declare module '../objectSchema' {
 
-
-    interface ObjectSchema {
-        maxKeys(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
 

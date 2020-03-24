@@ -32,11 +32,3 @@ registerConstraint.extend({
     constraint: MinConstraint
 });
 
-declare module '../arraySchema' {
-
-
-    interface ArraySchema {
-        min(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
-

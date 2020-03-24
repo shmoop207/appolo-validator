@@ -26,9 +26,4 @@ registerConstraint.extend({
     constraint: NumericStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        numeric(options?: IConstraintOptions): this;
-    }
-}

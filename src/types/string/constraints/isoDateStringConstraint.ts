@@ -28,9 +28,3 @@ registerConstraint.extend({
     constraint: IsoDateStringConstraint
 });
 
-declare module '../stringSchema' {
-
-    interface StringSchema {
-        isoDate(options?: IConstraintOptions): this;
-    }
-}

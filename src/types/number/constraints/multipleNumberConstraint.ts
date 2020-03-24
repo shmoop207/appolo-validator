@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: MultipleNumberConstraint
 });
 
-declare module '../numberSchema' {
 
-    interface NumberSchema {
-        multiple(base: number, options?: IConstraintOptions): this;
-    }
-}

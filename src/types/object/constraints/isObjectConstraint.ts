@@ -32,10 +32,4 @@ registerConstraint.extend({
     constraint: IsObjectConstraint
 });
 
-declare module '../objectSchema' {
-
-    interface ObjectSchema {
-        isObject(options?: IConstraintOptions): this;
-    }
-}
 

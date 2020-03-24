@@ -32,11 +32,5 @@ registerConstraint.extend({
     constraint: SizeConstraint
 });
 
-declare module '../objectSchema' {
 
-
-    interface ObjectSchema {
-        size(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
 

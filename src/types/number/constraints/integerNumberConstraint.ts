@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: IntegerNumberConstraint
 });
 
-declare module '../numberSchema' {
 
-    interface NumberSchema {
-        integer(options?: IConstraintOptions): this;
-    }
-}

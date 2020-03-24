@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: SlugStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        slug(options?: IConstraintOptions): this;
-    }
-}

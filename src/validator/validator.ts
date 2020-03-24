@@ -9,7 +9,6 @@ import {When} from "../when/when";
 import {Classes} from "appolo-utils";
 import {object} from "../../index";
 import {ValidationErrorsError} from "../common/errors/ValidationErrorsError";
-import {Schema} from "../schema/registerSchema";
 
 @define()
 @singleton()
@@ -18,7 +17,7 @@ export class Validator {
     @injectFactoryMethod(SchemaValidator) private createSchemaValidator: () => SchemaValidator;
 
 
-    public validate(schema: Schema | When | IClass, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {
+    public validate(schema: AnySchema | When | IClass, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {
 
         let validator = this.createSchemaValidator();
 
@@ -34,7 +33,7 @@ export class Validator {
 
     }
 
-    public getSchema(schema: AnySchema | Schema | When | IClass): AnySchema {
+    public getSchema(schema: AnySchema | AnySchema | When | IClass): AnySchema {
         return SchemaValidator.getSchemaFromParams(schema)
     }
 

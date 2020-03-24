@@ -2,10 +2,12 @@ import "reflect-metadata";
 import {createApp} from "appolo-engine"
 import {Promises, Objects} from "appolo-utils";
 
+
+
 import {ValidatorDefaults} from "./src/defaults/defaults";
 import {Validator} from "./src/validator/validator";
 import {IValidateOptions, IOptions, ISchemaOptions} from "./src/interfaces/IOptions";
-import {any} from "./src/types/any/anySchema";
+import {any,AnySchema} from "./src/types/any/anySchema";
 import {number} from "./src/types/number/numberSchema";
 import {string} from "./src/types/string/stringSchema";
 import {array} from "./src/types/array/arraySchema";
@@ -21,7 +23,6 @@ import {date} from "./src/types/date/dateSchema";
 import {registerConstraint} from "./src/schema/registerConstraint";
 import {registerConverter} from "./src/schema/registerConverter";
 import {schema} from "./src/decorators/decorators";
-import {AnySchema} from "./src/types/any/anySchema";
 import {NumberSchema} from "./src/types/number/numberSchema";
 import {StringSchema} from "./src/types/string/stringSchema";
 import {ArraySchema} from "./src/types/array/arraySchema";
@@ -101,6 +102,7 @@ import './src/types/any/constraints/validConstraint';
 import './src/types/any/constraints/allowConstraint';
 import './src/types/any/converters/defaultConverter';
 import './src/types/any/converters/promiseConverter';
+import './src/when/whenConstraint';
 
 import './src/types/string/constraints/alphanumStringConstraint';
 import './src/types/string/constraints/alphaStringConstraint';
@@ -108,7 +110,7 @@ import './src/types/string/constraints/asciiStringConstraint';
 import './src/types/string/constraints/base64StringConstraint';
 import './src/types/string/constraints/domainStringConstraint';
 import './src/types/string/constraints/emailStringConstraint';
-import './src/types/string/constraints/emailStringConstraint';
+import './src/types/string/constraints/enumStringConstraint';
 import './src/types/string/constraints/hashStringConstraint';
 import './src/types/string/constraints/hexadecimalStringConstraint';
 import './src/types/string/constraints/ipStringConstraint';
@@ -137,11 +139,16 @@ import './src/types/string/converters/trimConverter';
 import './src/types/string/converters/truncateConverter';
 import {IConstraint} from "./src/interfaces/IConstraint";
 import {IConverter} from "./src/interfaces/IConverter";
+import { registerSchema} from "./src/schema/registerSchema";
+import {When} from "./src/when/when";
+import {IConstraintOptions} from "./src/interfaces/IConstraintOptions";
 
 
 export {
+    registerSchema,
     registerConstraint,
     registerConverter,
+    AnySchema,
     Validator,
     any,
     number,
@@ -159,8 +166,8 @@ export {
     boolean,
     IValidateOptions,
     IOptions,
-    ISchemaOptions,
-    AnySchema, ValidationErrorsError, ValidationError, FunctionSchema, IConstraint,IConverter,
+    ISchemaOptions, When,
+     ValidationErrorsError, ValidationError, FunctionSchema, IConstraint, IConverter,
     NumberSchema, StringSchema, DateSchema, BufferSchema, BooleanSchema, ObjectSchema, ArraySchema,
 }
 

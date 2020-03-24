@@ -26,9 +26,4 @@ registerConstraint.extend({
     constraint: UuidStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        regex(regex: RegExp, options?: IConstraintOptions): this;
-    }
-}

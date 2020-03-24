@@ -29,9 +29,3 @@ registerConstraint.extend({
     blackList: true
 });
 
-declare module '../anySchema' {
-
-    interface AnySchema {
-        forbidden(options?: IConstraintOptions): this;
-    }
-}

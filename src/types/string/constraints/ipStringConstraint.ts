@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: IpStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        ip(options?: IConstraintOptions): this;
-    }
-}

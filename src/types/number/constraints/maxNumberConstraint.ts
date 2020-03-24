@@ -28,9 +28,3 @@ registerConstraint.extend({
     constraint: MaxNumberConstraint
 });
 
-declare module '../numberSchema' {
-
-    interface NumberSchema {
-        max(max: number | Ref, options?: IConstraintOptions): this;
-    }
-}

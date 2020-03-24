@@ -26,9 +26,4 @@ registerConstraint.extend({
     constraint: MinStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        min(limit: number, options?: IConstraintOptions): this;
-    }
-}

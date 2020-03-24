@@ -8,7 +8,7 @@ import {ArraySchema} from "../arraySchema";
 
 export class ArrayConstraint implements IConstraint {
 
-    public  validate(args: ValidationParams):IConstraintValidateResult {
+    public validate(args: ValidationParams): IConstraintValidateResult {
 
         let isValid = Array.isArray(args.value);
 
@@ -30,9 +30,3 @@ registerConstraint.extend({
     constraint: ArrayConstraint
 });
 
-declare module '../arraySchema' {
-
-    interface ArraySchema {
-        isArray(options?: IConstraintOptions): this;
-    }
-}

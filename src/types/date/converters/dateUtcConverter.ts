@@ -27,10 +27,3 @@ registerConverter.extend({
     name: "toUtc",
     converter: DateConverter
 });
-
-declare module '../dateSchema' {
-
-    interface DateSchema {
-        toUtc(options?: IConverterOptions): this;
-    }
-}

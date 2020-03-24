@@ -19,4 +19,10 @@ registerConverter_1.registerConverter.extend({
     name: "toSort",
     converter: ToSortConverter
 });
+// declare module '../../../../index' {
+//
+//     interface ArraySchema {
+//         toSort(fn?: ((item: any) => any), options?: IConverterOptions): this;
+//     }
+// }
 //# sourceMappingURL=toSortConverter.js.map

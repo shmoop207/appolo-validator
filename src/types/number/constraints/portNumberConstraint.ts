@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: PortNumberConstraint
 });
 
-declare module '../numberSchema' {
 
-    interface NumberSchema {
-        port(options?: IConstraintOptions): this;
-    }
-}

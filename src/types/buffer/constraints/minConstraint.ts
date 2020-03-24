@@ -30,11 +30,4 @@ registerConstraint.extend({
     constraint: MinConstraint
 });
 
-declare module '../bufferSchema' {
-
-
-    interface BufferSchema {
-        min(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
 

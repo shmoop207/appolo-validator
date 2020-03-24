@@ -34,9 +34,4 @@ registerConstraint.extend({
     constraint: StringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        isString(options?: IConstraintOptions): this;
-    }
-}

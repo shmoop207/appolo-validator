@@ -8,6 +8,7 @@ import {ObjectSchema} from "../object/objectSchema";
 import {FuncConstraint} from "./constraints/funcConstraint";
 import {registerSchema} from "../../schema/registerSchema";
 import {ArraySchema} from "../array/arraySchema";
+import {Ref} from "../../schema/ref";
 
 export class FunctionSchema extends ObjectSchema {
 
@@ -27,3 +28,13 @@ export function func(options?: IConstraintOptions) {
 
 
 }
+
+export interface FunctionSchema {
+    argsSize(limit: number | Ref, options?: IConstraintOptions): this;
+    minArgs(limit: number | Ref, options?: IConstraintOptions): this;
+    maxArgs(limit: number | Ref, options?: IConstraintOptions): this;
+    isClass( options?: IConstraintOptions): this;
+    isFunction( options?: IConstraintOptions): this;
+
+}
+

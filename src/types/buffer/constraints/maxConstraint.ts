@@ -30,11 +30,5 @@ registerConstraint.extend({
     constraint: MaxConstraint
 });
 
-declare module '../bufferSchema' {
 
-
-    interface BufferSchema {
-        max(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
 

@@ -21,11 +21,6 @@ registerConverter.extend({
 });
 
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        decode(options?: IConverterOptions): this;
-    }
-}
 
 

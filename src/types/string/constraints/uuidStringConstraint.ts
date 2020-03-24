@@ -28,9 +28,3 @@ registerConstraint.extend({
     constraint: UuidStringConstraint
 });
 
-declare module '../stringSchema' {
-
-    interface StringSchema {
-        uuid(options?: IConstraintOptions): this;
-    }
-}

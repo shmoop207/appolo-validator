@@ -30,9 +30,4 @@ registerConstraint.extend({
     constraint: HexadecimalStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        hexadecimal(options?: IConstraintOptions): this;
-    }
-}

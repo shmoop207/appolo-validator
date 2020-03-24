@@ -21,11 +21,4 @@ registerConverter.extend({
 });
 
 
-declare module '../stringSchema' {
-
-    interface StringSchema {
-        replace(searchValue: string | RegExp, replaceValue: string, options?: IConverterOptions): this;
-    }
-}
-
 

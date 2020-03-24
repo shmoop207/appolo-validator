@@ -42,9 +42,4 @@ registerConstraint.extend({
     constraint: HashStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        hash(type: "md5" | "md4" | "sha1" | "sha256" | "sha384" | "sha512", options?: IConstraintOptions): this;
-    }
-}

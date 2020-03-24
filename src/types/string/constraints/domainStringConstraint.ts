@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: DomainStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        domain(options?: IConstraintOptions): this;
-    }
-}

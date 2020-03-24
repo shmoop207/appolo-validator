@@ -5,7 +5,6 @@ import {any, AnySchema} from "../anySchema";
 import {Promises} from "appolo-utils";
 import {truncate} from "fs";
 import {Validator} from "../../../validator/validator";
-import {Schema} from "../../../schema/registerSchema";
 
 export class OrConstraint implements IConstraint {
 
@@ -53,21 +52,14 @@ registerConstraint.extend({
     whiteList: true
 });
 
-declare module '../anySchema' {
 
-
-
-    interface AnySchema {
-        or(schemas: Schema[] | Schema, options?: IConstraintOptions): this;
-    }
-}
 
 export function or(schema: AnySchema | AnySchema[]): AnySchema {
 
     if (Array.isArray(schema)) {
         let [first, ...rest] = schema;
 
-        return first.or(rest);
+        return (first.or(rest) as AnySchema);
     }
 
     return schema

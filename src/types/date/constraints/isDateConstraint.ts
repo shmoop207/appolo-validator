@@ -32,9 +32,4 @@ registerConstraint.extend({
     constraint: isDateConstraint
 });
 
-declare module '../dateSchema' {
 
-    interface DateSchema {
-        isDate(options?: IConstraintOptions): this;
-    }
-}

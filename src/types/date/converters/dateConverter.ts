@@ -60,10 +60,3 @@ registerConverter.extend({
     name: "format",
     converter: DateConverter
 });
-
-declare module '../dateSchema' {
-
-    interface DateSchema {
-        format(format?: string, options?: IConverterOptions): this;
-    }
-}

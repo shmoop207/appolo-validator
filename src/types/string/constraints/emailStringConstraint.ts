@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: EmailStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        email(options?: IConstraintOptions): this;
-    }
-}

@@ -19,10 +19,3 @@ registerConverter.extend({
     name: "default",
     converter: DefaultConverter
 });
-
-declare module '../anySchema' {
-
-    interface AnySchema {
-        default(value: any, options?: IConverterOptions): this;
-    }
-}

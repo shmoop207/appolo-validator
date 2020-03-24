@@ -24,10 +24,4 @@ registerConverter.extend({
 });
 
 
-declare module '../stringSchema' {
-
-    interface StringSchema {
-        sanitize(options?: IConverterOptions): this;
-    }
-}
 

@@ -11,6 +11,22 @@ import {NumberSchema} from "../number/numberSchema";
 import {registerSchema} from "../../schema/registerSchema";
 import {Objects, Arrays} from "appolo-utils";
 import {IContextSchema} from "../../interfaces/IContext";
+import {IConverterOptions} from "../../interfaces/IConverterOptions";
+import {When} from "../../when/when";
+
+export interface SchemaWrapper {
+    getContext(name: string): any
+
+    context(): { [index: string]: any }
+
+    converters(): IConverterSchema[]
+
+    constraints(): IConstraintSchema[]
+
+    converters(): IConverterSchema[]
+
+    getOptions(): ISchemaOptions
+}
 
 export class AnySchema {
 
@@ -30,19 +46,19 @@ export class AnySchema {
         this._constraintOptions = constraintOptions || {};
     }
 
-    public get context() {
+    protected get context() {
         return this._context;
     }
 
-    public get constraints(): IConstraintSchema[] {
+    protected get constraints(): IConstraintSchema[] {
         return this._constraints;
     }
 
-    public get converters(): IConverterSchema[] {
+    protected get converters(): IConverterSchema[] {
         return this._converters;
     }
 
-    public get contexts(): IContextSchema[] {
+    protected get contexts(): IContextSchema[] {
         return this._contexts;
     }
 
@@ -64,7 +80,7 @@ export class AnySchema {
         return this;
     }
 
-    public getContext(name: string): any {
+    protected getContext(name: string): any {
         return this._contexts[name];
 
     }
@@ -75,22 +91,22 @@ export class AnySchema {
         return this;
     }
 
-    public getOptions() {
+    protected getOptions() {
         return this._options;
     }
 
-    addConstraint(schema: IConstraintSchema): AnySchema {
+    protected addConstraint(schema: IConstraintSchema): AnySchema {
         schema.options = Object.assign({}, this._constraintOptions, schema.options);
         this._constraints.push(schema);
         return this
     }
 
-    public addConverter(schema: IConverterSchema, top: boolean = false): AnySchema {
+    protected addConverter(schema: IConverterSchema, top: boolean = false): AnySchema {
         top ? this._converters.unshift(schema) : this._converters.push(schema);
         return this
     }
 
-    public addContext(schema: IContextSchema, top: boolean = false): AnySchema {
+    protected addContext(schema: IContextSchema, top: boolean = false): AnySchema {
         top ? this._contexts.unshift(schema) : this._contexts.push(schema);
         return this
     }
@@ -102,3 +118,19 @@ export function any(options?: IConstraintOptions) {
     return registerSchema.extend<AnySchema>({type: AnySchema, options});
 }
 
+export interface AnySchema {
+    allow(values: any[], options?: IConstraintOptions): this;
+    and(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
+    forbidden(options?: IConstraintOptions): this;
+    invalid(values: any[], options?: IConstraintOptions): this;
+    optional(options?: IConstraintOptions): this;
+    or(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
+    required(options?: IConstraintOptions): this;
+    valid(values: any[], options?: IConstraintOptions): this;
+    default(value: any, options?: IConverterOptions): this;
+    await(options?: IConverterOptions): this;
+
+    if(params: When): this;
+
+
+}

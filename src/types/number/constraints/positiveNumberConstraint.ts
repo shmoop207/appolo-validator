@@ -28,9 +28,3 @@ registerConstraint.extend({
     constraint: PositiveNumberConstraint
 });
 
-declare module '../numberSchema' {
-
-    interface NumberSchema {
-        positive(options?: IConstraintOptions): this;
-    }
-}

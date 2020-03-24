@@ -57,12 +57,7 @@ registerConstraint.extend({
     blackList: true
 });
 
-declare module '../anySchema' {
 
-    interface AnySchema {
-        and(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
-    }
-}
 
 export function and(schema: AnySchema | AnySchema[]): AnySchema {
     return any().and(schema);

@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: NegativeNumberConstraint
 });
 
-declare module '../numberSchema' {
 
-    interface NumberSchema {
-        negative(options?: IConstraintOptions): this;
-    }
-}

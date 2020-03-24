@@ -9,6 +9,6 @@
     "experimentalDecorators": true,
     "moduleResolution": "node",
     "allowJs": false,
-    "preserveConstEnums": true
+    "preserveConstEnums": true,
   }
 }

@@ -30,9 +30,4 @@ registerConstraint.extend({
     constraint: AsciiStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        ascii(options?: IConstraintOptions): this;
-    }
-}

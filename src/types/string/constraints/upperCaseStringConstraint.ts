@@ -30,9 +30,4 @@ registerConstraint.extend({
     constraint: UpperCaseStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        uppercase(options?: IConstraintOptions): this;
-    }
-}

@@ -26,9 +26,9 @@ registerConverter.extend({
     converter: ToSortConverter
 });
 
-declare module '../ArraySchema' {
-
-    interface ArraySchema {
-        toSort(fn?: ((item: any) => any), options?: IConverterOptions): this;
-    }
-}
+// declare module '../../../../index' {
+//
+//     interface ArraySchema {
+//         toSort(fn?: ((item: any) => any), options?: IConverterOptions): this;
+//     }
+// }

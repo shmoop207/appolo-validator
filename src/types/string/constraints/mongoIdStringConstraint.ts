@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: JsonStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        mongoId(options?: IConstraintOptions): this;
-    }
-}

@@ -42,10 +42,3 @@ registerConstraint.extend({
     constraint: MinConstraint
 });
 
-declare module '../dateSchema' {
-
-
-    interface DateSchema {
-        min(date: Date | string | number | Ref,format?:string, options?: IConstraintOptions): this;
-    }
-}

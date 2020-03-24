@@ -19,10 +19,3 @@ registerConverter.extend({
     name: "toInteger",
     converter: IntegerConverter
 });
-
-declare module '../numberSchema' {
-
-    interface NumberSchema {
-        toInteger(options?: IConverterOptions): this;
-    }
-}

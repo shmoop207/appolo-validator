@@ -36,11 +36,4 @@ registerConstraint.extend({
     constraint: UniqConstraint
 });
 
-declare module '../arraySchema' {
-
-
-    interface ArraySchema {
-        uniq(fn?: ((item: any, index?: number) => any), options?: IConstraintOptions): this;
-    }
-}
 

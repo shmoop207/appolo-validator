@@ -38,9 +38,4 @@ registerConstraint.extend({
     constraint: Base64StringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        base64(options?: IConstraintOptions): this;
-    }
-}

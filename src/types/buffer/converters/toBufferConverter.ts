@@ -19,10 +19,3 @@ registerConverter.extend({
     name: "toBuffer",
     converter: ToBufferConverterConverter
 });
-
-declare module '../bufferSchema' {
-
-    interface BufferSchema {
-        toBuffer(encoding: "ascii" | "utf8" | "utf-8" | "utf16le" | "ucs2" | "ucs-2" | "base64" | "latin1" | "binary" | "hex", options?: IConverterOptions): this;
-    }
-}

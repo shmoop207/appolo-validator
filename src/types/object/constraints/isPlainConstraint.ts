@@ -32,10 +32,4 @@ registerConstraint.extend({
     constraint: IsPlainConstraint
 });
 
-declare module '../objectSchema' {
-
-    interface ObjectSchema {
-        isPlain( options?: IConstraintOptions): this;
-    }
-}
 

@@ -32,11 +32,5 @@ registerConstraint.extend({
     constraint: MinKeysConstraint
 });
 
-declare module '../objectSchema' {
 
-
-    interface ObjectSchema {
-        minKeys(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
 

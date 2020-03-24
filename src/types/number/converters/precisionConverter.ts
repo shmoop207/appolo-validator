@@ -22,9 +22,3 @@ registerConverter.extend({
     converter: PrecisionConverter
 });
 
-declare module '../numberSchema' {
-
-    interface NumberSchema {
-        toPrecision(precision: number, options?: IConverterOptions): this;
-    }
-}

@@ -32,11 +32,4 @@ registerConstraint.extend({
     constraint: SizeConstraint
 });
 
-declare module '../arraySchema' {
-
-
-    interface ArraySchema {
-        size(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
 

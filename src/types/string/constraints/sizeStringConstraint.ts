@@ -27,9 +27,4 @@ registerConstraint.extend({
     constraint: SizeStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        size(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}

@@ -28,9 +28,4 @@ registerConstraint.extend({
     constraint: MinNumberConstraint
 });
 
-declare module '../numberSchema' {
 
-    interface NumberSchema {
-        min(min: number | Ref, options?: IConstraintOptions): this;
-    }
-}

@@ -8,28 +8,16 @@ interface IExtendParams {
     options: IConstraintOptions
 }
 
-type Omited =
-    "context"
-    | "constraints"
-    | "converters"
-    | "contexts"
-    | "getContext"
-    | "getOptions"
-    | "addConstraint"
-    | "addConverter"
-    | "addContext"
-
-export type Schema = Omit<AnySchema, Omited>
 
 export class RegisterSchema {
 
-    public extend<T extends Schema>(params: IExtendParams): Omit<DecoratorFn & T, Omited> {
+    public extend<T extends AnySchema>(params: IExtendParams): DecoratorFn & T {
 
         let schema = new params.type(params.options || {});
 
         let fn = registerDecorator.extend<T>({schema});
 
-        return fn as Omit<DecoratorFn & T, Omited>
+        return fn as DecoratorFn & T
     }
 }
 

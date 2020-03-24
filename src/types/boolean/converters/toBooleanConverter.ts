@@ -34,10 +34,3 @@ registerConverter.extend({
     name: "toBoolean",
     converter: ToBooleanConverter
 });
-
-declare module '../booleanSchema' {
-
-    interface BooleanSchema {
-        toBoolean(opts: { truthy?: any[], falsy?: any[] }, options?: IConverterOptions): this;
-    }
-}

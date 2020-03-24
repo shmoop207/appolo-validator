@@ -85,7 +85,7 @@ export class WhenConstraint implements IConstraint {
         }
     }
 
-    private async _validateSchemaResult(schema: AnySchema, value: any, params: ValidationParams):Promise<IConstraintValidateResult> {
+    private async _validateSchemaResult(schema: AnySchema, value: any, params: ValidationParams): Promise<IConstraintValidateResult> {
 
         let result = await this._validateSchema(schema, value, params);
 
@@ -121,10 +121,3 @@ registerConstraint.extend({
 });
 
 
-declare module '../types/any/anySchema' {
-
-    interface AnySchema {
-        if(params: When): this;
-
-    }
-}

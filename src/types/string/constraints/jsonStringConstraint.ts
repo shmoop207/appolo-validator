@@ -34,9 +34,4 @@ registerConstraint.extend({
     constraint: JsonStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        json(options?: IConstraintOptions): this;
-    }
-}

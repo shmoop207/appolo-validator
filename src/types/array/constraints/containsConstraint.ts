@@ -50,11 +50,11 @@ registerConstraint.extend({
     constraint: ContainsConstraint
 });
 
-declare module '../arraySchema' {
-
-
-    interface ArraySchema {
-        contains(item: any | Ref, options?: IConstraintOptions): this;
-    }
-}
+// declare module '../../../../index' {
+//
+//
+//     interface ArraySchema {
+//         contains(item: any | Ref, options?: IConstraintOptions): this;
+//     }
+// }
 

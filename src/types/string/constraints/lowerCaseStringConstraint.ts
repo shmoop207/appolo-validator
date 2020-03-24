@@ -30,9 +30,4 @@ registerConstraint.extend({
     constraint: LowerCaseStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        lowercase(options?: IConstraintOptions): this;
-    }
-}

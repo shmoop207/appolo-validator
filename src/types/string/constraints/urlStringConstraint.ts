@@ -56,9 +56,4 @@ registerConstraint.extend({
     constraint: UrlStringConstraint
 });
 
-declare module '../stringSchema' {
 
-    interface StringSchema {
-        url(options?: IConstraintOptions): this;
-    }
-}

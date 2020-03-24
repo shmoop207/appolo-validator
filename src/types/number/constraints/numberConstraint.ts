@@ -34,9 +34,4 @@ registerConstraint.extend({
     constraint: NumberConstraint
 });
 
-declare module '../numberSchema' {
 
-    interface NumberSchema {
-        float(options?: IConstraintOptions): this;
-    }
-}

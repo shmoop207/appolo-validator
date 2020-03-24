@@ -34,11 +34,4 @@ registerConstraint.extend({
     constraint: ArgsSizeConstraint
 });
 
-declare module '../functionSchema' {
-
-
-    interface FunctionSchema {
-        argsSize(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
 

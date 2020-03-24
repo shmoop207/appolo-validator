@@ -29,9 +29,3 @@ registerConstraint.extend({
     whiteList:true
 });
 
-declare module '../anySchema' {
-
-    interface AnySchema {
-        optional(options?: IConstraintOptions): this;
-    }
-}

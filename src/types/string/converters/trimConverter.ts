@@ -21,10 +21,3 @@ registerConverter.extend({
 });
 
 
-declare module '../stringSchema' {
-
-    interface StringSchema {
-        trim(options?: IConverterOptions): this;
-    }
-}
-

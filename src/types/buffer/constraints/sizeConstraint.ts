@@ -30,11 +30,4 @@ registerConstraint.extend({
     constraint: SizeConstraint
 });
 
-declare module '../bufferSchema' {
-
-
-    interface BufferSchema {
-        size(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
 

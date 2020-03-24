@@ -42,9 +42,4 @@ registerConstraint.extend({
     blackList: true
 });
 
-declare module '../anySchema' {
 
-    interface AnySchema {
-        valid(values: any[], options?: IConstraintOptions): this;
-    }
-}

@@ -28,9 +28,3 @@ registerConverter.extend({
     converter: PromiseConverter
 });
 
-declare module '../anySchema' {
-
-    interface AnySchema {
-        await(options?: IConverterOptions): this;
-    }
-}

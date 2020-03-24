@@ -34,11 +34,4 @@ registerConstraint.extend({
     constraint: MinArgsConstraint
 });
 
-declare module '../functionSchema' {
-
-
-    interface FunctionSchema {
-        minArgs(limit: number | Ref, options?: IConstraintOptions): this;
-    }
-}
 

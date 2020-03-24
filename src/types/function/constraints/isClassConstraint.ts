@@ -31,10 +31,5 @@ registerConstraint.extend({
     constraint: IsClassConstraint
 });
 
-declare module '../functionSchema' {
 
-    interface FunctionSchema {
-        isClass( options?: IConstraintOptions): this;
-    }
-}
 
