@@ -51,6 +51,18 @@ describe("validator", function () {
             result = await validator.validate(schema, { min: 5, max: 4 }, { groups: ["test2"] });
             result.errors.length.should.be.eq(0);
         });
+        it('should validate object when with group fn', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().keys({
+                min: index_1.number(),
+                max: index_1.number().min(5).groups(["test"])
+            });
+            let result = await validator.validate(schema, { min: 5, max: 4 }, { groups: ["test"] });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('max must be larger than 5');
+            result = await validator.validate(schema, { min: 5, max: 4 }, { groups: ["test2"] });
+            result.errors.length.should.be.eq(0);
+        });
         it('should validate object when with group else', async () => {
             let validator = await index_1.validation({ groups: ["test"] });
             let schema = index_1.object().keys({
@@ -241,6 +253,13 @@ describe("validator", function () {
             let result = await validator.validate(schema, [5, "aa"]);
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq('[1] must be a number');
+        });
+        it('should not validate array items on invalid array', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.array().items(index_1.number());
+            let result = await validator.validate(schema, 5);
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('value is not valid array');
         });
         it('should validate array with object', async () => {
             let validator = await index_1.validation();

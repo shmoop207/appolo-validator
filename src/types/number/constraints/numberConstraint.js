@@ -21,6 +21,6 @@ exports.NumberConstraint = NumberConstraint;
 registerConstraint_1.registerConstraint.extend({
     base: numberSchema_1.NumberSchema,
     name: "float",
-    constraint: NumberConstraint
+    constraint: NumberConstraint, blackList: true
 });
 //# sourceMappingURL=numberConstraint.js.map

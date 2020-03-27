@@ -21,6 +21,6 @@ exports.StringConstraint = StringConstraint;
 registerConstraint_1.registerConstraint.extend({
     base: stringSchema_1.StringSchema,
     name: "isString",
-    constraint: StringConstraint
+    constraint: StringConstraint, blackList: true
 });
 //# sourceMappingURL=stringConstraint.js.map

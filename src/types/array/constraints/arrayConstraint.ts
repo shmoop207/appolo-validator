@@ -20,13 +20,13 @@ export class ArrayConstraint implements IConstraint {
     }
 
     public get defaultMessage(): string {
-        return "${property} has valid array"
+        return "${property} is not valid array"
     }
 }
 
 registerConstraint.extend({
     base: ArraySchema,
     name: "isArray",
-    constraint: ArrayConstraint
+    constraint: ArrayConstraint, blackList: true
 });
 

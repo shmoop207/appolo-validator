@@ -26,11 +26,14 @@ class AnySchema {
         return this._contexts;
     }
     groups(group) {
-        this._constraintOptions.groups = appolo_utils_1.Arrays.arrayify(group);
+        group = appolo_utils_1.Arrays.arrayify(group);
+        this._constraintOptions.groups = group;
+        this._constraints.forEach(constraint => constraint.options.groups = group);
         return this;
     }
     runIf(fn) {
         this._constraintOptions.runIf = fn;
+        this._constraints.forEach(constraint => constraint.options.runIf = fn);
         return this;
     }
     options(options) {

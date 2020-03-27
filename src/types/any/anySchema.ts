@@ -62,14 +62,18 @@ export class AnySchema {
         return this._contexts;
     }
 
-    public groups(group: string | string[]) {
-        this._constraintOptions.groups = Arrays.arrayify(group);
+    public groups(group: string | string[]): this {
+        group = Arrays.arrayify(group);
+        this._constraintOptions.groups = group;
+        this._constraints.forEach(constraint => constraint.options.groups = group as string[]);
 
         return this;
     }
 
-    public runIf(fn: (params: ValidationParams) => boolean) {
+    public runIf(fn: (params: ValidationParams) => boolean): this {
         this._constraintOptions.runIf = fn;
+
+        this._constraints.forEach(constraint => constraint.options.runIf = fn);
 
         return this;
     }
@@ -85,7 +89,7 @@ export class AnySchema {
 
     }
 
-    public setContext(name: string, value: any) {
+    public setContext(name: string, value: any): this {
         this._contexts[name] = value;
 
         return this;

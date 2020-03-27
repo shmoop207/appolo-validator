@@ -1,6 +1,6 @@
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../../../interfaces/IConstraint";
 import {registerConstraint} from "../../../schema/registerConstraint";
-import {NumberSchema} from "../numberSchema";
+import {number, NumberSchema} from "../numberSchema";
 import {Ref} from "../../../schema/ref";
 import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 import {MinNumberConstraint} from "./minNumberConstraint";
@@ -31,7 +31,7 @@ export class NumberConstraint implements IConstraint {
 registerConstraint.extend({
     base: NumberSchema,
     name: "float",
-    constraint: NumberConstraint
+    constraint: NumberConstraint, blackList: true
 });
 
 

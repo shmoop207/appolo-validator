@@ -8,9 +8,9 @@ import {StringSchema} from "../stringSchema";
 
 export class StringConstraint implements IConstraint {
 
-    public  validate(params: ValidationParams): IConstraintValidateResult {
+    public validate(params: ValidationParams): IConstraintValidateResult {
 
-        let  value:string = params.value;
+        let value: string = params.value;
 
         if (typeof params.value !== "string") {
             return {isValid: false};
@@ -31,7 +31,7 @@ export class StringConstraint implements IConstraint {
 registerConstraint.extend({
     base: StringSchema,
     name: "isString",
-    constraint: StringConstraint
+    constraint: StringConstraint, blackList: true
 });
 
 

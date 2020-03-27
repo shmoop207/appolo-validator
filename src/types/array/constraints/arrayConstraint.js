@@ -11,13 +11,13 @@ class ArrayConstraint {
         return "array";
     }
     get defaultMessage() {
-        return "${property} has valid array";
+        return "${property} is not valid array";
     }
 }
 exports.ArrayConstraint = ArrayConstraint;
 registerConstraint_1.registerConstraint.extend({
     base: arraySchema_1.ArraySchema,
     name: "isArray",
-    constraint: ArrayConstraint
+    constraint: ArrayConstraint, blackList: true
 });
 //# sourceMappingURL=arrayConstraint.js.map

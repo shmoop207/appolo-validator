@@ -19,6 +19,6 @@ exports.IsObjectOrClassConstraint = IsObjectOrClassConstraint;
 registerConstraint_1.registerConstraint.extend({
     base: objectSchema_1.ObjectSchema,
     name: "isObjectOrClass",
-    constraint: IsObjectOrClassConstraint
+    constraint: IsObjectOrClassConstraint, blackList: true
 });
 //# sourceMappingURL=isObjectOrClassConstraint.js.map

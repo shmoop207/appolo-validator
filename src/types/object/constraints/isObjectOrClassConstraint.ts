@@ -29,7 +29,7 @@ export class IsObjectOrClassConstraint implements IConstraint {
 registerConstraint.extend({
     base: ObjectSchema,
     name: "isObjectOrClass",
-    constraint: IsObjectOrClassConstraint
+    constraint: IsObjectOrClassConstraint, blackList: true
 });
 
 

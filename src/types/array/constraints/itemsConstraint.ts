@@ -18,7 +18,11 @@ export class ItemsConstraint implements IConstraint {
         if (Array.isArray(schema)) {
             schema = any().or(schema);
         } else if (Objects.isPlain(schema)) {
-            schema = object().keys(schema as {[index:string]:AnySchema})
+            schema = object().keys(schema as { [index: string]: AnySchema })
+        }
+
+        if (!Array.isArray(params.value)) {
+            return {isValid: false}
         }
 
         let results = await Promises.map(params.value, (item, index) =>
