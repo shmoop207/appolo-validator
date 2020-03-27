@@ -11,7 +11,7 @@ import {Objects, Promises, Arrays} from "appolo-utils";
 import {ValidateDefaults} from "../defaults/defaults";
 import {Validator} from "../validator/validator";
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
-import {any, AnySchema, SchemaWrapper} from "../types/any/anySchema";
+import {any, SchemaWrapper} from "../types/any/anySchema";
 import {IConverterSchema} from "../interfaces/IConverterSchema";
 import {IConstraintOptions} from "../interfaces/IConstraintOptions";
 import {Ref} from "./ref";
@@ -21,6 +21,7 @@ import {PropertySymbol, RegisterDecorator, SchemaFnSymbol} from "../decorators/r
 import {object} from "../../index";
 import {SchemaSymbol} from "../decorators/decorators";
 import {ObjectSchema} from "../types/object/objectSchema";
+import {AnySchema} from "../../index";
 
 @define()
 export class SchemaValidator {

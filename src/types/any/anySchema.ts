@@ -120,14 +120,23 @@ export function any(options?: IConstraintOptions) {
 
 export interface AnySchema {
     allow(values: any[], options?: IConstraintOptions): this;
+
     and(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
+
     forbidden(options?: IConstraintOptions): this;
+
     invalid(values: any[], options?: IConstraintOptions): this;
+
     optional(options?: IConstraintOptions): this;
+
     or(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
+
     required(options?: IConstraintOptions): this;
+
     valid(values: any[], options?: IConstraintOptions): this;
+
     default(value: any, options?: IConverterOptions): this;
+
     await(options?: IConverterOptions): this;
 
     if(params: When): this;

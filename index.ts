@@ -3,11 +3,10 @@ import {createApp} from "appolo-engine"
 import {Promises, Objects} from "appolo-utils";
 
 
-
 import {ValidatorDefaults} from "./src/defaults/defaults";
 import {Validator} from "./src/validator/validator";
 import {IValidateOptions, IOptions, ISchemaOptions} from "./src/interfaces/IOptions";
-import {any,AnySchema} from "./src/types/any/anySchema";
+import {any, AnySchema} from "./src/types/any/anySchema";
 import {number} from "./src/types/number/numberSchema";
 import {string} from "./src/types/string/stringSchema";
 import {array} from "./src/types/array/arraySchema";
@@ -139,16 +138,17 @@ import './src/types/string/converters/trimConverter';
 import './src/types/string/converters/truncateConverter';
 import {IConstraint} from "./src/interfaces/IConstraint";
 import {IConverter} from "./src/interfaces/IConverter";
-import { registerSchema} from "./src/schema/registerSchema";
+import {registerSchema} from "./src/schema/registerSchema";
 import {When} from "./src/when/when";
 import {IConstraintOptions} from "./src/interfaces/IConstraintOptions";
+import {IConverterOptions} from "./src/interfaces/IConverterOptions";
 
 
 export {
+    IConstraintOptions, IConverterOptions,
     registerSchema,
     registerConstraint,
     registerConverter,
-    AnySchema,
     Validator,
     any,
     number,
@@ -167,9 +167,10 @@ export {
     IValidateOptions,
     IOptions,
     ISchemaOptions, When,
-     ValidationErrorsError, ValidationError, FunctionSchema, IConstraint, IConverter,
+    ValidationErrorsError, ValidationError, FunctionSchema, IConstraint, IConverter, AnySchema,
     NumberSchema, StringSchema, DateSchema, BufferSchema, BooleanSchema, ObjectSchema, ArraySchema,
 }
+
 
 export async function validation(options: IOptions = {}): Promise<Validator> {
 

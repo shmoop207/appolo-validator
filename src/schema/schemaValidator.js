@@ -4,12 +4,12 @@ const tslib_1 = require("tslib");
 const ValidationError_1 = require("../common/errors/ValidationError");
 const appolo_engine_1 = require("appolo-engine");
 const appolo_utils_1 = require("appolo-utils");
-const anySchema_1 = require("../types/any/anySchema");
 const ref_1 = require("./ref");
 const when_1 = require("../when/when");
 const registerDecorator_1 = require("../decorators/registerDecorator");
 const index_1 = require("../../index");
 const decorators_1 = require("../decorators/decorators");
+const index_2 = require("../../index");
 let SchemaValidator = class SchemaValidator {
     async validate(value, schema, options) {
         this._options = options;
@@ -179,11 +179,11 @@ let SchemaValidator = class SchemaValidator {
         if (schema[registerDecorator_1.SchemaFnSymbol] || schema[when_1.SchemaFnWhen]) {
             schema = schema[registerDecorator_1.SchemaFnSymbol] || schema[when_1.SchemaFnWhen];
         }
-        if (schema instanceof anySchema_1.AnySchema) {
+        if (schema instanceof index_2.AnySchema) {
             return schema;
         }
         if (schema instanceof when_1.When) {
-            return new anySchema_1.AnySchema().if(schema);
+            return new index_2.AnySchema().if(schema);
         }
         let meta = Reflect.getMetadata(registerDecorator_1.PropertySymbol, schema.prototype);
         if (!meta) {

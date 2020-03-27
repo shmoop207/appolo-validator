@@ -14,7 +14,7 @@ class RegisterDecorator {
         };
         fn[exports.SchemaFnSymbol] = schema;
         let schemaProto = Object.getPrototypeOf(schema);
-        let fnNames = [{ name: "options" }];
+        let fnNames = [{ name: "options" }, { name: "runIf" }, { name: "groups" }];
         while (schemaProto) {
             fnNames.push(...registerConstraint_1.registerConstraint.constraints.get(schemaProto.constructor) || []);
             fnNames.push(...registerConverter_1.registerConverter.converters.get(schemaProto.constructor) || []);

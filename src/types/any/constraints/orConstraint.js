@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const registerConstraint_1 = require("../../../schema/registerConstraint");
-const anySchema_1 = require("../anySchema");
+const __1 = require("../../../../");
 const appolo_utils_1 = require("appolo-utils");
 class OrConstraint {
     async validate(params) {
@@ -29,7 +29,7 @@ class OrConstraint {
 }
 exports.OrConstraint = OrConstraint;
 registerConstraint_1.registerConstraint.extend({
-    base: anySchema_1.AnySchema,
+    base: __1.AnySchema,
     name: "or",
     constraint: OrConstraint,
     whiteList: true

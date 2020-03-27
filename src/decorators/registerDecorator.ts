@@ -15,18 +15,18 @@ export class RegisterDecorator {
         let {schema} = params;
 
         let fn = function (this: AnySchema, target: any, propertyKey: string, descriptor: PropertyDescriptor) {
-            let validations = Reflector.getMetadata<{ [index: string]: AnySchema }>(PropertySymbol, target,undefined, {});
+            let validations = Reflector.getMetadata<{ [index: string]: AnySchema }>(PropertySymbol, target, undefined, {});
             validations[propertyKey] = schema;
         };
 
         fn[SchemaFnSymbol] = schema;
 
         let schemaProto = Object.getPrototypeOf(schema);
-        let fnNames = [{name: "options"}];
+        let fnNames = [{name: "options"}, {name: "runIf"}, {name: "groups"}];
 
         while (schemaProto) {
             fnNames.push(...registerConstraint.constraints.get(schemaProto.constructor) || []);
-            fnNames.push(...registerConverter.converters.get(schemaProto.constructor)||[]);
+            fnNames.push(...registerConverter.converters.get(schemaProto.constructor) || []);
             schemaProto = Object.getPrototypeOf(schemaProto)
         }
         for (let i = 0; i < fnNames.length; i++) {
