@@ -115,6 +115,29 @@ describe("validator", function () {
 
         });
 
+        it('should validate group and strip unknown ', async () => {
+            let validator = await validation({stripUnknown: true});
+
+            let schema = object().keys({
+                min: number(),
+                max: number().min(5).groups(["test"])
+            });
+
+            let result = await validator.validate(schema, {min: 5, max: 4}, {groups: ["test"]});
+
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('max must be larger than 5');
+
+
+            result = await validator.validate(schema, {min: 5, max: 4}, {groups: ["test2"]});
+
+            result.errors.length.should.be.eq(0);
+
+            result.value.should.be.deep.eq({min: 5})
+
+        });
+
+
         it('should validate object when with group else', async () => {
             let validator = await validation({groups: ["test"]});
 

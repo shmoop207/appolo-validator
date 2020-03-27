@@ -32,7 +32,7 @@ class KeysConstraint {
                     }
                 }
             }
-            else if (!schemasIndex[key] && args.validateOptions.stripUnknown) {
+            else if (args.validateOptions.stripUnknown && (!schemasIndex[key] || result.invalidGroup)) {
                 delete args.value[key];
             }
         }
@@ -46,11 +46,23 @@ class KeysConstraint {
         if (!schema) {
             return { errors: [], value: value };
         }
-        let result = await args.validator.validate(schema, value, Object.assign(Object.assign({}, (args.validateOptions || {})), { object: args.value, property: key, validateOnly: runTypes.validateOnly, convertOnly: runTypes.convertOnly }));
+        let schem = args.validator.getSchema(schema);
+        let constraintOptions = schem.getConstraintOptions();
+        if (this._checkForInValidGroup(constraintOptions.groups, args.validateOptions.groups)) {
+            return { errors: [], value: value, invalidGroup: true };
+        }
+        let result = await args.validator.validate(schem, value, Object.assign(Object.assign({}, (args.validateOptions || {})), { object: args.value, property: key, validateOnly: runTypes.validateOnly, convertOnly: runTypes.convertOnly }));
         if (runTypes.convertOnly && result.value != undefined) {
             args.value[key] = result.value;
         }
         return result;
+    }
+    _checkForInValidGroup(constraintGroups, validatorGroups) {
+        return (constraintGroups
+            && constraintGroups.length
+            && validatorGroups
+            && validatorGroups.length
+            && !constraintGroups.every(group => validatorGroups.indexOf(group) > -1));
     }
     get type() {
         return "IsObject";
@@ -60,7 +72,8 @@ class KeysConstraint {
     }
 }
 exports.KeysConstraint = KeysConstraint;
-registerConstraint_1.registerConstraint.extend({
+registerConstraint_1.registerConstraint
+    .extend({
     base: objectSchema_1.ObjectSchema,
     name: "keys",
     constraint: KeysConstraint

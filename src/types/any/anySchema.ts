@@ -26,6 +26,8 @@ export interface SchemaWrapper {
     converters(): IConverterSchema[]
 
     getOptions(): ISchemaOptions
+    getOptions(): ISchemaOptions
+    getConstraintOptions(): IConstraintOptions
 }
 
 export class AnySchema {
@@ -97,6 +99,10 @@ export class AnySchema {
 
     protected getOptions() {
         return this._options;
+    }
+
+    protected getConstraintOptions() {
+        return this._constraintOptions;
     }
 
     protected addConstraint(schema: IConstraintSchema): AnySchema {

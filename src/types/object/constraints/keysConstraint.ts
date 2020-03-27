@@ -53,7 +53,7 @@ export class KeysConstraint implements IConstraint {
                 }
 
 
-            } else if (!schemasIndex[key] && args.validateOptions.stripUnknown) {
+            } else if (args.validateOptions.stripUnknown && (!schemasIndex[key] || result.invalidGroup)) {
 
                 delete args.value[key];
 
@@ -68,14 +68,22 @@ export class KeysConstraint implements IConstraint {
         return {isValid: false, errors};
     }
 
-    private async _validateProperty(schemasIndex: { [index: string]: AnySchema }, key: string, args: ValidationParams, runTypes: { validateOnly?: boolean, convertOnly?: boolean } = {}): Promise<{ errors: ValidationError[], value: any }> {
+    private async _validateProperty(schemasIndex: { [index: string]: AnySchema }, key: string, args: ValidationParams, runTypes: { validateOnly?: boolean, convertOnly?: boolean } = {}): Promise<{ invalidGroup?: boolean, errors: ValidationError[], value: any }> {
         let schema = schemasIndex[key], value = args.value[key];
 
         if (!schema) {
             return {errors: [], value: value}
         }
 
-        let result = await args.validator.validate(schema, value, {
+        let schem = args.validator.getSchema(schema);
+
+        let constraintOptions = schem.getConstraintOptions();
+
+        if (this._checkForInValidGroup(constraintOptions.groups, args.validateOptions.groups)) {
+            return {errors: [], value: value, invalidGroup: true}
+        }
+
+        let result = await args.validator.validate(schem, value, {
             ...(args.validateOptions || {}),
             object: args.value,
             property: key,
@@ -90,6 +98,15 @@ export class KeysConstraint implements IConstraint {
         return result;
     }
 
+    private _checkForInValidGroup(constraintGroups: string[], validatorGroups: string[]): boolean {
+        return (constraintGroups
+            && constraintGroups.length
+            && validatorGroups
+            && validatorGroups.length
+            && !constraintGroups.every(group => validatorGroups.indexOf(group) > -1))
+    }
+
+
     public get type(): string {
         return "IsObject"
     }
@@ -99,11 +116,12 @@ export class KeysConstraint implements IConstraint {
     }
 }
 
-registerConstraint.extend({
-    base: ObjectSchema,
-    name: "keys",
-    constraint: KeysConstraint
-});
+registerConstraint
+    .extend({
+        base: ObjectSchema,
+        name: "keys",
+        constraint: KeysConstraint
+    });
 
 
 

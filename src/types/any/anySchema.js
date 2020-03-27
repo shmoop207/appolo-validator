@@ -50,6 +50,9 @@ class AnySchema {
     getOptions() {
         return this._options;
     }
+    getConstraintOptions() {
+        return this._constraintOptions;
+    }
     addConstraint(schema) {
         schema.options = Object.assign({}, this._constraintOptions, schema.options);
         this._constraints.push(schema);
