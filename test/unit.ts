@@ -2,7 +2,7 @@
 import chai = require('chai');
 import {Guid} from 'appolo-utils';
 import {
-    array,
+    array,validate,
     any,
     object,
     string,
@@ -1185,7 +1185,7 @@ describe("validator", function () {
             @schema(object().required())
             class A {
 
-                @number().min(5)
+                @validate.number().min(5)
                 private a: number
             }
 

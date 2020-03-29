@@ -156,6 +156,9 @@ const registerSchema_1 = require("./src/schema/registerSchema");
 exports.registerSchema = registerSchema_1.registerSchema;
 const when_2 = require("./src/when/when");
 exports.When = when_2.When;
+exports.validate = {
+    boolean: booleanSchema_1.boolean, any: anySchema_1.any, buffer: bufferSchema_1.buffer, date: dateSchema_1.date, func: functionSchema_1.func, object: objectSchema_1.object, array: arraySchema_1.array, string: stringSchema_1.string, number: numberSchema_1.number, when: when_1.when, or: orConstraint_1.or
+};
 async function validation(options = {}) {
     let app = appolo_engine_1.createApp({ root: __dirname });
     app.injector.addObject("options", appolo_utils_1.Objects.defaults({}, options, defaults_1.ValidatorDefaults));

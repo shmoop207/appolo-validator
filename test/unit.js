@@ -695,7 +695,7 @@ describe("validator", function () {
             let A = class A {
             };
             tslib_1.__decorate([
-                index_1.number().min(5)
+                index_1.validate.number().min(5)
             ], A.prototype, "a", void 0);
             A = tslib_1.__decorate([
                 index_1.schema(index_1.object().required())

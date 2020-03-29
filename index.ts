@@ -171,6 +171,9 @@ export {
     NumberSchema, StringSchema, DateSchema, BufferSchema, BooleanSchema, ObjectSchema, ArraySchema,
 }
 
+export let validate = {
+    boolean,any,buffer,date,func,object,array,string,number,when,or
+};
 
 export async function validation(options: IOptions = {}): Promise<Validator> {
 
