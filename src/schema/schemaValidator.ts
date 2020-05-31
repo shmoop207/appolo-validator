@@ -175,7 +175,7 @@ export class SchemaValidator {
                 return null;
             }
 
-            if (constraintSchema.options && constraintSchema.options.groups && !constraintSchema.options.groups.every(group => this._options.groups.indexOf(group) > -1)) {
+            if (this._options.groups && constraintSchema.options && constraintSchema.options.groups && !constraintSchema.options.groups.every(group => this._options.groups.indexOf(group) > -1)) {
                 return null;
             }
 

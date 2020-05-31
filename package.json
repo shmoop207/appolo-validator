@@ -14,7 +14,7 @@
     "test": "mocha test --exit"
   },
   "main": "index.js",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -24,9 +24,9 @@
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
-    "appolo-engine": "^7.0.0",
-    "appolo-utils": "^0.0.42",
-    "date-fns": "^2.11.0",
+    "appolo-engine": "^7.0.1",
+    "appolo-utils": "^0.0.53",
+    "date-fns": "^2.14.0",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
