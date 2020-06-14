@@ -112,7 +112,9 @@ let SchemaValidator = class SchemaValidator {
             if (constraintSchema.options && constraintSchema.options.runIf && !constraintSchema.options.runIf(params)) {
                 return null;
             }
-            if (this._options.groups && constraintSchema.options && constraintSchema.options.groups && !constraintSchema.options.groups.every(group => this._options.groups.indexOf(group) > -1)) {
+            if (constraintSchema.options && constraintSchema.options.groups
+                && constraintSchema.options.groups.length
+                && !constraintSchema.options.groups.every(group => (this._options.groups || []).indexOf(group) > -1)) {
                 return null;
             }
             params.args = this._prepareArgs(constraintSchema.args, params);

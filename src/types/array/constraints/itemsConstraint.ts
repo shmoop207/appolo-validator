@@ -25,7 +25,7 @@ export class ItemsConstraint implements IConstraint {
             return {isValid: false}
         }
 
-        let results = await Promises.map(params.value, (item, index) =>
+        let results = await Promises.map<any,{ errors: ValidationError[], value: any }>(params.value, (item, index) =>
             params.validator.validate(schema, item, {
                 ...(params.validateOptions || {}),
                 validateOnly: false,

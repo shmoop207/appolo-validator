@@ -32,7 +32,7 @@ export class KeysConstraint implements IConstraint {
 
         let keys = [...new Set(Object.keys(args.value || {}).concat(Object.keys(schemasIndex)))];
 
-        let results = await Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, {convertOnly: true}));
+        let results = await Promises.map<string, { invalidGroup?: boolean, errors: ValidationError[], value: any }>(keys, key => this._validateProperty(schemasIndex, key, args, {convertOnly: true}));
 
         results = await Promise.all(keys.map(key => this._validateProperty(schemasIndex, key, args, {validateOnly: true})));
 

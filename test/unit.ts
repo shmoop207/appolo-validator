@@ -75,6 +75,20 @@ describe("validator", function () {
 
         });
 
+        it('should validate object when with group not exists', async () => {
+            let validator = await validation({});
+
+            let schema = object().keys({
+                min: number(),
+                max: number().min(5).groups("test")
+            });
+
+            let result = await validator.validate(schema, {min: 5, max: 4});
+
+            result.errors.length.should.be.eq(0);
+
+        });
+
         it('should validate object when with group obj', async () => {
             let validator = await validation();
 

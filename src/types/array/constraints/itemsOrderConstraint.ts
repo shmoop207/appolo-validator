@@ -20,7 +20,7 @@ export class ItemsOrderConstraint implements IConstraint {
             return {isValid: false}
         }
 
-        let results = await Promises.map(schemas, (schema, i) => {
+        let results = await Promises.map<any,{ errors: ValidationError[], value: any }>(schemas, (schema, i) => {
             return params.validator.validate(schema, params.value[i], {
                 ...(params.validateOptions || {}),
                 object: params.value,
