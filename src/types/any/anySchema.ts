@@ -26,7 +26,9 @@ export interface SchemaWrapper {
     converters(): IConverterSchema[]
 
     getOptions(): ISchemaOptions
+
     getOptions(): ISchemaOptions
+
     getConstraintOptions(): IConstraintOptions
 }
 
@@ -130,6 +132,8 @@ export function any(options?: IConstraintOptions) {
 
 export interface AnySchema {
     allow(values: any[], options?: IConstraintOptions): this;
+
+    allowEmpty(options?: IConstraintOptions): this;
 
     and(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
 
