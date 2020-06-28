@@ -14,7 +14,7 @@
     "test": "mocha test --exit"
   },
   "main": "index.js",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "license": "MIT",
   "repository": {
     "type": "git",

@@ -26,12 +26,14 @@ describe("validator", function () {
     describe("When", () => {
         it('should validate object when', async () => {
 
-            let validator = await validation();
-
             let schema = object().keys({
                 min: number(),
                 max: when().fn(params => params.object.min == 5).then(number().min(5))
             });
+
+            let validator = await validation();
+
+
 
             let result = await validator.validate(schema, {min: 5, max: 4});
 

@@ -8,11 +8,11 @@ let should = chai.should();
 describe("validator", function () {
     describe("When", () => {
         it('should validate object when', async () => {
-            let validator = await index_1.validation();
             let schema = index_1.object().keys({
                 min: index_1.number(),
                 max: index_1.when().fn(params => params.object.min == 5).then(index_1.number().min(5))
             });
+            let validator = await index_1.validation();
             let result = await validator.validate(schema, { min: 5, max: 4 });
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq('max must be larger than 5');
