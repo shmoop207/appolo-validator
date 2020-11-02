@@ -1,9 +1,6 @@
 import {IConverter} from "../../../interfaces/IConverter";
 import {ValidationParams} from "../../../interfaces/IConstraint";
 import {registerConverter} from "../../../schema/registerConverter";
-import {IConverterOptions} from "../../../interfaces/IConverterOptions";
-import {Util} from "appolo-utils";
-import {ArraySchema} from "../../array/arraySchema";
 import {StringSchema} from "../stringSchema";
 
 export class SanitizeConverter implements IConverter {

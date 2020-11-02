@@ -1,9 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.SchemaValidator = void 0;
 const tslib_1 = require("tslib");
 const ValidationError_1 = require("../common/errors/ValidationError");
-const appolo_engine_1 = require("appolo-engine");
-const appolo_utils_1 = require("appolo-utils");
+const inject_1 = require("@appolo/inject");
+const utils_1 = require("@appolo/utils");
 const ref_1 = require("./ref");
 const when_1 = require("../when/when");
 const registerDecorator_1 = require("../decorators/registerDecorator");
@@ -15,7 +16,7 @@ let SchemaValidator = class SchemaValidator {
         this._options = options;
         this._schema = schema;
         this._value = value;
-        this._groupsIndex = options.groups ? appolo_utils_1.Arrays.keyBy(options.groups || []) : {};
+        this._groupsIndex = options.groups ? utils_1.Arrays.keyBy(options.groups || []) : {};
         if (options.convertOnly || !options.validateOnly) {
             await this._handleConverters(schema, options);
         }
@@ -72,14 +73,14 @@ let SchemaValidator = class SchemaValidator {
         if (whiteList.length == 0) {
             return false;
         }
-        let result = await appolo_utils_1.Promises.someResolved(whiteList.map(item => this._validateConstraint(item)), { fn: value => !value });
+        let result = await utils_1.Promises.someResolved(whiteList.map(item => this._validateConstraint(item)), { fn: value => !value });
         return result.length > 0;
     }
     async _checkBlackListConstraint(blackList) {
         if (blackList.length == 0) {
             return null;
         }
-        let result = await appolo_utils_1.Promises.someRejected(blackList.map(item => this._validateConstraint(item)), { fn: value => !value });
+        let result = await utils_1.Promises.someRejected(blackList.map(item => this._validateConstraint(item)), { fn: value => !value });
         if (!result.length) {
             return null;
         }
@@ -198,13 +199,13 @@ let SchemaValidator = class SchemaValidator {
     }
 };
 tslib_1.__decorate([
-    appolo_engine_1.inject()
+    inject_1.inject()
 ], SchemaValidator.prototype, "injector", void 0);
 tslib_1.__decorate([
-    appolo_engine_1.inject()
+    inject_1.inject()
 ], SchemaValidator.prototype, "validator", void 0);
 SchemaValidator = tslib_1.__decorate([
-    appolo_engine_1.define()
+    inject_1.define()
 ], SchemaValidator);
 exports.SchemaValidator = SchemaValidator;
 //# sourceMappingURL=schemaValidator.js.map

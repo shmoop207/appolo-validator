@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const appolo_utils_1 = require("appolo-utils");
+exports.registerConverter = exports.RegisterConverter = void 0;
+const utils_1 = require("@appolo/utils");
 class RegisterConverter {
     constructor() {
         this._converters = new Map();
@@ -15,7 +16,7 @@ class RegisterConverter {
             let config = {
                 args: args,
                 converter: params.converter,
-                options: appolo_utils_1.Objects.isPlain(options) ? options : {},
+                options: utils_1.Objects.isPlain(options) ? options : {},
             };
             this.addConverter(config);
             return this;

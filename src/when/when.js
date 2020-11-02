@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.when = exports.SchemaFnWhen = exports.When = void 0;
 const ref_1 = require("../schema/ref");
-const index_1 = require("appolo-utils/index");
+const utils_1 = require("@appolo/utils");
 const registerDecorator_1 = require("../decorators/registerDecorator");
 class When {
     constructor(prop) {
@@ -76,7 +77,7 @@ exports.SchemaFnWhen = "__SchemaFnWhen__";
 function when(prop) {
     let when = new When(prop);
     let fn = function (target, propertyKey, descriptor) {
-        let validations = index_1.Reflector.getMetadata(registerDecorator_1.PropertySymbol, target, undefined, {});
+        let validations = utils_1.Reflector.getMetadata(registerDecorator_1.PropertySymbol, target, undefined, {});
         validations[propertyKey] = when;
     };
     fn[exports.SchemaFnWhen] = when;

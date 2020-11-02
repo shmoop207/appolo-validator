@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BooleanConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const booleanSchema_1 = require("../booleanSchema");
 class BooleanConstraint {

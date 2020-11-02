@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ItemsConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
-const appolo_utils_1 = require("appolo-utils");
+const utils_1 = require("@appolo/utils");
 const anySchema_1 = require("../../any/anySchema");
 const arraySchema_1 = require("../arraySchema");
 const index_1 = require("../../../../index");
@@ -11,13 +12,13 @@ class ItemsConstraint {
         if (Array.isArray(schema)) {
             schema = anySchema_1.any().or(schema);
         }
-        else if (appolo_utils_1.Objects.isPlain(schema)) {
+        else if (utils_1.Objects.isPlain(schema)) {
             schema = index_1.object().keys(schema);
         }
         if (!Array.isArray(params.value)) {
             return { isValid: false };
         }
-        let results = await appolo_utils_1.Promises.map(params.value, (item, index) => params.validator.validate(schema, item, Object.assign(Object.assign({}, (params.validateOptions || {})), { validateOnly: false, convertOnly: false, object: params.value, property: index })));
+        let results = await utils_1.Promises.map(params.value, (item, index) => params.validator.validate(schema, item, Object.assign(Object.assign({}, (params.validateOptions || {})), { validateOnly: false, convertOnly: false, object: params.value, property: index })));
         let errors = ItemsConstraint.handleErrors(params, results);
         return { isValid: errors.length == 0, errors };
     }

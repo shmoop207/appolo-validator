@@ -9,7 +9,7 @@ import {IConverter, IConverterClass} from "../../interfaces/IConverter";
 import {registerDecorator} from "../../decorators/registerDecorator";
 import {NumberSchema} from "../number/numberSchema";
 import {registerSchema} from "../../schema/registerSchema";
-import {Objects, Arrays} from "appolo-utils";
+import {Objects, Arrays} from "@appolo/utils";
 import {IContextSchema} from "../../interfaces/IContext";
 import {IConverterOptions} from "../../interfaces/IConverterOptions";
 import {When} from "../../when/when";

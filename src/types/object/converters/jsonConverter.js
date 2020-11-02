@@ -1,13 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.JsonConverter = void 0;
 const registerConverter_1 = require("../../../schema/registerConverter");
 const objectSchema_1 = require("../objectSchema");
-const appolo_utils_1 = require("appolo-utils");
+const utils_1 = require("@appolo/utils");
 const arraySchema_1 = require("../../array/arraySchema");
 class JsonConverter {
     convert(params) {
         let value = params.value;
-        return typeof value === 'string' ? appolo_utils_1.Util.objects.tryParseJSON(value) || value : value;
+        return typeof value === 'string' ? utils_1.Util.objects.tryParseJSON(value) || value : value;
     }
 }
 exports.JsonConverter = JsonConverter;

@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.and = exports.AndConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const anySchema_1 = require("../anySchema");
-const appolo_utils_1 = require("appolo-utils");
+const utils_1 = require("@appolo/utils");
 class AndConstraint {
     async validate(params) {
         let schemas = params.args[0], value = params.value;
         if (!Array.isArray(schemas)) {
             schemas = [schemas];
         }
-        let results = await appolo_utils_1.Promises.someRejected(schemas.map((schema) => this._validateSchema(schema, value, params)), {
+        let results = await utils_1.Promises.someRejected(schemas.map((schema) => this._validateSchema(schema, value, params)), {
             fn: value => value.errors.length == 0
         });
         if (results.length == 0) {

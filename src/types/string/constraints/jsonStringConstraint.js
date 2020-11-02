@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.JsonStringConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const stringSchema_1 = require("../stringSchema");
-const appolo_utils_1 = require("appolo-utils");
+const utils_1 = require("@appolo/utils");
 class JsonStringConstraint {
     validate(params) {
         let value = params.value;
         if (typeof value != "string") {
             return { isValid: false };
         }
-        let obj = appolo_utils_1.Objects.tryParseJSON(value);
+        let obj = utils_1.Objects.tryParseJSON(value);
         return { isValid: !!obj && typeof obj === 'object' };
     }
     get type() {

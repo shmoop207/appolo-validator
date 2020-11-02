@@ -1,14 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.any = exports.AnySchema = void 0;
 const defaults_1 = require("../../defaults/defaults");
 const registerSchema_1 = require("../../schema/registerSchema");
-const appolo_utils_1 = require("appolo-utils");
+const utils_1 = require("@appolo/utils");
 class AnySchema {
     constructor(constraintOptions = {}) {
         this._constraints = [];
         this._converters = [];
         this._contexts = [];
-        this._options = appolo_utils_1.Objects.defaults({}, defaults_1.SchemaDefaults);
+        this._options = utils_1.Objects.defaults({}, defaults_1.SchemaDefaults);
         this._type = "any";
         this._context = {};
         this._constraintOptions = constraintOptions || {};
@@ -26,7 +27,7 @@ class AnySchema {
         return this._contexts;
     }
     groups(group) {
-        group = appolo_utils_1.Arrays.arrayify(group);
+        group = utils_1.Arrays.arrayify(group);
         this._constraintOptions.groups = group;
         this._constraints.forEach(constraint => constraint.options.groups = group);
         return this;

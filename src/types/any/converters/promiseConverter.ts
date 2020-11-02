@@ -1,6 +1,6 @@
 import {IConverter} from "../../../interfaces/IConverter";
 import {ValidationParams} from "../../../interfaces/IConstraint";
-import {Promises} from "appolo-utils";
+import {Promises} from "@appolo/utils";
 import {registerConverter} from "../../../schema/registerConverter";
 import {IConverterOptions} from "../../../interfaces/IConverterOptions";
 import {ObjectSchema} from "../../object/objectSchema";

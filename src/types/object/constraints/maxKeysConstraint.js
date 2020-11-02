@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MaxKeysConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const objectSchema_1 = require("../objectSchema");
 class MaxKeysConstraint {

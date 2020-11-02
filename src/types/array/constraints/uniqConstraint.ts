@@ -4,7 +4,7 @@ import {registerConstraint} from "../../../schema/registerConstraint";
 import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 import {Ref} from "../../../schema/ref";
 import {ArraySchema} from "../arraySchema";
-import {Arrays} from "appolo-utils/index";
+import {Arrays} from "@appolo/utils";
 import {ValidationError} from "../../../common/errors/ValidationError";
 
 

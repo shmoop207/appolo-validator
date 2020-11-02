@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.string = exports.StringSchema = void 0;
 const anySchema_1 = require("../any/anySchema");
 const registerSchema_1 = require("../../schema/registerSchema");
 class StringSchema extends anySchema_1.AnySchema {

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.PortNumberConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const numberSchema_1 = require("../numberSchema");
 class PortNumberConstraint {

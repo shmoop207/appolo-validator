@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const tslib_1 = require("tslib");
 const chai = require("chai");
-const appolo_utils_1 = require("appolo-utils");
+const utils_1 = require("@appolo/utils");
 const index_1 = require("../index");
 let should = chai.should();
 describe("validator", function () {
@@ -838,9 +838,9 @@ describe("validator", function () {
         it("should validate string uuid", async () => {
             let validator = await index_1.validation();
             let schema = index_1.string().uuid();
-            let result = await validator.validate(schema, appolo_utils_1.Guid.guid());
+            let result = await validator.validate(schema, utils_1.Guid.guid());
             result.errors.length.should.be.eq(0);
-            result = await validator.validate(schema, appolo_utils_1.Guid.guid() + "1");
+            result = await validator.validate(schema, utils_1.Guid.guid() + "1");
             result.errors[0].message.should.be.eq("value is not valid uuid string");
         });
         it("should validate string url", async () => {

@@ -1,5 +1,5 @@
 import {ValidationParams} from "../interfaces/IConstraint";
-import {Classes} from "appolo-utils";
+import {Classes} from "@appolo/utils";
 
 export class Ref {
     constructor(private key: string | ((params: ValidationParams) => string | number)) {

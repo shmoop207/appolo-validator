@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const appolo_utils_1 = require("appolo-utils");
+exports.registerDecorator = exports.RegisterDecorator = exports.SchemaFnSymbol = exports.PropertySymbol = void 0;
+const utils_1 = require("@appolo/utils");
 const registerConstraint_1 = require("../schema/registerConstraint");
 const registerConverter_1 = require("../schema/registerConverter");
 exports.PropertySymbol = "__PropertySymbol__";
@@ -9,7 +10,7 @@ class RegisterDecorator {
     extend(params) {
         let { schema } = params;
         let fn = function (target, propertyKey, descriptor) {
-            let validations = appolo_utils_1.Reflector.getMetadata(exports.PropertySymbol, target, undefined, {});
+            let validations = utils_1.Reflector.getMetadata(exports.PropertySymbol, target, undefined, {});
             validations[propertyKey] = schema;
         };
         fn[exports.SchemaFnSymbol] = schema;

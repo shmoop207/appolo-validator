@@ -3,7 +3,7 @@ import {ValidationParams} from "../../../interfaces/IConstraint";
 import {NumberSchema} from "../numberSchema";
 import {registerConverter} from "../../../schema/registerConverter";
 import {IConverterOptions} from "../../../interfaces/IConverterOptions";
-import {Numbers} from "appolo-utils";
+import {Numbers} from "@appolo/utils";
 
 export class PrecisionConverter implements IConverter {
 

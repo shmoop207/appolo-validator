@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const appolo_utils_1 = require("appolo-utils");
+exports.ValidationError = void 0;
+const utils_1 = require("@appolo/utils");
 class ValidationError extends Error {
     constructor(message) {
         super();
@@ -75,7 +76,7 @@ class ValidationError extends Error {
             output = this._addPrefix(prop.property, output);
         }
         dto.property = this._addPrefix(dto.property != undefined ? dto.property : "value", output, false);
-        let message = appolo_utils_1.Strings.replaceFormat(this._message, dto);
+        let message = utils_1.Strings.replaceFormat(this._message, dto);
         return message;
     }
     _addPrefix(property, output, addDot = true) {

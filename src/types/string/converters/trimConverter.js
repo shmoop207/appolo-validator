@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TrimConverter = void 0;
 const registerConverter_1 = require("../../../schema/registerConverter");
 const stringSchema_1 = require("../stringSchema");
 class TrimConverter {

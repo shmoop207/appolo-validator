@@ -1,12 +1,12 @@
-import {define, singleton, inject, injectFactoryMethod, IClass} from "appolo-engine"
+import {define, singleton, inject, factoryMethod} from "@appolo/inject"
 import {IOptions, ISchemaOptions, IValidateOptions} from "../interfaces/IOptions";
-import {Arrays, Objects} from "appolo-utils/index";
+import {Arrays, Objects} from "@appolo/utils";
+import {IClass} from "@appolo/engine";
 import {SchemaDefaults, ValidateDefaults, ValidatorDefaults} from "../defaults/defaults";
 import {ValidationError} from "../common/errors/ValidationError";
 import {SchemaValidator} from "../schema/schemaValidator";
 import {any, AnySchema, SchemaWrapper} from "../types/any/anySchema";
 import {When} from "../when/when";
-import {Classes} from "appolo-utils";
 import {object} from "../../index";
 import {ValidationErrorsError} from "../common/errors/ValidationErrorsError";
 
@@ -14,7 +14,7 @@ import {ValidationErrorsError} from "../common/errors/ValidationErrorsError";
 @singleton()
 export class Validator {
     @inject() private options: IOptions;
-    @injectFactoryMethod(SchemaValidator) private createSchemaValidator: () => SchemaValidator;
+    @factoryMethod(SchemaValidator) private createSchemaValidator: () => SchemaValidator;
 
 
     public validate(schema: AnySchema | When | IClass, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {

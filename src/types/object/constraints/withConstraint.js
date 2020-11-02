@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.WithConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const objectSchema_1 = require("../objectSchema");
-const appolo_utils_1 = require("appolo-utils");
+const utils_1 = require("@appolo/utils");
 class WithConstraint {
     validate(params) {
         let key = params.args[0];
-        let peers = appolo_utils_1.Arrays.arrayify(params.args[1]);
+        let peers = utils_1.Arrays.arrayify(params.args[1]);
         if (params.value[key] === undefined) {
             return { isValid: true };
         }

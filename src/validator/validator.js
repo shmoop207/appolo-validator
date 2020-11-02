@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Validator = void 0;
 const tslib_1 = require("tslib");
-const appolo_engine_1 = require("appolo-engine");
-const index_1 = require("appolo-utils/index");
+const inject_1 = require("@appolo/inject");
+const utils_1 = require("@appolo/utils");
 const defaults_1 = require("../defaults/defaults");
 const schemaValidator_1 = require("../schema/schemaValidator");
 const ValidationErrorsError_1 = require("../common/errors/ValidationErrorsError");
@@ -13,7 +14,7 @@ let Validator = class Validator {
         if (!schem) {
             throw new Error("failed to find schema");
         }
-        options = index_1.Objects.defaults({}, options, schem.getOptions(), this.options, defaults_1.ValidateDefaults);
+        options = utils_1.Objects.defaults({}, options, schem.getOptions(), this.options, defaults_1.ValidateDefaults);
         return validator.validate(value, schem, options);
     }
     getSchema(schema) {
@@ -28,14 +29,14 @@ let Validator = class Validator {
     }
 };
 tslib_1.__decorate([
-    appolo_engine_1.inject()
+    inject_1.inject()
 ], Validator.prototype, "options", void 0);
 tslib_1.__decorate([
-    appolo_engine_1.injectFactoryMethod(schemaValidator_1.SchemaValidator)
+    inject_1.factoryMethod(schemaValidator_1.SchemaValidator)
 ], Validator.prototype, "createSchemaValidator", void 0);
 Validator = tslib_1.__decorate([
-    appolo_engine_1.define(),
-    appolo_engine_1.singleton()
+    inject_1.define(),
+    inject_1.singleton()
 ], Validator);
 exports.Validator = Validator;
 //# sourceMappingURL=validator.js.map

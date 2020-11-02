@@ -1,4 +1,4 @@
-import {Objects, Classes} from "appolo-utils/index";
+import {Objects, Classes} from "@appolo/utils";
 import {AnySchema} from "../../any/anySchema";
 import {ValidationError} from "../../../common/errors/ValidationError";
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../../../interfaces/IConstraint";

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.OptionalConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const anySchema_1 = require("../anySchema");
 class OptionalConstraint {

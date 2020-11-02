@@ -1,6 +1,6 @@
 import "reflect-metadata";
-import {createApp} from "appolo-engine"
-import {Promises, Objects,Files} from "appolo-utils";
+import {createApp} from "@appolo/engine"
+import {Promises, Objects,Files} from "@appolo/utils";
 
 
 import {ValidatorDefaults} from "./src/defaults/defaults";

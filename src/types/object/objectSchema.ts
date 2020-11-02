@@ -1,9 +1,8 @@
 import {AnySchema} from "../any/anySchema";
 import {IConstraintOptions} from "../../interfaces/IConstraintOptions";
-import {Util} from "appolo-utils";
 
 import {registerSchema} from "../../schema/registerSchema";
-import {IClass} from "appolo-engine/index";
+import {IClass} from "@appolo/engine";
 import {When} from "../../when/when";
 import {IConverterOptions} from "../../interfaces/IConverterOptions";
 import {Ref} from "../../schema/ref";

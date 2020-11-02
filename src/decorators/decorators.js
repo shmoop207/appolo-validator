@@ -1,10 +1,11 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const appolo_utils_1 = require("appolo-utils");
+exports.schema = exports.SchemaSymbol = void 0;
+const utils_1 = require("@appolo/utils");
 exports.SchemaSymbol = "__SchemaSymbol__";
 function schema(schema) {
     return function (target) {
-        let result = appolo_utils_1.Reflector.getMetadata(exports.SchemaSymbol, target.constructor, undefined, {});
+        let result = utils_1.Reflector.getMetadata(exports.SchemaSymbol, target.constructor, undefined, {});
         result.schema = schema;
     };
 }

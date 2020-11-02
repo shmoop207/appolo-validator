@@ -5,8 +5,7 @@ import {registerConstraint} from "../../../schema/registerConstraint";
 import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 import {ObjectSchema} from "../objectSchema";
 import {When} from "../../../when/when";
-import {Promises} from "appolo-utils";
-import {IClass} from "appolo-engine";
+import {Promises} from "@appolo/utils";
 import {PropertySymbol} from "../../../decorators/registerDecorator";
 
 export class KeysConstraint implements IConstraint {

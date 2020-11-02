@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.MaxConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const arraySchema_1 = require("../arraySchema");
 class MaxConstraint {

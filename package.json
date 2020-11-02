@@ -14,7 +14,7 @@
     "test": "mocha test --exit"
   },
   "main": "index.js",
-  "version": "1.0.11",
+  "version": "8.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -24,8 +24,8 @@
   "readme": "",
   "readmeFilename": "README.md",
   "dependencies": {
-    "appolo-engine": "^7.0.1",
-    "appolo-utils": "^0.0.54",
+    "@appolo/engine": "^8.0.19",
+    "@appolo/utils": "^8.0.3",
     "date-fns": "^2.14.0",
     "reflect-metadata": "^0.1.13"
   },
@@ -42,6 +42,6 @@
     "chai": "^4.2.0",
     "mocha": "^7.1.1",
     "tslib": "^1.11.1",
-    "typescript": "^3.8.3"
+    "typescript": "^4.0.5"
   }
 }

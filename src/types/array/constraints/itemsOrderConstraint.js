@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ItemsOrderConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const arraySchema_1 = require("../arraySchema");
-const index_1 = require("appolo-utils/index");
+const utils_1 = require("@appolo/utils");
 const itemsConstraint_1 = require("./itemsConstraint");
 class ItemsOrderConstraint {
     async validate(params) {
@@ -10,7 +11,7 @@ class ItemsOrderConstraint {
         if (params.value.length != schemas.length) {
             return { isValid: false };
         }
-        let results = await index_1.Promises.map(schemas, (schema, i) => {
+        let results = await utils_1.Promises.map(schemas, (schema, i) => {
             return params.validator.validate(schema, params.value[i], Object.assign(Object.assign({}, (params.validateOptions || {})), { object: params.value, property: i }));
         });
         let errors = itemsConstraint_1.ItemsConstraint.handleErrors(params, results);

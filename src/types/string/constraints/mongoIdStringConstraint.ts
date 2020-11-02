@@ -2,7 +2,6 @@ import {IConstraint, IConstraintValidateResult, ValidationParams} from "../../..
 import {registerConstraint} from "../../../schema/registerConstraint";
 import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 import {StringSchema} from "../stringSchema";
-import {Strings} from "appolo-utils";
 
 
 export class JsonStringConstraint implements IConstraint {

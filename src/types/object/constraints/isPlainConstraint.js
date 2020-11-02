@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.IsPlainConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const objectSchema_1 = require("../objectSchema");
-const appolo_utils_1 = require("appolo-utils");
+const utils_1 = require("@appolo/utils");
 class IsPlainConstraint {
     validate(args) {
-        let isValid = appolo_utils_1.Objects.isPlain(args.value);
+        let isValid = utils_1.Objects.isPlain(args.value);
         return { isValid };
     }
     get type() {

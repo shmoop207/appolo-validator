@@ -1,15 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.or = exports.OrConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const __1 = require("../../../../");
-const appolo_utils_1 = require("appolo-utils");
+const utils_1 = require("@appolo/utils");
 class OrConstraint {
     async validate(params) {
         let schemas = params.args[0], value = params.value;
         if (!Array.isArray(schemas)) {
             schemas = [schemas];
         }
-        let results = await appolo_utils_1.Promises.someResolved(schemas.map((schema) => this._validateSchema(schema, value, params)), {
+        let results = await utils_1.Promises.someResolved(schemas.map((schema) => this._validateSchema(schema, value, params)), {
             fn: value => value.errors.length == 0
         });
         if (results.length > 0) {

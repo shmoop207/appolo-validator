@@ -1,5 +1,5 @@
 import {AnySchema} from "../types/any/anySchema";
-import {Reflector, Objects} from "appolo-utils";
+import {Reflector, Objects} from "@appolo/utils";
 import {registerConstraint} from "../schema/registerConstraint";
 import {registerConverter} from "../schema/registerConverter";
 

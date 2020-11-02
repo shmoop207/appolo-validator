@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const appolo_utils_1 = require("appolo-utils");
+exports.PromiseConverter = void 0;
+const utils_1 = require("@appolo/utils");
 const registerConverter_1 = require("../../../schema/registerConverter");
 const anySchema_1 = require("../anySchema");
 class PromiseConverter {
     async convert(params) {
         let value = params.value;
-        if (!appolo_utils_1.Promises.isPromise(value)) {
+        if (!utils_1.Promises.isPromise(value)) {
             return value;
         }
         try {

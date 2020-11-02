@@ -2,7 +2,7 @@ import {IConstraint, IConstraintValidateResult, ValidationParams} from "../../..
 import {registerConstraint} from "../../../schema/registerConstraint";
 import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 import {any, AnySchema} from "../../../../";
-import {Promises} from "appolo-utils";
+import {Promises} from "@appolo/utils";
 import {truncate} from "fs";
 import {Validator} from "../../../validator/validator";
 

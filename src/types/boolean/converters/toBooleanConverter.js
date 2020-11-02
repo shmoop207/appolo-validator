@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ToBooleanConverter = void 0;
 const registerConverter_1 = require("../../../schema/registerConverter");
 const booleanSchema_1 = require("../booleanSchema");
 class ToBooleanConverter {

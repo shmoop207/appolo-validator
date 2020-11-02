@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ToSortConverter = void 0;
 const registerConverter_1 = require("../../../schema/registerConverter");
-const index_1 = require("appolo-utils/index");
+const utils_1 = require("@appolo/utils");
 const arraySchema_1 = require("../arraySchema");
 class ToSortConverter {
     convert(params) {
@@ -9,7 +10,7 @@ class ToSortConverter {
             return params.value;
         }
         let fn = params.args[0] || ((item) => item);
-        let uniq = index_1.Arrays.sortBy(params.value, fn);
+        let uniq = utils_1.Arrays.sortBy(params.value, fn);
         return uniq;
     }
 }

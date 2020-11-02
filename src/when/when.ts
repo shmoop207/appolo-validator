@@ -3,7 +3,7 @@ import {AnySchema} from "../types/any/anySchema";
 import {ICaseParams} from "./ICaseParams";
 import {IWhenParams} from "./IWhenParams";
 import {Ref} from "../schema/ref";
-import {Reflector} from "appolo-utils/index";
+import {Reflector} from "@appolo/utils";
 import {DecoratorFn, PropertySymbol, SchemaFnSymbol} from "../decorators/registerDecorator";
 
 export class When implements Pick<When, "ref"> {

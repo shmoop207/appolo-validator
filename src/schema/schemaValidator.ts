@@ -5,9 +5,9 @@ import {
     IConstraintValidateResult
 } from "../interfaces/IConstraint";
 import {ValidationError} from "../common/errors/ValidationError";
-import {inject, Injector, Util, define, singleton} from "appolo-engine";
+import {inject, Injector, Util, define, singleton} from "@appolo/inject";
 import {IOptions, IValidateOptions} from "../interfaces/IOptions";
-import {Objects, Promises, Arrays} from "appolo-utils";
+import {Objects, Promises, Arrays} from "@appolo/utils";
 import {ValidateDefaults} from "../defaults/defaults";
 import {Validator} from "../validator/validator";
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
@@ -16,7 +16,7 @@ import {IConverterSchema} from "../interfaces/IConverterSchema";
 import {IConstraintOptions} from "../interfaces/IConstraintOptions";
 import {Ref} from "./ref";
 import {SchemaFnWhen, When} from "../when/when";
-import {IClass} from "appolo-engine/index";
+import {IClass} from "@appolo/engine";
 import {PropertySymbol, RegisterDecorator, SchemaFnSymbol} from "../decorators/registerDecorator";
 import {object} from "../../index";
 import {SchemaSymbol} from "../decorators/decorators";

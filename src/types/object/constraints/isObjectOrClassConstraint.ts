@@ -4,7 +4,7 @@ import {IConstraint, IConstraintValidateResult, ValidationParams} from "../../..
 import {registerConstraint} from "../../../schema/registerConstraint";
 import {ObjectSchema} from "../objectSchema";
 import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
-import {Util} from "appolo-utils";
+import {Util} from "@appolo/utils";
 
 
 export class IsObjectOrClassConstraint implements IConstraint {

@@ -1,5 +1,5 @@
 import {IConstraintClass} from "../interfaces/IConstraint";
-import {Arrays, Objects} from "appolo-utils"
+import {Arrays, Objects} from "@appolo/utils"
 import {IConstraintSchema} from "../interfaces/IConstraintSchema";
 import {AnySchema} from "../types/any/anySchema";
 

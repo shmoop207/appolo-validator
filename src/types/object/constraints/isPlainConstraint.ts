@@ -3,7 +3,7 @@ import {ValidationError} from "../../../common/errors/ValidationError";
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../../../interfaces/IConstraint";
 import {registerConstraint} from "../../../schema/registerConstraint";
 import {ObjectSchema} from "../objectSchema";
-import {Objects} from "appolo-utils";
+import {Objects} from "@appolo/utils";
 import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 
 

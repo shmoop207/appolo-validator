@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.ToBufferConverterConverter = void 0;
 const registerConverter_1 = require("../../../schema/registerConverter");
 const bufferSchema_1 = require("../bufferSchema");
 class ToBufferConverterConverter {

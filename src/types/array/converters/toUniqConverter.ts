@@ -2,7 +2,7 @@ import {IConverter} from "../../../interfaces/IConverter";
 import {ValidationParams} from "../../../interfaces/IConstraint";
 import {registerConverter} from "../../../schema/registerConverter";
 import {IConverterOptions} from "../../../interfaces/IConverterOptions";
-import {Arrays} from "appolo-utils/index";
+import {Arrays} from "@appolo/utils";
 import {ArraySchema} from "../arraySchema";
 
 export class ToUniqConverter implements IConverter {

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.WhenConstraint = void 0;
 const registerConstraint_1 = require("../schema/registerConstraint");
 const anySchema_1 = require("../types/any/anySchema");
 const ref_1 = require("../schema/ref");

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.registerSchema = exports.RegisterSchema = void 0;
 const registerDecorator_1 = require("../decorators/registerDecorator");
 class RegisterSchema {
     extend(params) {

@@ -4,7 +4,7 @@ import {NumberSchema} from "../../number/numberSchema";
 import {registerConverter} from "../../../schema/registerConverter";
 import {IConverterOptions} from "../../../interfaces/IConverterOptions";
 import {ObjectSchema} from "../objectSchema";
-import {Util} from "appolo-utils";
+import {Util} from "@appolo/utils";
 import {ArraySchema} from "../../array/arraySchema";
 
 export class JsonConverter implements IConverter {

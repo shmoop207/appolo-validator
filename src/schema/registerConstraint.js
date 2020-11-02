@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const appolo_utils_1 = require("appolo-utils");
+exports.registerConstraint = exports.RegisterConstraint = void 0;
+const utils_1 = require("@appolo/utils");
 class RegisterConstraint {
     constructor() {
         this._constraints = new Map();
@@ -15,7 +16,7 @@ class RegisterConstraint {
             let config = {
                 args: args,
                 constraint: params.constraint,
-                options: appolo_utils_1.Objects.isPlain(options) ? options : {},
+                options: utils_1.Objects.isPlain(options) ? options : {},
                 whiteList: params.whiteList,
                 blackList: params.blackList
             };

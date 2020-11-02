@@ -1,6 +1,6 @@
 "use strict";
 import chai = require('chai');
-import {Guid} from 'appolo-utils';
+import {Guid} from '@appolo/utils';
 import {
     array,validate,
     any,

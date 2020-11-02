@@ -1,5 +1,5 @@
 import {ObjectSchema} from "../types/object/objectSchema";
-import {Reflector} from "appolo-utils";
+import {Reflector} from "@appolo/utils";
 
 export const SchemaSymbol = "__SchemaSymbol__";
 

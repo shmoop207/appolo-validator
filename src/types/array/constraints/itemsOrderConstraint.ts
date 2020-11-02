@@ -1,11 +1,10 @@
 import {AnySchema} from "../../any/anySchema";
-import {Arrays} from "appolo-utils";
 import {IConstraint, IConstraintValidateResult, ValidationParams} from "../../../interfaces/IConstraint";
 import {registerConstraint} from "../../../schema/registerConstraint";
 import {IConstraintOptions} from "../../../interfaces/IConstraintOptions";
 import {Ref} from "../../../schema/ref";
 import {array, ArraySchema} from "../arraySchema";
-import {Promises} from "appolo-utils/index";
+import {Promises} from "@appolo/utils";
 import {ValidationError} from "../../../common/errors/ValidationError";
 import {ItemsConstraint} from "./itemsConstraint";
 

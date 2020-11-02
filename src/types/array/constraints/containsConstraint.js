@@ -1,11 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const appolo_utils_1 = require("appolo-utils");
+exports.ContainsConstraint = void 0;
+const utils_1 = require("@appolo/utils");
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const arraySchema_1 = require("../arraySchema");
 class ContainsConstraint {
     validate(params) {
-        let values = appolo_utils_1.Arrays.arrayify(params.args[0]);
+        let values = utils_1.Arrays.arrayify(params.args[0]);
         for (let i = 0; i < params.value.length; i++) {
             let result;
             result = values.every(value => {

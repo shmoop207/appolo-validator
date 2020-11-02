@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.registerContext = exports.RegisterContext = void 0;
 class RegisterContext {
     constructor() {
         this._contexts = new Map();

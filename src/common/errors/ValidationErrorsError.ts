@@ -1,4 +1,4 @@
-import {Strings} from "appolo-utils";
+import {Strings} from "@appolo/utils";
 import {ValidationError} from "./ValidationError";
 
 export class ValidationErrorsError extends Error {

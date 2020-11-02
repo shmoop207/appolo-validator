@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.DateConverter = void 0;
 const registerConverter_1 = require("../../../schema/registerConverter");
 const dateSchema_1 = require("../dateSchema");
 class DateConverter {

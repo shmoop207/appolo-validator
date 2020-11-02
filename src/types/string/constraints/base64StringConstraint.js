@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Base64StringConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const stringSchema_1 = require("../stringSchema");
 class Base64StringConstraint {

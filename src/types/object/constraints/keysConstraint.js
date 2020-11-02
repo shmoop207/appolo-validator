@@ -1,8 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.KeysConstraint = void 0;
 const registerConstraint_1 = require("../../../schema/registerConstraint");
 const objectSchema_1 = require("../objectSchema");
-const appolo_utils_1 = require("appolo-utils");
+const utils_1 = require("@appolo/utils");
 const registerDecorator_1 = require("../../../decorators/registerDecorator");
 class KeysConstraint {
     async validate(args) {
@@ -18,7 +19,7 @@ class KeysConstraint {
             schemasIndex = meta;
         }
         let keys = [...new Set(Object.keys(args.value || {}).concat(Object.keys(schemasIndex)))];
-        let results = await appolo_utils_1.Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, { convertOnly: true }));
+        let results = await utils_1.Promises.map(keys, key => this._validateProperty(schemasIndex, key, args, { convertOnly: true }));
         results = await Promise.all(keys.map(key => this._validateProperty(schemasIndex, key, args, { validateOnly: true })));
         //let error = new ValidationError();
         let errors = [];

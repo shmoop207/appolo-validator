@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.IntegerConverter = void 0;
 const numberSchema_1 = require("../numberSchema");
 const registerConverter_1 = require("../../../schema/registerConverter");
 class IntegerConverter {

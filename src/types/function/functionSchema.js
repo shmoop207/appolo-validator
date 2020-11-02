@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.func = exports.FunctionSchema = void 0;
 const objectSchema_1 = require("../object/objectSchema");
 const registerSchema_1 = require("../../schema/registerSchema");
 class FunctionSchema extends objectSchema_1.ObjectSchema {
