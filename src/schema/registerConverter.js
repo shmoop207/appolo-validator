@@ -17,6 +17,7 @@ class RegisterConverter {
                 args: args,
                 converter: params.converter,
                 options: utils_1.Objects.isPlain(options) ? options : {},
+                inject: params.inject
             };
             this.addConverter(config);
             return this;

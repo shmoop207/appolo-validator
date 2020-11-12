@@ -9,6 +9,7 @@ interface IExtendParams {
     name: string,
     converter: IConverterClass,
     base: typeof AnySchema
+    inject: boolean,
 }
 
 
@@ -18,8 +19,8 @@ export class RegisterConverter {
 
     public extend(params: IExtendParams) {
 
-        if(!this._converters.has(params.base)){
-            this._converters.set(params.base,[]);
+        if (!this._converters.has(params.base)) {
+            this._converters.set(params.base, []);
         }
 
         this._converters.get(params.base).push(params);
@@ -33,6 +34,7 @@ export class RegisterConverter {
                 args: args,
                 converter: params.converter,
                 options: Objects.isPlain(options) ? options : {},
+                inject: params.inject
             };
 
             this.addConverter(config);

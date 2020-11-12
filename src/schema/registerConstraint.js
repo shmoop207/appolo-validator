@@ -18,7 +18,8 @@ class RegisterConstraint {
                 constraint: params.constraint,
                 options: utils_1.Objects.isPlain(options) ? options : {},
                 whiteList: params.whiteList,
-                blackList: params.blackList
+                blackList: params.blackList,
+                inject: params.inject
             };
             this.addConstraint(config);
             return this;

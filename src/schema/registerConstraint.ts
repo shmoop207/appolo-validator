@@ -10,6 +10,7 @@ interface IExtendParams {
     base: typeof AnySchema,
     whiteList?: boolean,
     blackList?: boolean
+    inject: boolean
 }
 
 
@@ -35,7 +36,8 @@ export class RegisterConstraint {
                 constraint: params.constraint,
                 options: Objects.isPlain(options) ? options : {},
                 whiteList: params.whiteList,
-                blackList: params.blackList
+                blackList: params.blackList,
+                inject: params.inject
             };
 
             this.addConstraint(config);
