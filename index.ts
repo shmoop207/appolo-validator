@@ -33,7 +33,7 @@ import {FunctionSchema} from "./src/types/function/functionSchema";
 import {ValidationError} from "./src/common/errors/ValidationError";
 import {ValidationErrorsError} from "./src/common/errors/ValidationErrorsError";
 
-import {IConstraint} from "./src/interfaces/IConstraint";
+import {IConstraint,IConstraintValidateResult,ValidationParams} from "./src/interfaces/IConstraint";
 import {IConverter} from "./src/interfaces/IConverter";
 import {registerSchema} from "./src/schema/registerSchema";
 import {When} from "./src/when/when";
@@ -68,7 +68,8 @@ export {
     IOptions,
     ISchemaOptions, When,
     ValidationErrorsError, ValidationError, FunctionSchema, IConstraint, IConverter, AnySchema,
-    NumberSchema, StringSchema, DateSchema, BufferSchema, BooleanSchema, ObjectSchema, ArraySchema,
+    NumberSchema, StringSchema, DateSchema, BufferSchema, BooleanSchema, ObjectSchema, ArraySchema,ValidationParams,
+    IConstraintValidateResult
 }
 
 export let validate = {
