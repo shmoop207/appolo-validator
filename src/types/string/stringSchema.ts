@@ -22,6 +22,7 @@ export function string(options: IConstraintOptions & ISchemaOptions = {}) {
 
 export interface StringSchema {
     decode(options?: IConverterOptions): this;
+    emptyToNull(options?: IConverterOptions): this;
     truncate(limit: number, options?: IConverterOptions): this;
     trim(options?: IConverterOptions): this;
     slugify(options?: IConverterOptions): this;
@@ -55,5 +56,7 @@ export interface StringSchema {
     ascii(options?: IConstraintOptions): this;
     alpha(options?: IConstraintOptions): this;
     alphanum(options?: IConstraintOptions): this;
+    mongoSanitize(params?: {}, options?: IConstraintOptions): this;
+
 
 }

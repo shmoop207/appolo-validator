@@ -9,7 +9,7 @@ interface IExtendParams {
     name: string,
     converter: IConverterClass,
     base: typeof AnySchema
-    inject: boolean,
+    inject?: boolean,
 }
 
 

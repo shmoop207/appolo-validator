@@ -42,5 +42,7 @@ export interface ObjectSchema {
     isObjectOrClass(options?: IConstraintOptions): this;
     isObject(options?: IConstraintOptions): this;
     instanceOf(value:any, options?: IConstraintOptions): this;
+    mongoSanitize(params?: {}, options?: IConstraintOptions): this;
+
 
 }

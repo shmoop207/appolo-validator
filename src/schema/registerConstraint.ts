@@ -10,7 +10,7 @@ interface IExtendParams {
     base: typeof AnySchema,
     whiteList?: boolean,
     blackList?: boolean
-    inject: boolean
+    inject?: boolean
 }
 
 

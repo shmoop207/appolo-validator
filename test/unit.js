@@ -17,6 +17,18 @@ describe("validator", function () {
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq('max must be larger than 5');
         });
+        it('should validate object when with mongoSanitize', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.object().keys({
+                value: index_1.object(),
+                value2: index_1.string(),
+            }).mongoSanitize();
+            let result = await validator.validate(schema, { value: { "$where": "some code" }, value2: '{"$where":"bbbb"}' });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq('value has invalid keys');
+            let result2 = await validator.validate(schema, { value: { "where": "some code" }, value2: '{"where":"bbbb"}' });
+            result2.errors.length.should.be.eq(0);
+        });
         it('should validate object when with schema', async () => {
             let validator = await index_1.validation();
             let schema = index_1.object().keys({

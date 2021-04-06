@@ -43,6 +43,8 @@ export interface ArraySchema {
 
     toSort(fn?: ((item: any) => any), options?: IConverterOptions): this;
 
+    mongoSanitize(params?: {}, options?: IConstraintOptions): this;
+
     uniq(fn?: ((item: any, index?: number) => any), options?: IConstraintOptions): this;
 
     size(limit: number | Ref, options?: IConstraintOptions): this;
