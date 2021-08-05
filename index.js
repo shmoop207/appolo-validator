@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.validation = exports.validate = exports.ArraySchema = exports.ObjectSchema = exports.BooleanSchema = exports.BufferSchema = exports.DateSchema = exports.StringSchema = exports.NumberSchema = exports.AnySchema = exports.FunctionSchema = exports.ValidationError = exports.ValidationErrorsError = exports.When = exports.boolean = exports.buffer = exports.date = exports.func = exports.and = exports.schema = exports.or = exports.when = exports.ref = exports.object = exports.array = exports.string = exports.number = exports.any = exports.Validator = exports.registerConverter = exports.registerConstraint = exports.registerSchema = void 0;
+exports.validation = exports.validate = exports.ArraySchema = exports.ObjectSchema = exports.BooleanSchema = exports.BufferSchema = exports.DateSchema = exports.StringSchema = exports.NumberSchema = exports.AnySchema = exports.FunctionSchema = exports.ValidationError = exports.ValidationErrorsError = exports.When = exports.not = exports.boolean = exports.buffer = exports.date = exports.func = exports.and = exports.schema = exports.or = exports.when = exports.ref = exports.object = exports.array = exports.string = exports.number = exports.any = exports.Validator = exports.registerConverter = exports.registerConstraint = exports.registerSchema = void 0;
 require("reflect-metadata");
 const engine_1 = require("@appolo/engine");
 const utils_1 = require("@appolo/utils");
@@ -32,6 +32,8 @@ const orConstraint_1 = require("./src/types/any/constraints/orConstraint");
 Object.defineProperty(exports, "or", { enumerable: true, get: function () { return orConstraint_1.or; } });
 const andConstraint_1 = require("./src/types/any/constraints/andConstraint");
 Object.defineProperty(exports, "and", { enumerable: true, get: function () { return andConstraint_1.and; } });
+const notConstraint_1 = require("./src/types/any/constraints/notConstraint");
+Object.defineProperty(exports, "not", { enumerable: true, get: function () { return notConstraint_1.not; } });
 const dateSchema_1 = require("./src/types/date/dateSchema");
 Object.defineProperty(exports, "date", { enumerable: true, get: function () { return dateSchema_1.date; } });
 const registerConstraint_1 = require("./src/schema/registerConstraint");

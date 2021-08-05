@@ -2,7 +2,7 @@
 import chai = require('chai');
 import {Guid} from '@appolo/utils';
 import {
-    array,validate,
+    array, validate,
     any,
     object,
     string,
@@ -15,7 +15,7 @@ import {
     func,
     date,
     buffer,
-    boolean
+    boolean, not
 } from "../index";
 import {ValidationError} from "../src/common/errors/ValidationError";
 
@@ -32,7 +32,6 @@ describe("validator", function () {
             });
 
             let validator = await validation();
-
 
 
             let result = await validator.validate(schema, {min: 5, max: 4});
@@ -52,12 +51,15 @@ describe("validator", function () {
                 value2: string(),
             }).mongoSanitize();
 
-            let result = await validator.validate(schema, {value: {"$where":"some code"}, value2: '{"$where":"bbbb"}'});
+            let result = await validator.validate(schema, {
+                value: {"$where": "some code"},
+                value2: '{"$where":"bbbb"}'
+            });
 
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq('value has invalid keys');
 
-            let result2 = await validator.validate(schema, {value: {"where":"some code"}, value2: '{"where":"bbbb"}'});
+            let result2 = await validator.validate(schema, {value: {"where": "some code"}, value2: '{"where":"bbbb"}'});
             result2.errors.length.should.be.eq(0);
 
 
@@ -995,6 +997,26 @@ describe("validator", function () {
 
         });
 
+        it('should validate with not', async () => {
+            let result: { errors: ValidationError[], value: any };
+
+            let validator = await validation();
+
+            let schema = object().keys({
+                a: number({}).not(number().max(5)),
+                b: number().required()
+            });
+
+            result = await validator.validate(schema, {a: 6, b: 1});
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(schema, {a: 4, b: 1});
+
+            result.errors[0].message.should.be.eq("a invalid not condition");
+
+        });
+
         it('should validate with ref', async () => {
             let result: { errors: ValidationError[], value: any };
 
@@ -1230,6 +1252,25 @@ describe("validator", function () {
             let result = await validator.validate(A, {a: 6});
 
             result.errors.length.should.be.eq(0);
+        });
+
+        it('should validate decorators when', async () => {
+            class A {
+
+                @when().ref("timezone").schema(string().exists()).then(string()).else(number())
+                private a: number
+            }
+
+            let validator = await validation();
+
+            let result = await validator.validate(A, {a: 6});
+
+            result.errors.length.should.be.eq(0);
+
+            result = await validator.validate(A, {timezone: "aa", a: 6});
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("a is not valid string");
+
         });
 
         it('should validate decorators with inherit', async () => {

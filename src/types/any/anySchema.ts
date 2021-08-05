@@ -137,6 +137,8 @@ export interface AnySchema {
 
     and(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
 
+    not(schemas:  AnySchema, options?: IConstraintOptions): this;
+
     forbidden(options?: IConstraintOptions): this;
 
     invalid(values: any[], options?: IConstraintOptions): this;
@@ -146,6 +148,8 @@ export interface AnySchema {
     or(schemas: AnySchema[] | AnySchema, options?: IConstraintOptions): this;
 
     required(options?: IConstraintOptions): this;
+
+    exists(options?: IConstraintOptions): this;
 
     valid(values: any[], options?: IConstraintOptions): this;
 

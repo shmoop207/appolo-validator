@@ -21,20 +21,20 @@ let SchemaValidator = class SchemaValidator {
             await this._handleConverters(schema, options);
         }
         if (options.convertOnly) {
-            return { errors: [], value: this._value };
+            return { errors: [], value: this._value, isValid: true };
         }
         let { blackList, parallel, whiteList } = this._distributeConstraint(schema.constraints);
         if (whiteList.length && await this._checkWhiteListConstraint(whiteList)) {
-            return { errors: [], value };
+            return { errors: [], value, isValid: true };
         }
         if (blackList.length) {
             let blackListError = await this._checkBlackListConstraint(blackList);
             if (blackListError) {
-                return { errors: blackListError, value };
+                return { errors: blackListError, value, isValid: (blackListError === null || blackListError === void 0 ? void 0 : blackListError.length) == 0 };
             }
         }
         let errors = await this._checkParallelConstraint(parallel);
-        return { errors, value: this._value };
+        return { errors, value: this._value, isValid: (errors === null || errors === void 0 ? void 0 : errors.length) == 0 };
     }
     _handleConverters(schema, options) {
         let converters = (schema.converters || []);

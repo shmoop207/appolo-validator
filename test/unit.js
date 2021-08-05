@@ -23,7 +23,10 @@ describe("validator", function () {
                 value: index_1.object(),
                 value2: index_1.string(),
             }).mongoSanitize();
-            let result = await validator.validate(schema, { value: { "$where": "some code" }, value2: '{"$where":"bbbb"}' });
+            let result = await validator.validate(schema, {
+                value: { "$where": "some code" },
+                value2: '{"$where":"bbbb"}'
+            });
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq('value has invalid keys');
             let result2 = await validator.validate(schema, { value: { "where": "some code" }, value2: '{"where":"bbbb"}' });
@@ -569,6 +572,18 @@ describe("validator", function () {
             result = await validator.validate(schema, { a: 1 });
             result.errors[0].message.should.be.eq('b is required');
         });
+        it('should validate with not', async () => {
+            let result;
+            let validator = await index_1.validation();
+            let schema = index_1.object().keys({
+                a: index_1.number({}).not(index_1.number().max(5)),
+                b: index_1.number().required()
+            });
+            result = await validator.validate(schema, { a: 6, b: 1 });
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(schema, { a: 4, b: 1 });
+            result.errors[0].message.should.be.eq("a invalid not condition");
+        });
         it('should validate with ref', async () => {
             let result;
             let validator = await index_1.validation();
@@ -724,6 +739,19 @@ describe("validator", function () {
             let validator = await index_1.validation();
             let result = await validator.validate(A, { a: 6 });
             result.errors.length.should.be.eq(0);
+        });
+        it('should validate decorators when', async () => {
+            class A {
+            }
+            tslib_1.__decorate([
+                index_1.when().ref("timezone").schema(index_1.string().exists()).then(index_1.string()).else(index_1.number())
+            ], A.prototype, "a", void 0);
+            let validator = await index_1.validation();
+            let result = await validator.validate(A, { a: 6 });
+            result.errors.length.should.be.eq(0);
+            result = await validator.validate(A, { timezone: "aa", a: 6 });
+            result.errors.length.should.be.eq(1);
+            result.errors[0].message.should.be.eq("a is not valid string");
         });
         it('should validate decorators with inherit', async () => {
             class C {

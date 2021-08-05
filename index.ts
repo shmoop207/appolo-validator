@@ -16,8 +16,9 @@ import {Ref, ref} from "./src/schema/ref";
 import {when} from "./src/when/when";
 import {buffer} from "./src/types/buffer/bufferSchema";
 import {boolean} from "./src/types/boolean/booleanSchema";
-import {or,} from "./src/types/any/constraints/orConstraint";
+import {or} from "./src/types/any/constraints/orConstraint";
 import {and} from "./src/types/any/constraints/andConstraint";
+import {not} from "./src/types/any/constraints/notConstraint";
 import {date} from "./src/types/date/dateSchema";
 import {registerConstraint} from "./src/schema/registerConstraint";
 import {registerConverter} from "./src/schema/registerConverter";
@@ -63,7 +64,7 @@ export {
     func,
     date,
     buffer,
-    boolean,
+    boolean,not,
     IValidateOptions,
     IOptions,
     ISchemaOptions, When,

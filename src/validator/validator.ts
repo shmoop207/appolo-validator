@@ -17,7 +17,7 @@ export class Validator {
     @factoryMethod(SchemaValidator) private createSchemaValidator: () => SchemaValidator;
 
 
-    public validate(schema: AnySchema | When | IClass, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any }> {
+    public validate(schema: AnySchema | When | IClass, value: any, options: IValidateOptions = {}): Promise<{ errors: ValidationError[], value: any,isValid:boolean }> {
 
         let validator = this.createSchemaValidator();
 

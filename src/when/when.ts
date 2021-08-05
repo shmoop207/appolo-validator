@@ -49,17 +49,17 @@ export class When implements Pick<When, "ref"> {
         return this._case;
     }
 
-    public value(value: any): Pick<When, "then" | "case"> {
+    public value(value: any): DecoratorFn &Pick<When, "then" | "case"> {
         this._getCase().value = value;
-        return this;
+        return this as any;
     }
 
-    public fn(value: ((params: ValidationParams) => boolean)): Pick<When, "then" | "case"> {
+    public fn(value: ((params: ValidationParams) => boolean)): DecoratorFn &Pick<When, "then" | "case"> {
         this._getCase().fn = value;
-        return this;
+        return this as any;
     }
 
-    public group(group: string | string[]): Pick<When, "then" | "case"> {
+    public group(group: string | string[]): DecoratorFn & Pick<When, "then" | "case"> {
 
         if (typeof group == "string") {
             group = [group]
@@ -67,38 +67,38 @@ export class When implements Pick<When, "ref"> {
 
         this._getCase().groups = group;
 
-        return this;
+        return this as any;
     }
 
-    public schema(schema: AnySchema): Pick<When, "then" | "case"> {
+    public schema(schema: AnySchema): DecoratorFn & Pick<When, "then" | "case"> {
 
         this._getCase().schema = schema;
 
-        return this;
+        return this as any;
     }
 
-    public then(schema: AnySchema): Pick<When, "else"> {
+    public then(schema: AnySchema): DecoratorFn &Pick<When, "else"> {
         this._getCase().thenSchema = schema;
-        return this;
+        return this as any;
     }
 
 
-    public case(when: Pick<When, any>): Pick<When, "default" | "case"> {
+    public case(when: Pick<When, any>): DecoratorFn & Pick<When, "default" | "case"> {
         if (when.params.cases.length) {
             this._params.cases.push(when.params.cases[0]);
         }
 
-        return this;
+        return this as any;
     }
 
-    public else(schema: AnySchema): Pick<this, "else"> {
+    public else(schema: AnySchema): DecoratorFn &Pick<When, "else"> & Function {
         this._params.otherwise = schema;
-        return this
+        return this as any
     }
 
-    public default(schema: AnySchema): Pick<this, "default"> {
+    public default(schema: AnySchema): DecoratorFn & Pick<this, "default"> {
         this._params.otherwise = schema;
-        return this
+        return this as any
     }
 
 }

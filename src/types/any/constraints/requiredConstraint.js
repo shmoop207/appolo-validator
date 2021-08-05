@@ -22,4 +22,10 @@ registerConstraint_1.registerConstraint.extend({
     constraint: RequiredConstraint,
     blackList: true
 });
+registerConstraint_1.registerConstraint.extend({
+    base: anySchema_1.AnySchema,
+    name: "exists",
+    constraint: RequiredConstraint,
+    blackList: true
+});
 //# sourceMappingURL=requiredConstraint.js.map

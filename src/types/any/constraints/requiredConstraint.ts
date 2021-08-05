@@ -29,3 +29,10 @@ registerConstraint.extend({
     blackList: true
 });
 
+registerConstraint.extend({
+    base: AnySchema,
+    name: "exists",
+    constraint: RequiredConstraint,
+    blackList: true
+});
+
