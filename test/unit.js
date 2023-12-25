@@ -1170,6 +1170,20 @@ describe("validator", function () {
             result.errors.length.should.be.eq(1);
             result.errors[0].message.should.be.eq("test.a[0].a not a number");
         });
+        it('should validate sanitizeHtml convertor', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.string().sanitizeHTML();
+            let result = await validator.validate(schema, "<script>console.log('Hello World')</script>");
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.eq("&lt;script&gt;console.log('Hello World')&lt;/script&gt;");
+        });
+        it('should not sanitizeHtml in case of formula', async () => {
+            let validator = await index_1.validation();
+            let schema = index_1.string().sanitizeHTML();
+            let result = await validator.validate(schema, "25 > 10");
+            result.errors.length.should.be.eq(0);
+            result.value.should.be.eq("25 > 10");
+        });
     });
 });
 //# sourceMappingURL=unit.js.map
