@@ -57,6 +57,5 @@ export interface StringSchema {
     alpha(options?: IConstraintOptions): this;
     alphanum(options?: IConstraintOptions): this;
     mongoSanitize(params?: {}, options?: IConstraintOptions): this;
-
-
+    sanitizeHTML(options?: IConverterOptions): this;
 }
