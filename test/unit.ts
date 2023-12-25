@@ -1899,7 +1899,7 @@ describe("validator", function () {
         })
 
 
-        it.only('should validate sanitizeHtml convertor', async () => {
+        it('should validate sanitizeHtml convertor', async () => {
             let validator = await validation();
 
             let schema = string().sanitizeHTML();
@@ -1910,7 +1910,7 @@ describe("validator", function () {
             result.value.should.be.eq("&lt;script&gt;console.log('Hello World')&lt;/script&gt;");
         });
 
-        it.only('should not sanitizeHtml in case of formula', async () => {
+        it('should not sanitizeHtml in case of formula', async () => {
             let validator = await validation();
 
             let schema = string().sanitizeHTML();
